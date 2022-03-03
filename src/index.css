@@ -15,7 +15,6 @@
 /* @media only screen and (min-width: 1200px) {...} */
 
 :root {
-  margin: 0;
   --sky-blue: #dbfcff;
   --darker-sky-blue: #a6cfd5;
   --aqua-blue-green: #558c8c;
@@ -23,16 +22,45 @@
   --deep-purple: #320e3b;
   --white: #fff;
   --black: #000;
+
+  --red-text: #e74c32;
+
+  --dark-salmon: #e74c32;
+  --light-salmon: #ff9191;
+  --grey-dark-1: #373737;
+  --grey-dark-2: #474747;
+  --grey-dark-3: #676767;
+  --grey-dark-4: #c0bfbf;
+
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+    "Rozha One" sans-serif;
+  font-family: "Rozha One", serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+body {
+  margin: 0;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+/* .Modal {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  z-index: 1000;
+  left: 0px;
+  top: 0px;
+  overflow: auto; 
+  background-color: rgb(0,0,0); 
+  background-color: rgba(0,0,0,0.4); 
+} */
+.font-size-24px {
+  font-size: 24px;
 }
 
 .white-bkg {
@@ -49,4 +77,16 @@ code {
 
 .flex-direction-column {
   flex-direction: column;
+}
+
+.red-text {
+  color: var(--red-text);
+}
+
+.flex-text-padding {
+  padding: 2%;
+}
+
+.top-margin-buffer {
+  margin-top: 5%;
 }
