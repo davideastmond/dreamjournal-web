@@ -25,6 +25,7 @@
 
   --red-text: #e74c32;
 
+  --egg-shell-white: #f6f6f6;
   --dark-salmon: #e74c32;
   --light-salmon: #ff9191;
   --grey-dark-1: #373737;
@@ -38,6 +39,7 @@
   font-family: "Rozha One", serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: black;
 }
 body {
   margin: 0;
@@ -48,17 +50,6 @@ code {
     monospace;
 }
 
-/* .Modal {
-  width: 100%;
-  height: 100%;
-  position: fixed;
-  z-index: 1000;
-  left: 0px;
-  top: 0px;
-  overflow: auto; 
-  background-color: rgb(0,0,0); 
-  background-color: rgba(0,0,0,0.4); 
-} */
 .font-size-24px {
   font-size: 24px;
 }
@@ -89,4 +80,16 @@ code {
 
 .top-margin-buffer {
   margin-top: 5%;
+}
+
+.light-salmon-bkg {
+  background-color: var(--light-salmon);
+}
+
+.sky-blue-text {
+  color: var(--sky-blue);
+}
+
+.sky-blue-bkg {
+  background-color: var(--sky-blue);
 }

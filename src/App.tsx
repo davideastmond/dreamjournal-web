@@ -1,9 +1,9 @@
 import './App.css';
-import Login from './scenes/Login';
+import Splash from './scenes/Splash';
 function App() {
   return (
     <div className="App">
-      <Login />
+      <Splash />
     </div>
   );
 }

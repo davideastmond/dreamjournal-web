@@ -22,4 +22,10 @@
   .flex-top-margin {
     margin-top: 10%;
   }
+  .full-flex-basis {
+    flex-basis: 100%;
+  }
+  .splash-flex {
+    display: flex;
+  }
 }

@@ -17,39 +17,38 @@ function LoginModal (props: ILoginModalProps) {
   return (
     <div>
       <Dialog open={props.open} onClose={props.onDismiss}>
-      <DialogTitle>Sign In</DialogTitle>
-   
-    <DialogContent>
-      <DialogContentText>
-        Enter your details
-      </DialogContentText>
-      <TextField
-        required
-        autoFocus
-        margin="dense"
-        id="email"
-        label="Email"
-        type="email"
-        fullWidth
-        variant="filled"
-      />
-      <TextField
-        required
-        autoFocus
-        margin="dense"
-        id="filled-password"
-        label="Password"
-        type="password"
-        fullWidth
-        variant="filled"
-      />
-    </DialogContent>
-    <DialogActions>
-      <Button onClick={props.onDismiss}>Cancel</Button>
-      <Button onClick={props.onDismiss}>Go</Button>
-    </DialogActions> </Dialog>
+        <DialogTitle>Sign In</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Enter your details
+          </DialogContentText>
+          <TextField
+            required
+            autoFocus
+            margin="dense"
+            id="email"
+            label="Email"
+            type="email"
+            fullWidth
+            variant="filled"
+          />
+          <TextField
+            required
+            autoFocus
+            margin="dense"
+            id="filled-password"
+            label="Password"
+            type="password"
+            fullWidth
+            variant="filled"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={props.onDismiss}>Cancel</Button>
+          <Button onClick={props.onDismiss}>Go</Button>
+        </DialogActions> 
+      </Dialog>
     </div>
-   
   )
 }
 
