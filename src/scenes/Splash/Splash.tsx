@@ -1,5 +1,5 @@
 
-import Button from "@mui/material/Button"
+import { Button } from "@mui/material"
 import LoginIcon from '@mui/icons-material/Login';
 import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
 import AppLogo from "./app-logo.svg"
@@ -17,6 +17,10 @@ function Splash() {
 
   const handleOpenRegisterModal = () => {
     setRegistrationModalOpen(true)
+  }
+
+  const handleRegistrationSuccess  =() => {
+    console.log("Registration is successful")
   }
 
   return (
@@ -60,7 +64,7 @@ function Splash() {
         <LoginModal open={loginModalOpen} onDismiss={()=> setLoginModalOpen(false)} />
       )}
       { registrationModalOpen && (
-        <RegistrationModal open={registrationModalOpen} onDismiss={()=> setRegistrationModalOpen(false)} />
+        <RegistrationModal open={registrationModalOpen} onDismiss={()=> setRegistrationModalOpen(false)} onSuccessDismiss={handleRegistrationSuccess} />
       )}
     </div>)
 }
