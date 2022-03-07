@@ -1,31 +1,31 @@
-
-import { Button } from "@mui/material"
-import LoginIcon from '@mui/icons-material/Login';
-import AppRegistrationIcon from '@mui/icons-material/AppRegistration';
-import AppLogo from "./app-logo.svg"
-import "./splash-style.css"
+import { Button } from "@mui/material";
+import LoginIcon from "@mui/icons-material/Login";
+import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
+import AppLogo from "./app-logo.svg";
+import "./splash-style.css";
 import { useState } from "react";
 import LoginModal from "../../components/login-modal";
 import RegistrationModal from "../../components/registration-modal";
 function Splash() {
   const [loginModalOpen, setLoginModalOpen] = useState<boolean>(false);
-  const [registrationModalOpen, setRegistrationModalOpen] = useState<boolean>(false);
+  const [registrationModalOpen, setRegistrationModalOpen] =
+    useState<boolean>(false);
 
   const handleOpenLoginModal = () => {
     setLoginModalOpen(true);
-  }
+  };
 
   const handleOpenRegisterModal = () => {
-    setRegistrationModalOpen(true)
-  }
+    setRegistrationModalOpen(true);
+  };
 
-  const handleRegistrationSuccess  =() => {
-    console.log("Registration is successful")
-  }
+  const handleRegistrationSuccess = () => {
+    console.log("Registration is successful");
+  };
 
   const handleSuccessfulLogin = () => {
-    console.log("Login is successful")
-  }
+    console.log("Login is successful");
+  };
 
   return (
     <div className="Scene Login__Main bkg-dimensions">
@@ -35,14 +35,22 @@ function Splash() {
         </div>
         <div className="Login__Main__control-group">
           <div className="control">
-            <Button variant="contained" startIcon={<LoginIcon />} onClick={handleOpenLoginModal}  >
+            <Button
+              variant="contained"
+              startIcon={<LoginIcon />}
+              onClick={handleOpenLoginModal}
+            >
               Sign in
-            </Button >
+            </Button>
           </div>
           <div className="control">
-            <Button variant="contained" startIcon={<AppRegistrationIcon />} onClick={handleOpenRegisterModal} >
+            <Button
+              variant="contained"
+              startIcon={<AppRegistrationIcon />}
+              onClick={handleOpenRegisterModal}
+            >
               New Account
-            </Button >
+            </Button>
           </div>
         </div>
       </div>
@@ -64,13 +72,22 @@ function Splash() {
           </div>
         </div>
       </section>
-      { loginModalOpen && (
-        <LoginModal open={loginModalOpen} onDismiss={()=> setLoginModalOpen(false)} onSuccessfulLogin={handleSuccessfulLogin} />
+      {loginModalOpen && (
+        <LoginModal
+          open={loginModalOpen}
+          onDismiss={() => setLoginModalOpen(false)}
+          onSuccessfulLogin={handleSuccessfulLogin}
+        />
       )}
-      { registrationModalOpen && (
-        <RegistrationModal open={registrationModalOpen} onDismiss={()=> setRegistrationModalOpen(false)} onSuccessDismiss={handleRegistrationSuccess} />
+      {registrationModalOpen && (
+        <RegistrationModal
+          open={registrationModalOpen}
+          onDismiss={() => setRegistrationModalOpen(false)}
+          onSuccessDismiss={handleRegistrationSuccess}
+        />
       )}
-    </div>)
+    </div>
+  );
 }
 
 export default Splash;

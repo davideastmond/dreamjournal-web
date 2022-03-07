@@ -6,15 +6,14 @@ export interface TAppState {
 }
 
 const initialState: TAppState = {
-  stateStatus: { status: EStatus.Idle }
+  stateStatus: { status: EStatus.Idle },
 };
 
 const appSlice = createSlice({
   name: "app",
   initialState,
-  reducers:{},
+  reducers: {},
 });
-
 
 export const selectAppStateStatus = (state: TGlobalAppStore): IStateStatus =>
   state.app.stateStatus;

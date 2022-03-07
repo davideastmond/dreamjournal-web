@@ -1,8 +1,8 @@
-import { TAppState } from "./reducers/app-slice"
+import { TAppState } from "./reducers/app-slice";
 
 export type TGlobalAppStore = {
   app: TAppState;
-}
+};
 
 export enum EStatus {
   Idle = "idle",
@@ -13,4 +13,4 @@ export enum EStatus {
 export type IStateStatus = {
   status: EStatus;
   message?: string;
-}
+};
