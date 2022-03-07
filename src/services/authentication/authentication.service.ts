@@ -16,8 +16,7 @@ export const registerUser = async(data: TRegistrationRequestDetails) => {
         email: data.email
       }
     })
-    const loginRequestTokenData = await logInUser({ email: data.email, password: data.plainTextPassword })
-    writeTokenDataToSessionStorage(loginRequestTokenData)
+    await logInUser({ email: data.email, password: data.plainTextPassword })
     data.onSuccess()
   } catch (exception: any) {
     data.onError(`${exception.response.data.error}`)
@@ -25,20 +24,25 @@ export const registerUser = async(data: TRegistrationRequestDetails) => {
 }
 
 export const logInUser = async({ email, password}: {email: string, password: string }): Promise<TLoginResponseData> => {
-  const req = await axios({
-    url: `${API_URL}/api/auth/login`,
-    method: "POST",
-    withCredentials: true,
-    headers: AUTH_HEADER,
-    data: {
-      email,
-      password
+  try {
+    const req = await axios({
+      url: `${API_URL}/api/auth/login`,
+      method: "POST",
+      withCredentials: true,
+      headers: AUTH_HEADER,
+      data: {
+        email,
+        password
+      }
+    })
+    if (req.status === 200) {
+      writeTokenDataToSessionStorage(req.data)
+      return req.data
+    } else {
+      throw new Error("Received some other status than 200 from login request")
     }
-  })
-  if (req.status === 200) {
-    return req.data
-  } else {
-    throw new Error(req.statusText)
+  } catch (exception: any) {
+    throw new Error(`${exception.response.data.error}`)
   }
 }
 

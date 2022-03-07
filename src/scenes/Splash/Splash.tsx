@@ -23,6 +23,10 @@ function Splash() {
     console.log("Registration is successful")
   }
 
+  const handleSuccessfulLogin = () => {
+    console.log("Login is successful")
+  }
+
   return (
     <div className="Scene Login__Main bkg-dimensions">
       <div className="Login__Main__body flex flex-direction-column flex-top-margin">
@@ -61,7 +65,7 @@ function Splash() {
         </div>
       </section>
       { loginModalOpen && (
-        <LoginModal open={loginModalOpen} onDismiss={()=> setLoginModalOpen(false)} />
+        <LoginModal open={loginModalOpen} onDismiss={()=> setLoginModalOpen(false)} onSuccessfulLogin={handleSuccessfulLogin} />
       )}
       { registrationModalOpen && (
         <RegistrationModal open={registrationModalOpen} onDismiss={()=> setRegistrationModalOpen(false)} onSuccessDismiss={handleRegistrationSuccess} />

@@ -28,8 +28,8 @@ function RegistrationModal (props:IRegistrationModalProps) {
   const [password1ErrorText, setPassword1ErrorText] = useState<string>("");
   const [password2ErrorText, setPassword2ErrorText] = useState<string>("");
 
-  const [loginAttemptErrorState, setLoginAttemptErrorState] = useState<boolean>(false);
-  const [loginAttemptErrorText, setLoginAttemptErrorText] = useState<string>("")
+  const [registrationAttemptErrorState, setRegistrationAttemptErrorState] = useState<boolean>(false);
+  const [registrationAttemptErrorText, setRegistrationAttemptErrorText] = useState<string>("")
   const handleInputsChanged = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { id, value } = event.target;
     switch (id) {
@@ -58,14 +58,14 @@ function RegistrationModal (props:IRegistrationModalProps) {
     setLastNameErrorState(false);
     setPassword1ErrorState(false);
     setPassword2ErrorState(false);
-    setLoginAttemptErrorState(false);
+    setRegistrationAttemptErrorState(false);
 
     setEmailErrorText("");
     setFirstNameErrorText("");
     setLastNameErrorText("");
     setPassword1ErrorText("");
     setPassword2ErrorText("");
-    setLoginAttemptErrorText("");
+    setRegistrationAttemptErrorText("");
   }
 
   const handleSubmitRegistrationRequest = async() => {
@@ -77,7 +77,7 @@ function RegistrationModal (props:IRegistrationModalProps) {
       password1: registrationPassword1,
       password2: registrationPassword2,
       onSuccess: async () => {
-        registerUser({
+        await registerUser({
           email: registrationEmail,
           firstName: registrationFirstName,
           lastName: registrationLastName,
@@ -86,8 +86,8 @@ function RegistrationModal (props:IRegistrationModalProps) {
             props.onDismiss()
           },
           onError: (message?: string) => {
-            setLoginAttemptErrorState(true);
-            setLoginAttemptErrorText(message || "Encountered an error: unable to log in")
+            setRegistrationAttemptErrorState(true);
+            setRegistrationAttemptErrorText(message || "Encountered an error: unable to log in")
           }
         })
       },
@@ -179,9 +179,9 @@ function RegistrationModal (props:IRegistrationModalProps) {
           error={password2ErrorState}
           helperText={password2ErrorText}
         />
-        { loginAttemptErrorState && (
+        { registrationAttemptErrorState && (
            <DialogContentText color="error">
-             {loginAttemptErrorText}
+             {registrationAttemptErrorText}
            </DialogContentText>
         )}
       </DialogContent>
