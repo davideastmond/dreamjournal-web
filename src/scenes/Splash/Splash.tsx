@@ -6,10 +6,17 @@ import "./splash-style.css";
 import { useState } from "react";
 import LoginModal from "../../components/login-modal";
 import RegistrationModal from "../../components/registration-modal";
+import { verifyActiveSession } from "../../services/authentication/authentication.service";
+import { useDispatch } from "react-redux";
+import {
+  getHasActiveSessionAsync,
+  getSessionUserAsync,
+} from "../../reducers/app-slice";
 function Splash() {
   const [loginModalOpen, setLoginModalOpen] = useState<boolean>(false);
   const [registrationModalOpen, setRegistrationModalOpen] =
     useState<boolean>(false);
+  const dispatch = useDispatch();
 
   const handleOpenLoginModal = () => {
     setLoginModalOpen(true);
@@ -21,10 +28,19 @@ function Splash() {
 
   const handleRegistrationSuccess = () => {
     console.log("Registration is successful");
+    setRegistrationModalOpen(false);
   };
 
   const handleSuccessfulLogin = () => {
     console.log("Login is successful");
+    dispatch(getHasActiveSessionAsync());
+    dispatch(getSessionUserAsync());
+    setLoginModalOpen(false);
+  };
+
+  const handleTestSession = async () => {
+    const res = await verifyActiveSession();
+    console.log("res session", res);
   };
 
   return (
@@ -50,6 +66,11 @@ function Splash() {
               onClick={handleOpenRegisterModal}
             >
               New Account
+            </Button>
+          </div>
+          <div className="control">
+            <Button variant="contained" onClick={handleTestSession}>
+              Test Session
             </Button>
           </div>
         </div>

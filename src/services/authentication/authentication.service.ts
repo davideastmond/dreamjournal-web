@@ -57,3 +57,35 @@ function writeTokenDataToSessionStorage(data: TLoginResponseData) {
   sessionStorage.setItem("issued", JSON.stringify(data.issued));
   sessionStorage.setItem("expires", JSON.stringify(data.expires));
 }
+
+export const verifyActiveSession = async (): Promise<boolean> => {
+  const token = sessionStorage.getItem("token");
+  //if (!token) return false;
+
+  try {
+    const res = await axios({
+      url: `${API_URL}/api/auth/session`,
+      method: "GET",
+      withCredentials: true,
+      headers: {
+        ...AUTH_HEADER,
+        "X-JWT-Token": token!,
+      },
+    });
+
+    const renewedToken = res.headers["x-renewed-jwt-token"];
+    const activeToken = res.headers["X-JWT-Token"];
+    if (activeToken) {
+      sessionStorage.setItem("token", activeToken);
+      return true;
+    }
+
+    if (renewedToken) {
+      console.log("renewal token", renewedToken);
+      return true;
+    }
+    return false;
+  } catch (exception) {
+    return false;
+  }
+};
