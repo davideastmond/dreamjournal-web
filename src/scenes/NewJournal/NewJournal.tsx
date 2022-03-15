@@ -1,12 +1,13 @@
 import { TextField, Box, Typography, Button } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
 import "./style.css";
 import { validateAndSanitizeNewJournalSubmissionData } from "./validators";
 import { submitNewJournal } from "../../services/journal/journal.service";
 import { selectSessionUser } from "../../reducers/app-slice";
-import { shallowEqual, useSelector } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import { getAllJournalsForUserAsync } from "../../reducers/journal-slice";
 
 export interface INewJournalSubmissionProps {
   onSuccessfulSubmission?: () => void;
@@ -32,6 +33,8 @@ export function NewJournal(props: INewJournalSubmissionProps) {
     if (event.target.id === "tags") setJournalTags(event.target.value);
   };
 
+  const dispatch = useDispatch();
+
   const handleSubmitAndValidate = async () => {
     clearErrorMessages();
     validateAndSanitizeNewJournalSubmissionData({
@@ -43,8 +46,6 @@ export function NewJournal(props: INewJournalSubmissionProps) {
         sanitizedTitle,
         tagsArray,
       }) => {
-        // Dispatch some action
-        console.log("Success!");
         if (userData) {
           try {
             await submitNewJournal({
@@ -53,6 +54,7 @@ export function NewJournal(props: INewJournalSubmissionProps) {
               description: sanitizedDescription,
               tags: tagsArray,
             });
+            dispatch(getAllJournalsForUserAsync({ userId: userData._id }));
             props.onSuccessfulSubmission && props.onSuccessfulSubmission();
           } catch (exception: any) {
             setHasSubmissionError(true);
@@ -75,6 +77,12 @@ export function NewJournal(props: INewJournalSubmissionProps) {
     setSubmissionErrors([]);
     setHasSubmissionError(false);
   };
+
+  useEffect(() => {
+    if (userData) {
+      dispatch(getAllJournalsForUserAsync({ userId: userData._id }));
+    }
+  }, []);
   return (
     <div className="Scene NewJournal__Main">
       <Typography
