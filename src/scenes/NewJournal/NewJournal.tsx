@@ -4,6 +4,9 @@ import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
 import "./style.css";
 import { validateAndSanitizeNewJournalSubmissionData } from "./validators";
+import { submitNewJournal } from "../../services/journal/journal.service";
+import { selectSessionUser } from "../../reducers/app-slice";
+import { shallowEqual, useSelector } from "react-redux";
 
 export interface INewJournalSubmissionProps {
   onSuccessfulSubmission?: () => void;
@@ -14,6 +17,7 @@ export interface INewJournalSubmissionProps {
  * @returns
  */
 export function NewJournal(props: INewJournalSubmissionProps) {
+  const userData = useSelector(selectSessionUser, shallowEqual);
   const [journalTitleText, setJournalTitleText] = useState("");
   const [journalDescriptionText, setJournalDescriptionText] = useState("");
   const [journalTags, setJournalTags] = useState("");
@@ -28,15 +32,36 @@ export function NewJournal(props: INewJournalSubmissionProps) {
     if (event.target.id === "tags") setJournalTags(event.target.value);
   };
 
-  const handleSubmitAndValidate = () => {
+  const handleSubmitAndValidate = async () => {
     clearErrorMessages();
     validateAndSanitizeNewJournalSubmissionData({
       title: journalTitleText,
       description: journalDescriptionText,
       tags: journalTags,
-      onSuccess: () => {
+      onSuccess: async ({
+        sanitizedDescription,
+        sanitizedTitle,
+        tagsArray,
+      }) => {
         // Dispatch some action
         console.log("Success!");
+        if (userData) {
+          try {
+            await submitNewJournal({
+              userId: userData._id,
+              title: sanitizedTitle,
+              description: sanitizedDescription,
+              tags: tagsArray,
+            });
+            props.onSuccessfulSubmission && props.onSuccessfulSubmission();
+          } catch (exception: any) {
+            setHasSubmissionError(true);
+            setSubmissionErrors([`${exception.message}`]);
+          }
+        } else {
+          setHasSubmissionError(true);
+          setSubmissionErrors(["Unable to authenticate this session"]);
+        }
       },
       onFail: (messages: string[]) => {
         // Show a validation error
@@ -137,13 +162,16 @@ export function NewJournal(props: INewJournalSubmissionProps) {
       {hasSubmissionError && (
         <Stack sx={{ width: "100%" }} spacing={0}>
           {submissionErrors &&
-            submissionErrors.map((error) => (
-              <Alert severity="error">{error}</Alert>
+            submissionErrors.map((error, index) => (
+              <Alert key={`${index}_error`} severity="error">
+                {error}
+              </Alert>
             ))}
         </Stack>
       )}
       <Box>
         <Button
+          onClick={handleSubmitAndValidate}
           fullWidth
           variant="contained"
           sx={{

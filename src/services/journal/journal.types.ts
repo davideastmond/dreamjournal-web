@@ -1,4 +1,7 @@
+import { TSecureUser } from "../user/user.types";
+
 export type TJournal = {
+  _id: string;
   title: string;
   ownerId: string;
   tags?: string[];
@@ -19,4 +22,9 @@ export type TJournalEntry = {
   tags: string[];
   createdAt?: Date;
   updatedAt?: Date;
+};
+
+export type TNewJournalReturnData = {
+  user: TSecureUser;
+  journal: TJournal;
 };
