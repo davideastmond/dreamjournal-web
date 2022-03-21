@@ -15,10 +15,15 @@ import { AccountCircle } from "@mui/icons-material";
 import Divider from "@mui/material/Divider";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import LoginIcon from "@mui/icons-material/Login";
 import { styled, alpha } from "@mui/material/styles";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
 import { getHasActiveSessionAsync } from "../../reducers/app-slice";
+
+interface IAppNavBarProps {
+  hasSession: boolean;
+}
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -59,9 +64,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     },
   },
 }));
-function AppNavBar() {
+function AppNavBar(props: IAppNavBarProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -75,6 +79,28 @@ function AppNavBar() {
     sessionStorage.setItem("token", "");
     dispatch(getHasActiveSessionAsync());
   };
+
+  const handleCreateNewJournal = () => {
+    window.location.href = "/new_journal";
+  };
+
+  const LoggedInMenuItems = () => {
+    return (
+      <div>
+        <MenuItem onClick={handleCreateNewJournal}>Create New Journal</MenuItem>
+        <MenuItem onClick={handleClose}>New Journal Entry</MenuItem>
+        <MenuItem onClick={handleClose}>Settings</MenuItem>
+        <Divider />
+        <MenuItem>
+          <ListItemIcon>
+            <ExitToAppIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText onClick={handleLogout}>Log out</ListItemText>
+        </MenuItem>
+      </div>
+    );
+  };
+
   return (
     <Box
       sx={{
@@ -97,53 +123,48 @@ function AppNavBar() {
             component="div"
             sx={{ flexGrow: 1 }}
           ></Typography>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ "aria-label": "search" }}
-            />
-          </Search>
-          <div>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleMenu}
-              color="inherit"
-            >
-              <AccountCircle />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorEl}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorEl)}
-              onClose={handleClose}
-            >
-              <MenuItem onClick={handleClose}>Create New Journal</MenuItem>
-              <MenuItem onClick={handleClose}>New Journal Entry</MenuItem>
-              <MenuItem onClick={handleClose}>Settings</MenuItem>
-              <Divider />
-              <MenuItem>
-                <ListItemIcon>
-                  <ExitToAppIcon fontSize="small" />
-                </ListItemIcon>
-                <ListItemText onClick={handleLogout}>Log out</ListItemText>
-              </MenuItem>
-            </Menu>
-          </div>
+          {props.hasSession && (
+            <Search>
+              <SearchIconWrapper>
+                <SearchIcon />
+              </SearchIconWrapper>
+              <StyledInputBase
+                placeholder="Search…"
+                inputProps={{ "aria-label": "search" }}
+              />
+            </Search>
+          )}
+          {props.hasSession && (
+            <div>
+              <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleMenu}
+                color="inherit"
+              >
+                <AccountCircle />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+              >
+                <LoggedInMenuItems />
+              </Menu>
+            </div>
+          )}
         </Toolbar>
       </AppBar>
     </Box>

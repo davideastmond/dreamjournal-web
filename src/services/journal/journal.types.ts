@@ -13,6 +13,7 @@ export type TJournal = {
 };
 
 export type TJournalEntry = {
+  _id: string;
   parentJournalId: string;
   ownerId: string;
   title: string;

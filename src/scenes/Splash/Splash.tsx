@@ -3,21 +3,23 @@ import LoginIcon from "@mui/icons-material/Login";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 import AppLogo from "./app-logo.svg";
 import "./splash-style.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LoginModal from "../../components/login-modal";
 import RegistrationModal from "../../components/registration-modal";
-import { verifyActiveSession } from "../../services/authentication/authentication.service";
-import { useDispatch } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import {
   getHasActiveSessionAsync,
   getSessionUserAsync,
+  selectHasActiveSession,
 } from "../../reducers/app-slice";
 function Splash() {
+  const hasSession = useSelector(selectHasActiveSession, shallowEqual);
   const [loginModalOpen, setLoginModalOpen] = useState<boolean>(false);
   const [registrationModalOpen, setRegistrationModalOpen] =
     useState<boolean>(false);
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const handleOpenLoginModal = () => {
     setLoginModalOpen(true);
   };
@@ -32,16 +34,16 @@ function Splash() {
   };
 
   const handleSuccessfulLogin = () => {
-    console.log("Login is successful");
+    navigate("/home", { replace: true });
     dispatch(getHasActiveSessionAsync());
     dispatch(getSessionUserAsync());
-    setLoginModalOpen(false);
   };
 
-  const handleTestSession = async () => {
-    const res = await verifyActiveSession();
-    console.log("res session", res);
-  };
+  useEffect(() => {
+    if (hasSession) {
+      navigate("/home");
+    }
+  }, [hasSession]);
 
   return (
     <div className="Scene Login__Main bkg-dimensions">
@@ -66,11 +68,6 @@ function Splash() {
               onClick={handleOpenRegisterModal}
             >
               New Account
-            </Button>
-          </div>
-          <div className="control">
-            <Button variant="contained" onClick={handleTestSession}>
-              Test Session
             </Button>
           </div>
         </div>

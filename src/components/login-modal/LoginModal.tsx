@@ -6,6 +6,8 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { getHasActiveSessionAsync } from "../../reducers/app-slice";
 import { logInUser } from "../../services/authentication/authentication.service";
 
 import "./login-modal-style.css";
@@ -32,6 +34,7 @@ function LoginModal(props: ILoginModalProps) {
   const [loginAttemptErrorMessage, setLoginAttemptErrorMessage] =
     useState<string>("");
 
+  const dispatch = useDispatch();
   const handleTextInputChanged = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {

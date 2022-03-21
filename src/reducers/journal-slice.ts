@@ -50,4 +50,7 @@ export const selectJournalStateStatus = (state: TGlobalAppStore) =>
   state.journal.stateStatus;
 export const selectJournals = (state: TGlobalAppStore) =>
   state.journal.journals;
+export const selectJournalById = (id: string) => (state: TGlobalAppStore) => {
+  return state.journal.journals.find((j) => j._id === id);
+};
 export default journalSlice.reducer;
