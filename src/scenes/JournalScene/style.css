@@ -1,0 +1,20 @@
+.MuiOutlinedInput-input {
+  color: white;
+}
+
+.JournalContext__main__titleHeader {
+  margin-top: 20px;
+}
+.JournalContext__main__updateDateSection {
+  display: flex;
+  justify-content: space-between;
+}
+
+.JournalContext__main__backToJournals {
+  display: flex;
+  justify-content: left;
+}
+
+.JournalContext__main__backToJournals:hover {
+  cursor: pointer;
+}

@@ -1,13 +1,116 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+/** 
+/* Extra small devices (phones, 600px and down) */
+/* @media only screen and (max-width: 600px) {...}
+
+/* Small devices (portrait tablets and large phones, 600px and up) */
+/* @media only screen and (min-width: 601px -767px) {...} */
+
+/* Medium devices (landscape tablets, 768px and up) */
+/* @media only screen and (min-width: 768px -991ppx) {...} */
+
+/* Large devices (laptops/desktops, 992px and up) */
+/* @media only screen and (min-width: 992px -1199px) {...} */
+
+/* Extra large devices (large laptops and desktops, 1200px and up) */
+/* @media only screen and (min-width: 1200px) {...} */
+
+:root {
+  --sky-blue: #dbfcff;
+  --darker-sky-blue: #a6cfd5;
+  --aqua-blue-green: #558c8c;
+  --red-wine: #82204a;
+  --deep-purple: #320e3b;
+  --white: #fff;
+  --black: #000;
+
+  --red-text: #e74c32;
+
+  --egg-shell-white: #f6f6f6;
+  --dark-salmon: #e74c32;
+  --light-salmon: #ff9191;
+  --grey-dark-1: #373737;
+  --grey-dark-2: #474747;
+  --grey-dark-3: #676767;
+  --grey-dark-4: #c0bfbf;
+
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    "Rozha One" sans-serif;
+  font-family: "Rozha One", serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: black;
+}
+body {
+  margin: 0;
+  color: white;
+}
+
+a {
+  text-decoration: none;
+  color: white;
+}
+input {
+  color: white;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+.font-size-24px {
+  font-size: 24px;
+}
+
+.white-bkg {
+  background-color: var(--white);
+}
+
+.black-bkg {
+  background-color: var(--black);
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-direction-column {
+  flex-direction: column;
+}
+
+.red-text {
+  color: var(--red-text);
+}
+
+.flex-text-padding {
+  padding: 2%;
+}
+
+.top-margin-buffer {
+  margin-top: 5%;
+}
+
+.light-salmon-bkg {
+  background-color: var(--light-salmon);
+}
+
+.sky-blue-text {
+  color: var(--sky-blue);
+}
+
+.sky-blue-bkg {
+  background-color: var(--sky-blue);
+}
+
+.align-right {
+  text-align: right;
+}
+
+.cursor-hover {
+  cursor: pointer;
+}
+
+.warning-color {
+  color: var(--dark-salmon);
 }
