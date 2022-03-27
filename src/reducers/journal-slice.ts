@@ -1,7 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { EStatus, IStateStatus, TGlobalAppStore } from "../definitions";
-import { getAllJournalsForUser } from "../services/journal/journal.service";
-import { TJournal } from "../services/journal/journal.types";
+import {
+  deleteJournalById,
+  getAllJournalsForUser,
+} from "../services/journal/journal.service";
+import {
+  TJournal,
+  TJournalDeleteResult,
+} from "../services/journal/journal.types";
 
 export interface TJournalState {
   stateStatus: IStateStatus;
@@ -19,6 +25,18 @@ export const getAllJournalsForUserAsync = createAsyncThunk(
     return getAllJournalsForUser(userId);
   }
 );
+
+export const deleteJournalByIdAsync = createAsyncThunk(
+  "journal/deleteJournalById",
+  async ({
+    journalId,
+  }: {
+    journalId: string;
+  }): Promise<TJournalDeleteResult> => {
+    return deleteJournalById({ journalId });
+  }
+);
+
 const journalSlice = createSlice({
   name: "journal",
   initialState,
@@ -42,6 +60,24 @@ const journalSlice = createSlice({
           status: EStatus.Error,
           message: action.error.message,
         };
+      })
+      .addCase(deleteJournalByIdAsync.pending, (state) => {
+        state.stateStatus = {
+          status: EStatus.Loading,
+          message: "Attempting to delete journal by id",
+        };
+      })
+      .addCase(deleteJournalByIdAsync.fulfilled, (state, action) => {
+        state.stateStatus = {
+          status: EStatus.Idle,
+        };
+        state.journals = action.payload.journals;
+      })
+      .addCase(deleteJournalByIdAsync.rejected, (state, action) => {
+        state.stateStatus = {
+          status: EStatus.Error,
+          message: action.error.message,
+        };
       });
   },
 });
@@ -53,4 +89,20 @@ export const selectJournals = (state: TGlobalAppStore) =>
 export const selectJournalById = (id: string) => (state: TGlobalAppStore) => {
   return state.journal.journals.find((j) => j._id === id);
 };
+
+export const selectJournalEntryById =
+  ({
+    journalId,
+    journalEntryId,
+  }: {
+    journalId: string | null;
+    journalEntryId: string | null;
+  }) =>
+  (state: TGlobalAppStore) => {
+    if (!journalId || !journalEntryId) return null;
+    const entry = state.journal.journals.find((j) => j._id === journalId);
+    return entry?.journalEntries.find(
+      (jEntry) => jEntry._id === journalEntryId
+    );
+  };
 export default journalSlice.reducer;

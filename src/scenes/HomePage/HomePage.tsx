@@ -1,4 +1,3 @@
-import { Grid } from "@mui/material";
 import { useEffect } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { JournalList } from "../../components/JournalList";

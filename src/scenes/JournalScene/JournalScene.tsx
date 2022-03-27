@@ -1,29 +1,25 @@
 import { InputAdornment, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
-import { shallowEqual, useSelector } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { selectJournalById } from "../../reducers/journal-slice";
+import {
+  deleteJournalByIdAsync,
+  getAllJournalsForUserAsync,
+  selectJournalById,
+} from "../../reducers/journal-slice";
 import EditIcon from "@mui/icons-material/Edit";
 import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
 import "./style.css";
 import { getFormattedDate } from "../../utils/string-helpers";
 import { JournalEntriesList } from "../../components/JournalEntriesList";
 import { NotFound404 } from "../NotFound404";
-const textAreaStyling = {
-  "& .MuiInputBase-input": {
-    color: "white",
-  },
-  "& .MuiOutlinedInput-root": {
-    borderColor: "white",
-    borderLeftStyle: "solid",
-    borderRightStyle: "solid",
-    borderWidth: "1px",
-    color: "white",
-  },
-  "& .MuiTextField-root": {
-    marginTop: "20",
-  },
-};
+import { textAreaStyling } from "../../styling/text-styling";
+import { patchJournalAttribute } from "../../services/journal/journal.service";
+import {
+  getSessionUserAsync,
+  selectSessionUser,
+} from "../../reducers/app-slice";
+import { ActionDialog } from "../../components/ActionDialog";
 
 function JournalScene() {
   const { journalId } = useParams();
@@ -32,34 +28,125 @@ function JournalScene() {
     selectJournalById(journalId!),
     shallowEqual
   );
+  const sessionUser = useSelector(selectSessionUser, shallowEqual);
   const [journalTitleText, setJournalTitleText] = useState<string>(
     journalContext?.title || ""
   );
-  const [journalDescription, setJournaDescription] = useState<string>(
+  const [journalDescriptionText, setJournalDescriptionText] = useState<string>(
     journalContext?.description || ""
   );
-  const [journalTags, setJournalTags] = useState<string>(
-    journalContext?.tags ? journalContext.tags.join(",") : ""
-  );
 
-  console.log(journalContext);
+  const [rawJournalTagString, setRawJournalTagString] = useState<string>(
+    journalContext?.tags ? journalContext.tags.join(", ") : ""
+  );
+  const [actionDialogOpen, setActionDialogOpen] = useState<boolean>(false);
+  const dispatch = useDispatch();
+
   const handleTextInputChanged = (
-    event: React.InputHTMLAttributes<HTMLInputElement>
-  ) => {};
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const element = event.target.id;
+
+    switch (element) {
+      case "journalTitle":
+        if (event.target.value.trim() !== "") {
+          setJournalTitleText(event.target.value);
+        }
+        break;
+      case "journalDescription":
+        setJournalDescriptionText(event.target.value);
+        break;
+      case "journalTags":
+        setRawJournalTagString(event.target.value);
+        break;
+    }
+  };
+
+  const handleDeleteJournal = () => {
+    // Do some delete action
+    if (journalContext) {
+      dispatch(deleteJournalByIdAsync({ journalId: journalContext._id }));
+      dispatch(getSessionUserAsync());
+      navigate("/home");
+    }
+    setActionDialogOpen(false);
+  };
+
+  const handleOnElementOnBlur = async (
+    event: React.FocusEvent<HTMLInputElement>
+  ) => {
+    if (!journalContext || !sessionUser) return;
+
+    const element = event.target.id;
+    switch (element) {
+      case "journalTitle":
+        if (journalTitleText.trim() !== "") {
+          await patchJournalAttribute({
+            journalId: journalContext?._id,
+            patchObject: {
+              title: { action: "update", data: journalTitleText },
+            },
+          });
+          dispatch(getAllJournalsForUserAsync({ userId: sessionUser._id }));
+        } else if (journalTitleText.trim() === "") {
+          await patchJournalAttribute({
+            journalId: journalContext._id,
+            patchObject: { title: { action: "delete", data: "" } },
+          });
+          dispatch(getAllJournalsForUserAsync({ userId: sessionUser._id }));
+        }
+        break;
+      case "journalDescription":
+        if (journalDescriptionText.trim() !== "") {
+          await patchJournalAttribute({
+            journalId: journalContext?._id,
+            patchObject: {
+              description: { action: "update", data: journalDescriptionText },
+            },
+          });
+          dispatch(getAllJournalsForUserAsync({ userId: sessionUser._id }));
+        } else if (journalDescriptionText.trim() === "") {
+          await patchJournalAttribute({
+            journalId: journalContext._id,
+            patchObject: { description: { action: "delete", data: "" } },
+          });
+          dispatch(getAllJournalsForUserAsync({ userId: sessionUser._id }));
+        }
+        break;
+      case "journalTags":
+        if (rawJournalTagString.trim() === "") {
+          await patchJournalAttribute({
+            journalId: journalContext._id,
+            patchObject: { tags: { action: "delete", data: [] } },
+          });
+          dispatch(getAllJournalsForUserAsync({ userId: sessionUser._id }));
+        } else {
+          const parsedTags = rawJournalTagString.split(",");
+          const trimmedTags = parsedTags.map((tag) => tag.trim());
+          await patchJournalAttribute({
+            journalId: journalContext._id,
+            patchObject: { tags: { action: "update", data: trimmedTags } },
+          });
+          dispatch(getAllJournalsForUserAsync({ userId: sessionUser._id }));
+        }
+    }
+  };
 
   return journalContext ? (
     <div className="JournalContext__main">
       <div className="JournalContext__main__backToJournals">
         <Link to="/home">
-          <Typography>
+          <div>
             <ArrowLeftIcon />
             Journals
-          </Typography>
+          </div>
         </Link>
       </div>
       <header className="JournalContext__main__Header">
         <div className="JournalContext__main__titleHeader">
-          <Typography variant="h5">{journalContext?.title}</Typography>
+          <div>
+            <h2>{journalContext?.title}</h2>
+          </div>
         </div>
         <TextField
           sx={textAreaStyling}
@@ -73,6 +160,7 @@ function JournalScene() {
           variant="filled"
           onChange={handleTextInputChanged}
           value={journalTitleText}
+          onBlur={handleOnElementOnBlur}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -92,7 +180,8 @@ function JournalScene() {
           focused
           variant="filled"
           onChange={handleTextInputChanged}
-          value={journalDescription}
+          value={journalDescriptionText}
+          onBlur={handleOnElementOnBlur}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -140,7 +229,8 @@ function JournalScene() {
             focused
             variant="filled"
             onChange={handleTextInputChanged}
-            value={journalTags}
+            value={rawJournalTagString}
+            onBlur={handleOnElementOnBlur}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -151,7 +241,18 @@ function JournalScene() {
           />
         </div>
       </header>
+      <section>
+        <div
+          className="delete-journal align-right cursor-hover warning-color"
+          onClick={() => setActionDialogOpen(true)}
+        >
+          Delete Journal
+        </div>
+      </section>
       <section className="JournalEntries__main__body">
+        <header className="top-margin-buffer">
+          <Typography variant="h4">Entries</Typography>
+        </header>
         <JournalEntriesList
           entries={
             journalContext && journalContext.journalEntries
@@ -160,6 +261,13 @@ function JournalScene() {
           }
         />
       </section>
+      <ActionDialog
+        type={"delete"}
+        open={actionDialogOpen}
+        promptText={`Are you sure you want to delete journal "${journalContext.title}" ?`}
+        onActionConfirmed={handleDeleteJournal}
+        onDismiss={() => setActionDialogOpen(false)}
+      />
     </div>
   ) : (
     <NotFound404 />

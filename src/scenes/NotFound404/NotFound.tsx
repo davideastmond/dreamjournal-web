@@ -21,6 +21,16 @@ export function NotFound404() {
         >
           There was an issue loading this page
         </Typography>
+        <Typography
+          variant="h6"
+          sx={{
+            color: "#e74c32",
+            width: "100%",
+            maxWidth: 500,
+          }}
+        >
+          If you tweaked a resource URL, you may have to go back and refresh.
+        </Typography>
       </Box>
     </div>
   );

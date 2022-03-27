@@ -69,12 +69,13 @@ export const verifyActiveSession = async (): Promise<boolean> => {
       withCredentials: true,
       headers: {
         ...AUTH_HEADER,
-        "X-JWT-Token": token!,
+        "x-jwt-token": token!,
       },
     });
 
+    if (res.data.response === "OK") return true;
     const renewedToken = res.headers["x-renewed-jwt-token"];
-    const activeToken = res.headers["X-JWT-Token"];
+    const activeToken = res.headers["x-jwt-token"];
     if (activeToken) {
       sessionStorage.setItem("token", activeToken);
       return true;
@@ -84,6 +85,11 @@ export const verifyActiveSession = async (): Promise<boolean> => {
       console.log("renewal token", renewedToken);
       return true;
     }
+    console.log(
+      "87 authentication service hits false?",
+      activeToken,
+      renewedToken
+    );
     return false;
   } catch (exception) {
     return false;

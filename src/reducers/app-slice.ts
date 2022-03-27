@@ -13,7 +13,7 @@ export interface TAppState {
 const initialState: TAppState = {
   stateStatus: { status: EStatus.Idle },
   sessionUser: null,
-  hasActiveSession: true,
+  hasActiveSession: false,
 };
 
 export const getSessionUserAsync = createAsyncThunk(

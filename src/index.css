@@ -46,6 +46,10 @@ body {
   color: white;
 }
 
+a {
+  text-decoration: none;
+  color: white;
+}
 input {
   color: white;
 }
@@ -97,4 +101,16 @@ code {
 
 .sky-blue-bkg {
   background-color: var(--sky-blue);
+}
+
+.align-right {
+  text-align: right;
+}
+
+.cursor-hover {
+  cursor: pointer;
+}
+
+.warning-color {
+  color: var(--dark-salmon);
 }

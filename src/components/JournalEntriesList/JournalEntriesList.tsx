@@ -7,8 +7,8 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { getFormattedDate } from "../../utils/string-helpers";
-import { Link, useNavigate } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
+import "./style.css";
 interface IJournalEntriesListProps {
   entries: TJournalEntry[];
 }
@@ -31,13 +31,6 @@ function JournalEntriesList(props: IJournalEntriesListProps) {
   };
   return (
     <div>
-      {/* { props.entries.length > 0 && (
-        <Link to="/entries">
-          <p>
-            All entries
-          </p>
-        </Link>
-      )} */}
       <TableContainer component={Paper} sx={{ marginTop: "10px" }}>
         <Table sx={{ backgroundColor: "black" }} aria-label="simple table">
           <TableHead>
