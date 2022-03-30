@@ -35,6 +35,18 @@ function App() {
       dispatch(getAllJournalsForUserAsync({ userId: sessionUser._id }));
   }, []);
 
+  useEffect(() => {
+    window.addEventListener("focus", handleOnFocus);
+
+    return () => {
+      window.removeEventListener("focus", handleOnFocus);
+    };
+  }, []);
+
+  const handleOnFocus = () => {
+    console.log("Focus");
+    dispatch(getHasActiveSessionAsync());
+  };
   return (
     <div className="App">
       <AppNavBar hasSession={hasSession} />
@@ -51,7 +63,11 @@ function App() {
           />
           <Route
             path="/new_journal"
-            element={hasSession ? <NewJournal /> : <Navigate to="/" />}
+            element={
+              <ProtectedRoute redirectPath="/">
+                <NewJournal />
+              </ProtectedRoute>
+            }
           />
           <Route
             path="/journals/:journalId"

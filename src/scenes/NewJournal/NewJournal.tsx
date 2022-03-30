@@ -50,14 +50,15 @@ export function NewJournal(props: INewJournalSubmissionProps) {
       }) => {
         if (userData) {
           try {
-            await submitNewJournal({
+            const newJournal = await submitNewJournal({
               userId: userData._id,
               title: sanitizedTitle,
               description: sanitizedDescription,
               tags: tagsArray,
             });
             dispatch(getAllJournalsForUserAsync({ userId: userData._id }));
-            props.onSuccessfulSubmission && props.onSuccessfulSubmission();
+            navigate(`/journals/${newJournal.journal._id}`);
+            //props.onSuccessfulSubmission && props.onSuccessfulSubmission();
           } catch (exception: any) {
             setHasSubmissionError(true);
             setSubmissionErrors([`${exception.message}`]);

@@ -1,5 +1,5 @@
 import { List, ListItem, ListItemText, Typography } from "@mui/material";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { TJournal } from "../../services/journal/journal.types";
 import "./style.css";
 
@@ -24,6 +24,11 @@ function JournaList(props: IJournalListProps) {
       >
         Journals
       </Typography>
+      <div className="NewJournals__Controls">
+        <div className="warning-color cursor-hover">
+          <Link to="/new_journal">+ New Journal</Link>
+        </div>
+      </div>
       <List dense={true}>
         {props.journals &&
           props.journals.length > 0 &&
