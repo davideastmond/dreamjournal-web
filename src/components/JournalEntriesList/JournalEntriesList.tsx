@@ -9,8 +9,10 @@ import Paper from "@mui/material/Paper";
 import { getFormattedDate } from "../../utils/string-helpers";
 import { useNavigate } from "react-router-dom";
 import "./style.css";
+import AddIcon from "@mui/icons-material/Add";
 interface IJournalEntriesListProps {
   entries: TJournalEntry[];
+  onClickAddNewJournalEntry?: (journalContextId?: string) => void;
 }
 
 const cellStyling = { color: "white" };
@@ -29,8 +31,17 @@ function JournalEntriesList(props: IJournalEntriesListProps) {
       { replace: true }
     );
   };
+  const handleAddNewJournalEntry = () => {
+    props.onClickAddNewJournalEntry && props.onClickAddNewJournalEntry();
+  };
   return (
     <div>
+      <header>
+        <div className="cursor-hover" onClick={handleAddNewJournalEntry}>
+          <AddIcon color="primary" />
+          New entry
+        </div>
+      </header>
       <TableContainer component={Paper} sx={{ marginTop: "10px" }}>
         <Table sx={{ backgroundColor: "black" }} aria-label="simple table">
           <TableHead>

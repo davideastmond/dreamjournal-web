@@ -121,3 +121,43 @@ export const deleteJournalById = async ({
     throw new Error(exception.message);
   }
 };
+
+export const addEntryToJournal = async ({
+  journalId,
+  title,
+  description,
+  text,
+  photoUrl,
+  tags,
+}: {
+  journalId: string;
+  title: string;
+  description: string;
+  text: string;
+  photoUrl?: string;
+  tags?: string[];
+}): Promise<TJournal> => {
+  const token = sessionStorage.getItem("token");
+
+  try {
+    const req = await axios({
+      method: "PUT",
+      url: `${API_URL}/api/journal/${journalId}/entry`,
+      withCredentials: true,
+      headers: {
+        ...AUTH_HEADER,
+        "X-JWT-Token": token!,
+      },
+      data: {
+        title,
+        description,
+        text,
+        photoUrl,
+        tags,
+      },
+    });
+    return req.data;
+  } catch (exception: any) {
+    throw new Error(exception.message);
+  }
+};

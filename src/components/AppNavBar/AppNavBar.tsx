@@ -15,7 +15,7 @@ import { AccountCircle } from "@mui/icons-material";
 import Divider from "@mui/material/Divider";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
-import LoginIcon from "@mui/icons-material/Login";
+
 import { styled, alpha } from "@mui/material/styles";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
@@ -80,15 +80,9 @@ function AppNavBar(props: IAppNavBarProps) {
     dispatch(getHasActiveSessionAsync());
   };
 
-  const handleCreateNewJournal = () => {
-    window.location.href = "/new_journal";
-  };
-
   const LoggedInMenuItems = () => {
     return (
       <div>
-        <MenuItem onClick={handleCreateNewJournal}>Create New Journal</MenuItem>
-        <MenuItem onClick={handleClose}>New Journal Entry</MenuItem>
         <MenuItem onClick={handleClose}>Settings</MenuItem>
         <Divider />
         <MenuItem>

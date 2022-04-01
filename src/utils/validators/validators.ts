@@ -31,8 +31,8 @@ export function validateAndSanitizeNewJournalSubmissionData({
     messages.push("Description is empty");
   }
 
-  nTitle = title.trim();
-  nDescription = description.trim();
+  nTitle = title?.trim();
+  nDescription = description?.trim();
   if (tags && tags.trim() !== "") {
     nTags = tags.split(",");
     nTags = nTags.map((tag) => {

@@ -20,6 +20,7 @@ import { HomePage } from "./scenes/HomePage";
 import { JournalEntryScene } from "./scenes/JournalEntryScene";
 import { JournalScene } from "./scenes/JournalScene";
 import { NewJournal } from "./scenes/NewJournal";
+import { NewJournalEntryScene } from "./scenes/NewJournalEntryScene";
 import { NotFound404 } from "./scenes/NotFound404";
 import Splash from "./scenes/Splash";
 
@@ -35,6 +36,18 @@ function App() {
       dispatch(getAllJournalsForUserAsync({ userId: sessionUser._id }));
   }, []);
 
+  useEffect(() => {
+    window.addEventListener("focus", handleOnFocus);
+
+    return () => {
+      window.removeEventListener("focus", handleOnFocus);
+    };
+  }, []);
+
+  const handleOnFocus = () => {
+    console.log("Focus");
+    dispatch(getHasActiveSessionAsync());
+  };
   return (
     <div className="App">
       <AppNavBar hasSession={hasSession} />
@@ -51,13 +64,25 @@ function App() {
           />
           <Route
             path="/new_journal"
-            element={hasSession ? <NewJournal /> : <Navigate to="/" />}
+            element={
+              <ProtectedRoute redirectPath="/">
+                <NewJournal />
+              </ProtectedRoute>
+            }
           />
           <Route
             path="/journals/:journalId"
             element={
               <ProtectedRoute redirectPath="/">
                 <JournalScene />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/journals/:journalId/new"
+            element={
+              <ProtectedRoute redirectPath="/">
+                <NewJournalEntryScene />
               </ProtectedRoute>
             }
           />

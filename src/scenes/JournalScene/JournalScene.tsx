@@ -1,5 +1,5 @@
 import { InputAdornment, TextField, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
@@ -29,19 +29,31 @@ function JournalScene() {
     shallowEqual
   );
   const sessionUser = useSelector(selectSessionUser, shallowEqual);
-  const [journalTitleText, setJournalTitleText] = useState<string>(
-    journalContext?.title || ""
+  const [journalTitleText, setJournalTitleText] = useState<string | null>(
+    journalContext?.title || null
   );
-  const [journalDescriptionText, setJournalDescriptionText] = useState<string>(
-    journalContext?.description || ""
-  );
+  const [journalDescriptionText, setJournalDescriptionText] = useState<
+    string | null
+  >(journalContext?.description || null);
 
   const [rawJournalTagString, setRawJournalTagString] = useState<string>(
     journalContext?.tags ? journalContext.tags.join(", ") : ""
   );
   const [actionDialogOpen, setActionDialogOpen] = useState<boolean>(false);
+
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    if (journalContext) {
+      setJournalTitleText(journalContext.title);
+      journalContext.description &&
+        setJournalDescriptionText(journalContext.description);
+      journalContext.tags &&
+        journalContext.tags.length &&
+        journalContext.tags.length > 0 &&
+        setRawJournalTagString(journalContext.tags.join(", "));
+    }
+  }, [journalContext]);
   const handleTextInputChanged = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -76,11 +88,10 @@ function JournalScene() {
     event: React.FocusEvent<HTMLInputElement>
   ) => {
     if (!journalContext || !sessionUser) return;
-
     const element = event.target.id;
     switch (element) {
       case "journalTitle":
-        if (journalTitleText.trim() !== "") {
+        if (journalTitleText && journalTitleText.trim() !== "") {
           await patchJournalAttribute({
             journalId: journalContext?._id,
             patchObject: {
@@ -88,7 +99,7 @@ function JournalScene() {
             },
           });
           dispatch(getAllJournalsForUserAsync({ userId: sessionUser._id }));
-        } else if (journalTitleText.trim() === "") {
+        } else if (journalTitleText && journalTitleText.trim() === "") {
           await patchJournalAttribute({
             journalId: journalContext._id,
             patchObject: { title: { action: "delete", data: "" } },
@@ -97,7 +108,7 @@ function JournalScene() {
         }
         break;
       case "journalDescription":
-        if (journalDescriptionText.trim() !== "") {
+        if (journalDescriptionText && journalDescriptionText.trim() !== "") {
           await patchJournalAttribute({
             journalId: journalContext?._id,
             patchObject: {
@@ -105,7 +116,10 @@ function JournalScene() {
             },
           });
           dispatch(getAllJournalsForUserAsync({ userId: sessionUser._id }));
-        } else if (journalDescriptionText.trim() === "") {
+        } else if (
+          journalDescriptionText &&
+          journalDescriptionText.trim() === ""
+        ) {
           await patchJournalAttribute({
             journalId: journalContext._id,
             patchObject: { description: { action: "delete", data: "" } },
@@ -130,6 +144,10 @@ function JournalScene() {
           dispatch(getAllJournalsForUserAsync({ userId: sessionUser._id }));
         }
     }
+  };
+
+  const handleNavigateToNewJournalEntry = () => {
+    journalContext && navigate(`/journals/${journalContext?._id}/new`);
   };
 
   return journalContext ? (
@@ -259,6 +277,7 @@ function JournalScene() {
               ? journalContext.journalEntries
               : []
           }
+          onClickAddNewJournalEntry={handleNavigateToNewJournalEntry}
         />
       </section>
       <ActionDialog
