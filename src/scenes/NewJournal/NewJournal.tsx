@@ -3,12 +3,13 @@ import { useEffect, useState } from "react";
 import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
 import "./style.css";
-import { validateAndSanitizeNewJournalSubmissionData } from "./validators";
+
 import { submitNewJournal } from "../../services/journal/journal.service";
 import { selectSessionUser } from "../../reducers/app-slice";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { getAllJournalsForUserAsync } from "../../reducers/journal-slice";
 import { useNavigate } from "react-router-dom";
+import { validateAndSanitizeNewJournalSubmissionData } from "../../utils/validators/validators";
 
 export interface INewJournalSubmissionProps {
   onSuccessfulSubmission?: () => void;

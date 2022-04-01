@@ -1,4 +1,3 @@
-import NewJournalHeader from "./NewJournalEntryHeader";
-import NewJournalBody from "./NewJournalEntryBody";
+import NewJournalEntryScene from "./NewJournalEntryScene";
 
-export { NewJournalHeader, NewJournalBody };
+export { NewJournalEntryScene };

@@ -20,6 +20,7 @@ import { HomePage } from "./scenes/HomePage";
 import { JournalEntryScene } from "./scenes/JournalEntryScene";
 import { JournalScene } from "./scenes/JournalScene";
 import { NewJournal } from "./scenes/NewJournal";
+import { NewJournalEntryScene } from "./scenes/NewJournalEntryScene";
 import { NotFound404 } from "./scenes/NotFound404";
 import Splash from "./scenes/Splash";
 
@@ -74,6 +75,14 @@ function App() {
             element={
               <ProtectedRoute redirectPath="/">
                 <JournalScene />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/journals/:journalId/new"
+            element={
+              <ProtectedRoute redirectPath="/">
+                <NewJournalEntryScene />
               </ProtectedRoute>
             }
           />

@@ -146,6 +146,10 @@ function JournalScene() {
     }
   };
 
+  const handleNavigateToNewJournalEntry = () => {
+    journalContext && navigate(`/journals/${journalContext?._id}/new`);
+  };
+
   return journalContext ? (
     <div className="JournalContext__main">
       <div className="JournalContext__main__backToJournals">
@@ -273,6 +277,7 @@ function JournalScene() {
               ? journalContext.journalEntries
               : []
           }
+          onClickAddNewJournalEntry={handleNavigateToNewJournalEntry}
         />
       </section>
       <ActionDialog
