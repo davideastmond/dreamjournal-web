@@ -15,11 +15,13 @@ import { AccountCircle } from "@mui/icons-material";
 import Divider from "@mui/material/Divider";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
-
+import AnalyticsIcon from "@mui/icons-material/Analytics";
 import { styled, alpha } from "@mui/material/styles";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
 import { getHasActiveSessionAsync } from "../../reducers/app-slice";
+import { doSearchAsync } from "../../reducers/search-slice";
+import { SearchResultsPopUp } from "../SearchResultsPopup";
 
 interface IAppNavBarProps {
   hasSession: boolean;
@@ -80,10 +82,18 @@ function AppNavBar(props: IAppNavBarProps) {
     dispatch(getHasActiveSessionAsync());
   };
 
+  const [, setSearchTestString] = useState<string>("");
+  const [searchActive, setSearchActive] = useState<boolean>(false);
   const LoggedInMenuItems = () => {
     return (
       <div>
         <MenuItem onClick={handleClose}>Settings</MenuItem>
+        <MenuItem>
+          <ListItemIcon>
+            <AnalyticsIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText>My Analytics</ListItemText>
+        </MenuItem>
         <Divider />
         <MenuItem>
           <ListItemIcon>
@@ -95,6 +105,19 @@ function AppNavBar(props: IAppNavBarProps) {
     );
   };
 
+  const handleSearchTextOnChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setSearchActive(true);
+    setSearchTestString(event.target.value);
+    dispatch(doSearchAsync({ data: event.target.value }));
+  };
+
+  const handleSearchMenuClickAway = () => {
+    // click away
+    console.log("something click");
+    setSearchActive(false);
+  };
   return (
     <Box
       sx={{
@@ -125,6 +148,7 @@ function AppNavBar(props: IAppNavBarProps) {
               <StyledInputBase
                 placeholder="Search…"
                 inputProps={{ "aria-label": "search" }}
+                onChange={handleSearchTextOnChange}
               />
             </Search>
           )}
@@ -161,6 +185,9 @@ function AppNavBar(props: IAppNavBarProps) {
           )}
         </Toolbar>
       </AppBar>
+      {searchActive && (
+        <SearchResultsPopUp onClickAway={handleSearchMenuClickAway} />
+      )}
     </Box>
   );
 }

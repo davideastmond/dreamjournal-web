@@ -1,0 +1,14 @@
+.SearchResultsPopup__main {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+}
+
+.SearchResultsPopup__context-menu {
+  width: 500px;
+  height: 500px;
+  background-color: white;
+  position: inherit;
+  right: 0vw;
+  z-index: 100;
+}

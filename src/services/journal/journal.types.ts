@@ -43,10 +43,13 @@ export type TPhotoURLPatchRequest = {
   photoUrl: { action: "update" | "delete"; data: string };
 };
 
+export type TTextBodyPatchRequest = {
+  text: { action: "update" | "delete"; data: string };
+};
 export type TUpdateAction = "update" | "delete";
 
 export type TJournalFieldUpdateAction = {
-  field: "title" | "tags" | "description" | "photoUrl" | "no changes";
+  field: "title" | "tags" | "description" | "photoUrl" | "text" | "no changes";
   action: TUpdateAction;
   data?: string | string[] | null;
 };
