@@ -12,3 +12,12 @@
   right: 0vw;
   z-index: 100;
 }
+
+.SearchResultCard__empty_text {
+  color: black;
+}
+
+.top-bottom-padding {
+  padding-top: 2%;
+  padding-bottom: 2%;
+}

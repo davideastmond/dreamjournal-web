@@ -17,11 +17,15 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import AnalyticsIcon from "@mui/icons-material/Analytics";
 import { styled, alpha } from "@mui/material/styles";
-import { useDispatch } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { getHasActiveSessionAsync } from "../../reducers/app-slice";
-import { doSearchAsync } from "../../reducers/search-slice";
+import {
+  doSearchAsync,
+  selectSearchResults,
+} from "../../reducers/search-slice";
 import { SearchResultsPopUp } from "../SearchResultsPopup";
+import { TSearchResults } from "../../services/search/search.types";
 
 interface IAppNavBarProps {
   hasSession: boolean;
@@ -68,6 +72,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 function AppNavBar(props: IAppNavBarProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const searchResults = useSelector(selectSearchResults, shallowEqual);
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -81,6 +87,8 @@ function AppNavBar(props: IAppNavBarProps) {
     sessionStorage.setItem("token", "");
     dispatch(getHasActiveSessionAsync());
   };
+
+  console.log("search results", searchResults);
 
   const [, setSearchTestString] = useState<string>("");
   const [searchActive, setSearchActive] = useState<boolean>(false);
@@ -186,7 +194,10 @@ function AppNavBar(props: IAppNavBarProps) {
         </Toolbar>
       </AppBar>
       {searchActive && (
-        <SearchResultsPopUp onClickAway={handleSearchMenuClickAway} />
+        <SearchResultsPopUp
+          onClickAway={handleSearchMenuClickAway}
+          searchData={searchResults as TSearchResults}
+        />
       )}
     </Box>
   );

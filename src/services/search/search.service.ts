@@ -1,6 +1,11 @@
 import axios from "axios";
 import { API_URL, AUTH_HEADER } from "../../environment";
-export const doSearch = async ({ data }: { data: string }) => {
+import { TSearchResults } from "./search.types";
+export const doSearch = async ({
+  data,
+}: {
+  data: string;
+}): Promise<TSearchResults> => {
   const token = sessionStorage.getItem("token");
 
   try {
@@ -13,7 +18,6 @@ export const doSearch = async ({ data }: { data: string }) => {
         "X-JWT-Token": token!,
       },
     });
-    console.log(req.data);
     return req.data;
   } catch (exception: any) {
     throw new Error(exception.message);

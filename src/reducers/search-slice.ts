@@ -1,15 +1,17 @@
+import { Sd } from "@mui/icons-material";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { EStatus, IStateStatus } from "../definitions";
+import { EStatus, IStateStatus, TGlobalAppStore } from "../definitions";
 import { doSearch } from "../services/search/search.service";
+import { TSearchResults } from "../services/search/search.types";
 
 export type TSearchState = {
   stateStatus: IStateStatus;
-  results: any[];
+  results: TSearchResults | {};
 };
 
 const initialState: TSearchState = {
   stateStatus: { status: EStatus.Idle },
-  results: [],
+  results: {},
 };
 
 export const doSearchAsync = createAsyncThunk(
@@ -33,7 +35,7 @@ export const searchSlice = createSlice({
         state.stateStatus = {
           status: EStatus.Idle,
         };
-        console.log("payload action", action.payload);
+        state.results = action.payload;
       })
       .addCase(doSearchAsync.rejected, (state, action) => {
         state.stateStatus = {
@@ -44,4 +46,6 @@ export const searchSlice = createSlice({
       }),
 });
 
+export const selectSearchResults = (state: TGlobalAppStore) =>
+  state.search.results;
 export default searchSlice.reducer;
