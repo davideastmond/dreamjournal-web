@@ -131,13 +131,10 @@ function LoginModal(props: ILoginModalProps) {
           )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={props.onDismiss} disabled={loginInProgress === true}>
+          <Button onClick={props.onDismiss} disabled={loginInProgress}>
             Cancel
           </Button>
-          <Button
-            onClick={handleSubmitLogin}
-            disabled={loginInProgress === true}
-          >
+          <Button onClick={handleSubmitLogin} disabled={loginInProgress}>
             Go
           </Button>
         </DialogActions>
