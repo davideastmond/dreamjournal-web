@@ -1,11 +1,11 @@
-import { Box } from "@mui/material";
 import CircularProgress from "@mui/material/CircularProgress";
+import "./style.css";
 
 function Spinner() {
   return (
-    <Box sx={{ display: "flex" }}>
+    <div className="Spinner__main flex centered-spinner-position">
       <CircularProgress />
-    </Box>
+    </div>
   );
 }
 export default Spinner;

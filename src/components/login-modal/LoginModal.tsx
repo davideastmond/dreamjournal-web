@@ -7,8 +7,8 @@ import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
-import { getHasActiveSessionAsync } from "../../reducers/app-slice";
 import { logInUser } from "../../services/authentication/authentication.service";
+import { Spinner } from "../Spinner";
 
 import "./login-modal-style.css";
 import { validateLoginData } from "./validators/login-validator";
@@ -34,7 +34,10 @@ function LoginModal(props: ILoginModalProps) {
   const [loginAttemptErrorMessage, setLoginAttemptErrorMessage] =
     useState<string>("");
 
+  const [loginInProgress, setLoginInProgress] = useState<boolean>(false);
+
   const dispatch = useDispatch();
+
   const handleTextInputChanged = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -53,9 +56,11 @@ function LoginModal(props: ILoginModalProps) {
     setLoginPasswordError("");
     setHasLoginAttemptError(false);
     setLoginAttemptErrorMessage("");
+    setLoginInProgress(false);
   };
   const handleSubmitLogin = async () => {
     clearErrors();
+    setLoginInProgress(true);
     validateLoginData({
       email: loginEmail,
       password: loginPassword,
@@ -68,10 +73,12 @@ function LoginModal(props: ILoginModalProps) {
           props.onSuccessfulLogin();
         } catch (err: any) {
           setHasLoginAttemptError(true);
+          setLoginInProgress(false);
           setLoginAttemptErrorMessage(err.message);
         }
       },
       onFail: ({ field, message }: { field: string; message: string }) => {
+        setLoginInProgress(false);
         switch (field) {
           case "email":
             setHasLoginEmailError(true);
@@ -87,6 +94,7 @@ function LoginModal(props: ILoginModalProps) {
   return (
     <div>
       <Dialog open={props.open} onClose={props.onDismiss}>
+        {loginInProgress && <Spinner />}
         <DialogTitle>Sign In</DialogTitle>
         <DialogContent>
           <DialogContentText>Enter your details</DialogContentText>
@@ -123,8 +131,15 @@ function LoginModal(props: ILoginModalProps) {
           )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={props.onDismiss}>Cancel</Button>
-          <Button onClick={handleSubmitLogin}>Go</Button>
+          <Button onClick={props.onDismiss} disabled={loginInProgress === true}>
+            Cancel
+          </Button>
+          <Button
+            onClick={handleSubmitLogin}
+            disabled={loginInProgress === true}
+          >
+            Go
+          </Button>
         </DialogActions>
       </Dialog>
     </div>
