@@ -50,8 +50,8 @@ function App() {
   };
   return (
     <div className="App">
-      <AppNavBar hasSession={hasSession} />
       <Router>
+        <AppNavBar hasSession={hasSession} />
         <Routes>
           <Route path="/" element={<Splash />} />
           <Route
