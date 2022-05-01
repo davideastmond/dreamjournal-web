@@ -97,38 +97,42 @@ function LoginModal(props: ILoginModalProps) {
         {loginInProgress && <Spinner />}
         <DialogTitle>Sign In</DialogTitle>
         <DialogContent>
-          <DialogContentText>Enter your details</DialogContentText>
-          <TextField
-            required
-            autoFocus
-            margin="dense"
-            id="email"
-            label="Email"
-            type="email"
-            fullWidth
-            variant="filled"
-            onChange={handleTextInputChanged}
-            error={hasLoginEmailError}
-            helperText={loginEmailError}
-          />
-          <TextField
-            required
-            autoFocus
-            margin="dense"
-            id="filled-password"
-            label="Password"
-            type="password"
-            fullWidth
-            variant="filled"
-            onChange={handleTextInputChanged}
-            error={hasLoginPasswordError}
-            helperText={loginPasswordError}
-          />
-          {hasLoginAttemptError && (
-            <DialogContentText color="error">
-              {loginAttemptErrorMessage}
-            </DialogContentText>
-          )}
+          <form>
+            <DialogContentText>Enter your details</DialogContentText>
+            <TextField
+              required
+              autoFocus
+              margin="dense"
+              id="email"
+              label="Email"
+              type="email"
+              fullWidth
+              variant="filled"
+              onChange={handleTextInputChanged}
+              error={hasLoginEmailError}
+              helperText={loginEmailError}
+              autoComplete="email username"
+            />
+            <TextField
+              required
+              autoFocus
+              margin="dense"
+              id="filled-password"
+              label="Password"
+              type="password"
+              fullWidth
+              variant="filled"
+              onChange={handleTextInputChanged}
+              error={hasLoginPasswordError}
+              helperText={loginPasswordError}
+              autoComplete="password"
+            />
+            {hasLoginAttemptError && (
+              <DialogContentText color="error">
+                {loginAttemptErrorMessage}
+              </DialogContentText>
+            )}
+          </form>
         </DialogContent>
         <DialogActions>
           <Button onClick={props.onDismiss} disabled={loginInProgress}>
