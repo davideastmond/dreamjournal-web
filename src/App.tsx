@@ -1,11 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  Navigate,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
 import { AppNavBar } from "./components/AppNavBar";
 import { ProtectedRoute } from "./components/ProtectedRoute";
@@ -45,7 +40,6 @@ function App() {
   }, []);
 
   const handleOnFocus = () => {
-    console.log("Focus");
     dispatch(getHasActiveSessionAsync());
   };
   return (
