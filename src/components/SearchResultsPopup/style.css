@@ -1,0 +1,76 @@
+.SearchResultsPopup__main {
+  position: absolute;
+  width: 100%;
+  height: 100vh;
+}
+
+.SearchResultsPopup__context-menu {
+  width: 500px;
+  height: 500px;
+  background-color: white;
+  position: inherit;
+  right: 0vw;
+  z-index: 100;
+}
+
+.SearchResultCard__empty_text {
+  color: black;
+}
+
+.top-bottom-padding {
+  padding-top: 2%;
+  padding-bottom: 2%;
+}
+
+.context-menu-fade-in {
+  animation: fadeIn 0.1s;
+  -webkit-animation: fadeIn 0.1s;
+  -moz-animation: fadeIn 0.1s;
+  -o-animation: fadeIn 0.1s;
+  -ms-animation: fadeIn 0.1s;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@-moz-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@-o-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@-ms-keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}

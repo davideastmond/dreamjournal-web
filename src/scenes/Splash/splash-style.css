@@ -1,0 +1,31 @@
+.Login__Main__control-group .control {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.Login__Main__app-logo {
+  width: 20%;
+  height: 20%;
+}
+
+@media only screen and (max-width: 600px) and (orientation: portrait) {
+  .flex-top-margin {
+    margin-top: 40%;
+  }
+  .Login__Main__app-logo {
+    width: 50%;
+    height: 100%;
+  }
+}
+
+@media only screen and (min-width: 601px) {
+  .flex-top-margin {
+    margin-top: 10%;
+  }
+  .full-flex-basis {
+    flex-basis: 100%;
+  }
+  .splash-flex {
+    display: flex;
+  }
+}
