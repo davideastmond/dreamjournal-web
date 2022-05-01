@@ -71,10 +71,7 @@ function JournalTagAnalytics(props: IJournalTagAnalyticsProps) {
     props.onClickClose && props.onClickClose();
   };
 
-  const handleTabChange = async (
-    event: React.SyntheticEvent,
-    newValue: number
-  ) => {
+  const handleTabChange = async (_: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
@@ -111,7 +108,7 @@ function JournalTagAnalytics(props: IJournalTagAnalyticsProps) {
             <CloseIcon />
           </IconButton>
         </header>
-        <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+        <Box sx={{ borderBottom: 1, borderColor: "divider", width: "100%" }}>
           <Tabs
             value={value}
             onChange={handleTabChange}

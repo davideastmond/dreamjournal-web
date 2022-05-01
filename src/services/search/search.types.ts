@@ -15,15 +15,18 @@ export enum MatchingCriteria {
 
   Default = "default",
 }
-export type TJournalEntryMatchInstance = TJournalEntry & {
+export type TJournalEntryMatchInstance = {
+  journalEntry: TJournalEntry;
   matchedBy: MatchingCriteria;
 };
 
-export type TJournalMatchInstance = TJournal & {
+export type TJournalMatchInstance = {
+  journal: TJournal;
   matchedBy: MatchingCriteria;
 };
 
 export type TSearchResults = {
+  queryString: string;
   journalEntries: TJournalEntryMatchInstance[];
   journals: TJournalMatchInstance[];
 };

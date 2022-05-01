@@ -12,7 +12,7 @@ interface IJournalTagTableProps {
 function JournalTagTable(props: IJournalTagTableProps) {
   return (
     <TableContainer component={Paper}>
-      <Table sx={{ minWidth: "100vw" }} aria-label="simple table">
+      <Table sx={{ minWidth: "80vw" }} aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell align="right">Tag</TableCell>

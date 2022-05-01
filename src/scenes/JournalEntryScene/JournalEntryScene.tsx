@@ -210,7 +210,7 @@ function JournalEntryScene() {
               focused
               variant="filled"
               value={getFormattedDate({
-                dateString: journalEntryContext?.createdAt!.toString()!,
+                dateString: journalEntryContext?.createdAt?.toString()!,
               })}
             />
             <TextField
@@ -219,7 +219,7 @@ function JournalEntryScene() {
               focused
               variant="filled"
               value={getFormattedDate({
-                dateString: journalEntryContext?.updatedAt!.toString()!,
+                dateString: journalEntryContext?.updatedAt?.toString()!,
               })}
             />
             <TextField
