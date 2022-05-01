@@ -88,8 +88,6 @@ function AppNavBar(props: IAppNavBarProps) {
     dispatch(getHasActiveSessionAsync());
   };
 
-  console.log("search results", searchResults);
-
   const [, setSearchTestString] = useState<string>("");
   const [searchActive, setSearchActive] = useState<boolean>(false);
   const LoggedInMenuItems = () => {
@@ -117,14 +115,23 @@ function AppNavBar(props: IAppNavBarProps) {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     setSearchActive(true);
-    setSearchTestString(event.target.value);
-    dispatch(doSearchAsync({ data: event.target.value }));
+    setSearchValue(event.target.value);
   };
 
   const handleSearchMenuClickAway = () => {
-    // click away
-    console.log("something click");
     setSearchActive(false);
+  };
+
+  const setSearchValue = (value: string) => {
+    setSearchTestString(value);
+    dispatch(doSearchAsync({ data: value }));
+  };
+
+  const handleClickIntoSearchTextBox = (event: any) => {
+    if (event.target.value.length > 0 && !searchActive) {
+      setSearchActive(true);
+      setSearchValue(event.target.value);
+    }
   };
   return (
     <Box
@@ -157,6 +164,7 @@ function AppNavBar(props: IAppNavBarProps) {
                 placeholder="Search…"
                 inputProps={{ "aria-label": "search" }}
                 onChange={handleSearchTextOnChange}
+                onClick={handleClickIntoSearchTextBox}
               />
             </Search>
           )}
