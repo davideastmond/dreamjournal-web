@@ -10,7 +10,6 @@ interface IProtectedRouteProps {
 }
 export function ProtectedRoute(props: IProtectedRouteProps) {
   const hasSession = useSelector(selectHasActiveSession, shallowEqual);
-  console.log("13 -hasSession", hasSession);
   return hasSession ? props.children : <Navigate to={props.redirectPath} />;
 }
 

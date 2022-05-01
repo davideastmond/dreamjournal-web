@@ -118,6 +118,7 @@ function RegistrationModal(props: IRegistrationModalProps) {
         });
       },
       onFail: ({ field, message }: { field: string; message: string }) => {
+        setSubmitInProgress(false);
         switch (field) {
           case "email":
             setEmailErrorText(message);
