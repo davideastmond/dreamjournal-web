@@ -114,3 +114,11 @@ code {
 .warning-color {
   color: var(--dark-salmon);
 }
+
+.font-color-black {
+  color: var(--black);
+}
+
+.align-center {
+  align-self: center;
+}
