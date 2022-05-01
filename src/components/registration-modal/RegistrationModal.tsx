@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import { registerUser } from "../../services/authentication/authentication.service";
+import { Spinner } from "../Spinner";
 import { validateRegistrationData } from "./validators/registration-validator";
 
 interface IRegistrationModalProps {
@@ -46,6 +47,8 @@ function RegistrationModal(props: IRegistrationModalProps) {
     useState<boolean>(false);
   const [registrationAttemptErrorText, setRegistrationAttemptErrorText] =
     useState<string>("");
+
+  const [submitInProgress, setSubmitInProgress] = useState<boolean>(false);
   const handleInputsChanged = (
     event: React.ChangeEvent<HTMLTextAreaElement>
   ) => {
@@ -88,6 +91,7 @@ function RegistrationModal(props: IRegistrationModalProps) {
 
   const handleSubmitRegistrationRequest = async () => {
     clearErrorState();
+    setSubmitInProgress(true);
     validateRegistrationData({
       email: registrationEmail,
       firstName: registrationFirstName,
@@ -102,9 +106,11 @@ function RegistrationModal(props: IRegistrationModalProps) {
           plainTextPassword: registrationPassword1,
           onSuccess: () => {
             props.onDismiss();
+            setSubmitInProgress(false);
           },
           onError: (message?: string) => {
             setRegistrationAttemptErrorState(true);
+            setSubmitInProgress(false);
             setRegistrationAttemptErrorText(
               message || "Encountered an error: unable to log in"
             );
@@ -112,6 +118,7 @@ function RegistrationModal(props: IRegistrationModalProps) {
         });
       },
       onFail: ({ field, message }: { field: string; message: string }) => {
+        setSubmitInProgress(false);
         switch (field) {
           case "email":
             setEmailErrorText(message);
@@ -140,6 +147,7 @@ function RegistrationModal(props: IRegistrationModalProps) {
   return (
     <div>
       <Dialog open={props.open} onClose={props.onDismiss}>
+        {submitInProgress && <Spinner />}
         <DialogTitle>Create new account</DialogTitle>
         <DialogContent>
           <DialogContentText>Enter your details</DialogContentText>
@@ -204,8 +212,14 @@ function RegistrationModal(props: IRegistrationModalProps) {
           )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={props.onDismiss}>Cancel</Button>
-          <Button color="success" onClick={handleSubmitRegistrationRequest}>
+          <Button onClick={props.onDismiss} disabled={submitInProgress}>
+            Cancel
+          </Button>
+          <Button
+            color="success"
+            onClick={handleSubmitRegistrationRequest}
+            disabled={submitInProgress}
+          >
             Register
           </Button>
         </DialogActions>

@@ -74,8 +74,6 @@ function NewJournalEntryScene() {
         sanitizedDescription,
         tagsArray,
       }) => {
-        // Do something
-        console.log(sanitizedDescription, sanitizedTitle);
         try {
           await addEntryToJournal({
             journalId: journalId!,

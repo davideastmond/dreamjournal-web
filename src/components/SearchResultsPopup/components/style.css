@@ -1,0 +1,4 @@
+.ResultPanel__Main:hover {
+  cursor: pointer;
+  background-color: var(--egg-shell-white);
+}

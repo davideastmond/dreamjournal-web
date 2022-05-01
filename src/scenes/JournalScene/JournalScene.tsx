@@ -1,4 +1,4 @@
-import { InputAdornment, TextField, Typography } from "@mui/material";
+import { InputAdornment, TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -20,6 +20,7 @@ import {
   selectSessionUser,
 } from "../../reducers/app-slice";
 import { ActionDialog } from "../../components/ActionDialog";
+import { JournalTagAnalytics } from "../TagAnalytics";
 
 function JournalScene() {
   const { journalId } = useParams();
@@ -40,7 +41,7 @@ function JournalScene() {
     journalContext?.tags ? journalContext.tags.join(", ") : ""
   );
   const [actionDialogOpen, setActionDialogOpen] = useState<boolean>(false);
-
+  const [tagsDialogOpen, setTagsDialogOpen] = useState<boolean>(false);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -165,6 +166,7 @@ function JournalScene() {
           <div>
             <h2>{journalContext?.title}</h2>
           </div>
+          <div>Journal</div>
         </div>
         <TextField
           sx={textAreaStyling}
@@ -266,10 +268,16 @@ function JournalScene() {
         >
           Delete Journal
         </div>
+        <div
+          className="tag-stats-journal align-right cursor-hover warning-color"
+          onClick={() => setTagsDialogOpen(true)}
+        >
+          Tag Analytics
+        </div>
       </section>
       <section className="JournalEntries__main__body">
         <header className="top-margin-buffer">
-          <Typography variant="h4">Entries</Typography>
+          <h2>Entries</h2>
         </header>
         <JournalEntriesList
           entries={
@@ -286,6 +294,13 @@ function JournalScene() {
         promptText={`Are you sure you want to delete journal "${journalContext.title}" ?`}
         onActionConfirmed={handleDeleteJournal}
         onDismiss={() => setActionDialogOpen(false)}
+      />
+      <JournalTagAnalytics
+        open={tagsDialogOpen}
+        onClickClose={() => setTagsDialogOpen(false)}
+        context={"journalSpecific"}
+        userId={sessionUser?._id!}
+        journalContext={journalContext}
       />
     </div>
   ) : (

@@ -5,6 +5,7 @@ import {
   TNewJournalReturnData,
   TPhotoURLPatchRequest,
   TTagsPatchRequest,
+  TTextBodyPatchRequest,
   TTitlePatchRequest,
 } from "./journal.types";
 import axios from "axios";
@@ -81,7 +82,7 @@ export const patchJournalAttribute = async ({
 }) => {
   const token = sessionStorage.getItem("token");
   try {
-    const req = await axios({
+    await axios({
       method: "PATCH",
       url: `${API_URL}/api/journal/${journalId}`,
       withCredentials: true,
@@ -93,8 +94,6 @@ export const patchJournalAttribute = async ({
         ...patchObject,
       },
     });
-
-    console.log(req.data);
   } catch (exception: any) {
     throw new Error(exception.message);
   }
@@ -157,6 +156,39 @@ export const addEntryToJournal = async ({
       },
     });
     return req.data;
+  } catch (exception: any) {
+    throw new Error(exception.message);
+  }
+};
+
+export const patchJournalEntry = async ({
+  journalId,
+  journalEntryId,
+  patchObject,
+}: {
+  journalId: string;
+  journalEntryId: string;
+  patchObject:
+    | TTitlePatchRequest
+    | TDescriptionPatchRequest
+    | TTagsPatchRequest
+    | TPhotoURLPatchRequest
+    | TTextBodyPatchRequest;
+}) => {
+  const token = sessionStorage.getItem("token");
+  try {
+    await axios({
+      method: "PATCH",
+      url: `${API_URL}/api/journal/${journalId}/entry/${journalEntryId}`,
+      withCredentials: true,
+      headers: {
+        ...AUTH_HEADER,
+        "X-JWT-Token": token!,
+      },
+      data: {
+        ...patchObject,
+      },
+    });
   } catch (exception: any) {
     throw new Error(exception.message);
   }

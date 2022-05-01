@@ -15,11 +15,17 @@ import { AccountCircle } from "@mui/icons-material";
 import Divider from "@mui/material/Divider";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
-
+import AnalyticsIcon from "@mui/icons-material/Analytics";
 import { styled, alpha } from "@mui/material/styles";
-import { useDispatch } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
 import { getHasActiveSessionAsync } from "../../reducers/app-slice";
+import {
+  doSearchAsync,
+  selectSearchResults,
+} from "../../reducers/search-slice";
+import { SearchResultsPopUp } from "../SearchResultsPopup";
+import { TSearchResults } from "../../services/search/search.types";
 
 interface IAppNavBarProps {
   hasSession: boolean;
@@ -66,6 +72,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 function AppNavBar(props: IAppNavBarProps) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const searchResults = useSelector(selectSearchResults, shallowEqual);
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -80,10 +88,18 @@ function AppNavBar(props: IAppNavBarProps) {
     dispatch(getHasActiveSessionAsync());
   };
 
+  const [, setSearchTestString] = useState<string>("");
+  const [searchActive, setSearchActive] = useState<boolean>(false);
   const LoggedInMenuItems = () => {
     return (
       <div>
         <MenuItem onClick={handleClose}>Settings</MenuItem>
+        <MenuItem>
+          <ListItemIcon>
+            <AnalyticsIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText>My Analytics</ListItemText>
+        </MenuItem>
         <Divider />
         <MenuItem>
           <ListItemIcon>
@@ -95,6 +111,28 @@ function AppNavBar(props: IAppNavBarProps) {
     );
   };
 
+  const handleSearchTextOnChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setSearchActive(true);
+    setSearchValue(event.target.value);
+  };
+
+  const handleSearchMenuClickAway = () => {
+    setSearchActive(false);
+  };
+
+  const setSearchValue = (value: string) => {
+    setSearchTestString(value);
+    dispatch(doSearchAsync({ data: value }));
+  };
+
+  const handleClickIntoSearchTextBox = (event: any) => {
+    if (event.target.value.length > 0 && !searchActive) {
+      setSearchActive(true);
+      setSearchValue(event.target.value);
+    }
+  };
   return (
     <Box
       sx={{
@@ -125,6 +163,8 @@ function AppNavBar(props: IAppNavBarProps) {
               <StyledInputBase
                 placeholder="Search…"
                 inputProps={{ "aria-label": "search" }}
+                onChange={handleSearchTextOnChange}
+                onClick={handleClickIntoSearchTextBox}
               />
             </Search>
           )}
@@ -161,6 +201,12 @@ function AppNavBar(props: IAppNavBarProps) {
           )}
         </Toolbar>
       </AppBar>
+      {searchActive && (
+        <SearchResultsPopUp
+          onClickAway={handleSearchMenuClickAway}
+          searchData={searchResults as TSearchResults}
+        />
+      )}
     </Box>
   );
 }
