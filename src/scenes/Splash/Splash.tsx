@@ -29,8 +29,10 @@ function Splash() {
   };
 
   const handleRegistrationSuccess = () => {
-    console.log("Registration is successful");
     setRegistrationModalOpen(false);
+    dispatch(getHasActiveSessionAsync());
+    dispatch(getSessionUserAsync());
+    navigate("/home", { replace: true });
   };
 
   const handleSuccessfulLogin = () => {

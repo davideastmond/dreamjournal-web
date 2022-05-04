@@ -105,7 +105,7 @@ function RegistrationModal(props: IRegistrationModalProps) {
           lastName: registrationLastName,
           plainTextPassword: registrationPassword1,
           onSuccess: () => {
-            props.onDismiss();
+            props.onSuccessDismiss();
             setSubmitInProgress(false);
           },
           onError: (message?: string) => {
