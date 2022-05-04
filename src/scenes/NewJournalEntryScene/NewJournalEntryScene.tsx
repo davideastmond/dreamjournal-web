@@ -51,6 +51,10 @@ function NewJournalEntryScene() {
     if (journalContext && journalContext._id === journalId) return true;
     return false;
   };
+
+  const handleCancelNewJournal = () => {
+    navigate("/home");
+  };
   const handleValidateAndSubmit = () => {
     clearSubmissionErrors();
     if (!validateJournalContext()) {
@@ -123,6 +127,12 @@ function NewJournalEntryScene() {
           onClick={handleValidateAndSubmit}
         >
           Submit
+        </div>
+        <div
+          className="JournalEntryText__footer__submit cursor-hover"
+          onClick={handleCancelNewJournal}
+        >
+          Cancel
         </div>
       </footer>
     </div>
