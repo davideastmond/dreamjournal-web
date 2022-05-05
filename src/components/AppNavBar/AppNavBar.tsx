@@ -16,6 +16,7 @@ import Divider from "@mui/material/Divider";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import AnalyticsIcon from "@mui/icons-material/Analytics";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import { styled, alpha } from "@mui/material/styles";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
@@ -93,12 +94,17 @@ function AppNavBar(props: IAppNavBarProps) {
   const LoggedInMenuItems = () => {
     return (
       <div>
-        <MenuItem onClick={handleClose}>Settings</MenuItem>
+        <MenuItem onClick={handleClose}>
+          <ListItemIcon>
+            <ManageAccountsIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText>Settings</ListItemText>
+        </MenuItem>
         <MenuItem>
           <ListItemIcon>
             <AnalyticsIcon fontSize="small" />
           </ListItemIcon>
-          <ListItemText>My Analytics</ListItemText>
+          <ListItemText>Analytics</ListItemText>
         </MenuItem>
         <Divider />
         <MenuItem>

@@ -29,7 +29,7 @@ export function NotFound404() {
             maxWidth: 500,
           }}
         >
-          If you tweaked a resource URL, you may have to go back and refresh.
+          If you tweaked a URL, you may have to go back and refresh.
         </Typography>
       </Box>
     </div>
