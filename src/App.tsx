@@ -17,6 +17,7 @@ import { JournalScene } from "./scenes/JournalScene";
 import { NewJournal } from "./scenes/NewJournal";
 import { NewJournalEntryScene } from "./scenes/NewJournalEntryScene";
 import { NotFound404 } from "./scenes/NotFound404";
+import { ProfileSettings } from "./scenes/ProfileSettings";
 import Splash from "./scenes/Splash";
 
 function App() {
@@ -85,6 +86,14 @@ function App() {
             element={
               <ProtectedRoute redirectPath="/">
                 <JournalEntryScene />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/settings"
+            element={
+              <ProtectedRoute redirectPath="/">
+                <ProfileSettings />
               </ProtectedRoute>
             }
           />
