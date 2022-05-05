@@ -122,3 +122,7 @@ code {
 .align-center {
   align-self: center;
 }
+
+.thin {
+  font-weight: lighter;
+}
