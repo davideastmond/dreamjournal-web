@@ -27,6 +27,7 @@ import {
 } from "../../reducers/search-slice";
 import { SearchResultsPopUp } from "../SearchResultsPopup";
 import { TSearchResults } from "../../services/search/search.types";
+import { useNavigate } from "react-router-dom";
 
 interface IAppNavBarProps {
   hasSession: boolean;
@@ -83,7 +84,7 @@ function AppNavBar(props: IAppNavBarProps) {
   };
 
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const handleLogout = () => {
     sessionStorage.setItem("token", "");
     dispatch(getHasActiveSessionAsync());
@@ -98,7 +99,7 @@ function AppNavBar(props: IAppNavBarProps) {
           <ListItemIcon>
             <ManageAccountsIcon fontSize="small" />
           </ListItemIcon>
-          <ListItemText>Settings</ListItemText>
+          <ListItemText onClick={handleLaunchSettings}>Settings</ListItemText>
         </MenuItem>
         <MenuItem>
           <ListItemIcon>
@@ -115,6 +116,10 @@ function AppNavBar(props: IAppNavBarProps) {
         </MenuItem>
       </div>
     );
+  };
+
+  const handleLaunchSettings = () => {
+    navigate("/settings", { replace: true });
   };
 
   const handleSearchTextOnChange = (
