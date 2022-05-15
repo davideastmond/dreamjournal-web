@@ -5,7 +5,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import Slide from "@mui/material/Slide";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
-import Typography from "@mui/material/Typography";
+
 import {
   getAllTagsCountByUserId,
   getTagCountByJournalId,
@@ -13,17 +13,13 @@ import {
 import { TJournal } from "../../services/journal/journal.types";
 import "./style.css";
 import { JournalTagTable } from "./JournalTagTable";
+import { TabPanel } from "../../components/tab-panel/TapPanel";
 interface IJournalTagAnalyticsProps {
   context?: "journalSpecific" | "allJournals";
   journalContext?: TJournal;
   userId: string;
   open: boolean;
   onClickClose?: () => void;
-}
-interface TabPanelProps {
-  children?: React.ReactNode;
-  index: number;
-  value: number;
 }
 
 const Transition = React.forwardRef(function Transition(
@@ -32,33 +28,13 @@ const Transition = React.forwardRef(function Transition(
   },
   ref: React.Ref<unknown>
 ) {
-  return <Slide direction="up" ref={ref} {...props} />;
+  return <Slide direction="left" ref={ref} {...props} />;
 });
 function a11yProps(index: number) {
   return {
     id: `simple-tab-${index}`,
     "aria-controls": `simple-tabpanel-${index}`,
   };
-}
-
-function TabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
-    </div>
-  );
 }
 
 function JournalTagAnalytics(props: IJournalTagAnalyticsProps) {

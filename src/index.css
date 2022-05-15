@@ -126,3 +126,7 @@ code {
 .thin {
   font-weight: lighter;
 }
+
+.justify-center-content {
+  justify-content: center;
+}

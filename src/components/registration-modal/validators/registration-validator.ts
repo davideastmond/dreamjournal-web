@@ -1,4 +1,5 @@
 import { isEmailValid } from "../../../utils/string-helpers";
+import { isPasswordValid } from "../../../utils/validators/validators";
 
 type TRegistrationValidationInput = {
   email: string;
@@ -17,7 +18,8 @@ type TRegistrationValidationInput = {
       | "lastName"
       | "password1"
       | "password2"
-      | "unknown";
+      | "unknown"
+      | string;
     message: string;
   }) => void;
 };
@@ -49,20 +51,20 @@ export function validateRegistrationData({
     onFail({ field: "lastName", message: "Please enter a last name" });
   }
 
-  if (!password1 || password1.trim() === "") {
+  const passwordFailMessage = ({
+    field,
+    message,
+  }: {
+    field: string;
+    message: string;
+  }) => {
     foundError = true;
     onFail({
-      field: "password1",
-      message: "Enter a password that is at least 8 characters long",
+      field,
+      message,
     });
-  }
-  if (password2.trim() !== password1.trim() || password2.trim() === "") {
-    foundError = true;
-    onFail({
-      field: "password2",
-      message: "Please confirm password, and ensure passwords match",
-    });
-  }
+  };
+  isPasswordValid({ password1, password2, onFail: passwordFailMessage });
 
   if (!foundError) {
     onSuccess();
