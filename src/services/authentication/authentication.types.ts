@@ -12,3 +12,8 @@ export type TRegistrationResponseData = {
   issued: number;
   expires: number;
 };
+
+export type TSecurityQuestionTemplate = {
+  id: string;
+  prompt: string;
+};
