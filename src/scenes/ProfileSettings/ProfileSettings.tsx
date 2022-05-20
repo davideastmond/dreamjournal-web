@@ -1,5 +1,5 @@
 import { Button, Grid, Tab, Tabs, TextField, Typography } from "@mui/material";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { TabPanel } from "../../components/tab-panel/TapPanel";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
@@ -10,6 +10,7 @@ import {
 } from "../../reducers/app-slice";
 import "./style.css";
 import { patchUserSecurePassword } from "../../services/user/user.service";
+import { Link } from "react-router-dom";
 
 interface IProfilePanelProps {
   sessionUserId: string | undefined;
@@ -34,11 +35,13 @@ const GridRow = ({
   label,
   contentData,
   onEdit,
+  idTag,
 }: {
   canEdit: boolean;
   label: string;
   contentData?: string;
   onEdit?: (value: string) => void;
+  idTag?: string;
 }) => {
   const handleOnTextInputChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -58,6 +61,7 @@ const GridRow = ({
               variant="outlined"
               value={contentData}
               onChange={handleOnTextInputChange}
+              id={idTag}
             />
           </Item>
         </Grid>
@@ -87,7 +91,7 @@ function PersonalPanel({
   const dispatch = useDispatch();
 
   const handleSubmitPersonalData = () => {
-    sessionUserId &&
+    if (sessionUserId) {
       dispatch(
         patchUserBasicProfileDataAsync({
           firstName: firstNameTextData,
@@ -95,8 +99,26 @@ function PersonalPanel({
           userId: sessionUserId,
         })
       );
+      setCanEdit(false);
+    }
   };
 
+  const originalFirstNameDataRef = useRef(firstName);
+  const originalLastNameDataRef = useRef(lastName);
+  const handleCancelEdit = () => {
+    setCanEdit(!canEdit);
+    setFirstNameTextData(originalFirstNameDataRef.current);
+    setLastNameTextData(originalLastNameDataRef.current);
+
+    const firstNameTextBox = document.getElementById(
+      "firstname"
+    ) as HTMLInputElement;
+    const lastNameTextBox = document.getElementById(
+      "lastname"
+    ) as HTMLInputElement;
+    firstNameTextBox.value = originalFirstNameDataRef.current;
+    lastNameTextBox.value = originalLastNameDataRef.current;
+  };
   return (
     <div>
       <Typography sx={{ color: "black" }}>Basic personal info</Typography>
@@ -107,21 +129,19 @@ function PersonalPanel({
           label="First Name"
           contentData={firstNameTextData}
           onEdit={setFirstNameTextData}
+          idTag="firstname"
         />
         <GridRow
           canEdit={canEdit}
           label="Last Name"
           contentData={lastNameTextData}
           onEdit={setLastNameTextData}
+          idTag="lastname"
         />
       </Grid>
-      <footer>
+      <footer className="top-margin-buffer">
         {canEdit ? (
-          <Button
-            variant="outlined"
-            color="error"
-            onClick={() => setCanEdit(!canEdit)}
-          >
+          <Button variant="outlined" color="error" onClick={handleCancelEdit}>
             Cancel edit
           </Button>
         ) : (
@@ -230,6 +250,7 @@ function PasswordSecurityPanel(props: IProfilePanelProps) {
         ) : (
           <>
             <Typography> Password has been updated </Typography>
+            <Link to="/settings">Back to settings</Link>
           </>
         )}
       </div>
@@ -243,6 +264,7 @@ function ProfileSettings() {
   const handleChange = (_: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
+
   return (
     <div style={{ backgroundColor: "white " }}>
       <header>

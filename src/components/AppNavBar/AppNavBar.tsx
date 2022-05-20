@@ -153,6 +153,7 @@ function AppNavBar(props: IAppNavBarProps) {
       <AppBar position="static">
         <Toolbar>
           <IconButton
+            onClick={() => navigate("/home")}
             size="large"
             edge="start"
             color="inherit"
