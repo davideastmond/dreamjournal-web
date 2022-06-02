@@ -28,8 +28,9 @@ function App() {
   useEffect(() => {
     dispatch(getHasActiveSessionAsync());
     dispatch(getSessionUserAsync());
-    sessionUser &&
+    if (sessionUser) {
       dispatch(getAllJournalsForUserAsync({ userId: sessionUser._id }));
+    }
   }, []);
 
   useEffect(() => {
