@@ -25,3 +25,10 @@ export type TNewSecurityQuestionDataSubmission = {
     response: string;
   };
 };
+
+export type TSecurityQuestionSecureDisplay = {
+  [keyof in "q0" | "q1" | "q2"]: {
+    selectedQuestionId: string;
+    selectedQuestionPrompt: string;
+  };
+};

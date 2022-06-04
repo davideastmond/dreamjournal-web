@@ -86,15 +86,16 @@ export const createNewUserSecurityQuestions = async ({
 }): Promise<void> => {
   const token = sessionStorage.getItem("token");
   try {
-    await axios({
+    const res = await axios({
       method: "PUT",
-      url: `${API_URL}/api/user/${userId}/security`,
+      url: `${API_URL}/api/user/${userId}/profile/security`,
       headers: {
         ...AUTH_HEADER,
         "X-JWT-Token": token!,
       },
       data,
     });
+    console.log("98 - ", res);
   } catch (exception: any) {
     throw new Error(exception.response.data.error);
   }

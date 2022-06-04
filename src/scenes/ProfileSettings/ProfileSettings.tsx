@@ -1,16 +1,30 @@
 import { Button, Grid, Tab, Tabs, TextField, Typography } from "@mui/material";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { TabPanel } from "../../components/tab-panel/TapPanel";
 import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 import { useSelector, shallowEqual, useDispatch } from "react-redux";
 import {
+  getAvailableSecurityQuestionsAsync,
   patchUserBasicProfileDataAsync,
   selectSessionUser,
 } from "../../reducers/app-slice";
 import "./style.css";
-import { patchUserSecurePassword } from "../../services/user/user.service";
+import {
+  createNewUserSecurityQuestions,
+  patchUserSecurePassword,
+} from "../../services/user/user.service";
 import { Link } from "react-router-dom";
+import {
+  SecurityQuestionPrompter,
+  SecurityQuestionSelector,
+} from "../../components/SecurityQuestion";
+import { getSecurityQuestionsForUserByUserId } from "../../services/authentication/authentication.security.service";
+import {
+  TNewSecurityQuestionDataSubmission,
+  TSecurityQuestionTemplate,
+} from "../../services/authentication/authentication.types";
+import { Spinner } from "../../components/Spinner";
 
 interface IProfilePanelProps {
   sessionUserId: string | undefined;
@@ -171,6 +185,12 @@ function PasswordSecurityPanel(props: IProfilePanelProps) {
     null
   );
 
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getAvailableSecurityQuestionsAsync());
+  }, []);
+
   const handlePasswordInputTextChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -261,12 +281,49 @@ function PasswordSecurityPanel(props: IProfilePanelProps) {
 function ProfileSettings() {
   const [value, setValue] = useState<number>(0);
   const sessionUser = useSelector(selectSessionUser, shallowEqual);
+  const [hasSecurityQuestionsSet, setHasSecurityQuestionsSet] =
+    useState<boolean>(false);
+  const [securityQuestionData, setSecurityQuestionData] = useState<{
+    isSet: boolean;
+    questions: TSecurityQuestionTemplate[];
+  } | null>(null);
+  const [isDoingNetworkRequest, setIsDoingNetworkRequest] =
+    useState<boolean>(false);
   const handleChange = (_: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
+  const securityQuestionsOn = async () => {
+    if (sessionUser) {
+      const data = await getSecurityQuestionsForUserByUserId({
+        userId: sessionUser?._id,
+      });
+      setHasSecurityQuestionsSet(data.isSet);
+      setSecurityQuestionData(data);
+    }
+  };
+
+  useEffect(() => {
+    securityQuestionsOn();
+  }, []);
+
+  const handleSubmitNewSecurityQuestions = async (
+    data: TNewSecurityQuestionDataSubmission
+  ) => {
+    if (!sessionUser) return;
+    try {
+      const res = await createNewUserSecurityQuestions({
+        userId: sessionUser._id,
+        data,
+      });
+      await securityQuestionsOn();
+    } catch (exception: any) {
+      console.log(exception.message);
+    }
+  };
   return (
     <div style={{ backgroundColor: "white " }}>
+      {isDoingNetworkRequest && <Spinner />}
       <header>
         <Tabs
           value={value}
@@ -287,6 +344,24 @@ function ProfileSettings() {
       </TabPanel>
       <TabPanel value={value} index={1}>
         <PasswordSecurityPanel sessionUserId={sessionUser?._id} />
+        <div className="security-question-section top-divider-border">
+          <header>
+            <p className="black-text">
+              Select password recovery security questions
+            </p>
+          </header>
+          <section>
+            {hasSecurityQuestionsSet && securityQuestionData && (
+              <SecurityQuestionPrompter data={securityQuestionData} />
+            )}
+            {!hasSecurityQuestionsSet && (
+              <SecurityQuestionSelector
+                onSaveSubmit={handleSubmitNewSecurityQuestions}
+              />
+            )}
+          </section>
+          <footer></footer>
+        </div>
       </TabPanel>
     </div>
   );

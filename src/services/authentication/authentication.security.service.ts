@@ -41,7 +41,6 @@ export const getSecurityQuestionsForUserByUserId = async ({
         "X-JWT-Token": token!,
       },
     });
-    console.log(req.data);
     return req.data;
   } catch (exception: any) {
     throw new Error(exception.response.data.error);
