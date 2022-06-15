@@ -287,19 +287,23 @@ function ProfileSettings() {
     isSet: boolean;
     questions: TSecurityQuestionTemplate[];
   } | null>(null);
+  const [isUpdateMode, setIsUpdateMode] = useState<boolean>(false);
   const [isDoingNetworkRequest, setIsDoingNetworkRequest] =
     useState<boolean>(false);
+
   const handleChange = (_: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
   const securityQuestionsOn = async () => {
     if (sessionUser) {
+      setIsDoingNetworkRequest(true);
       const data = await getSecurityQuestionsForUserByUserId({
         userId: sessionUser?._id,
       });
       setHasSecurityQuestionsSet(data.isSet);
       setSecurityQuestionData(data);
+      setIsDoingNetworkRequest(false);
     }
   };
 
@@ -312,14 +316,18 @@ function ProfileSettings() {
   ) => {
     if (!sessionUser) return;
     try {
-      const res = await createNewUserSecurityQuestions({
+      await createNewUserSecurityQuestions({
         userId: sessionUser._id,
         data,
       });
-      await securityQuestionsOn();
+      securityQuestionsOn();
     } catch (exception: any) {
       console.log(exception.message);
+      setIsDoingNetworkRequest(false);
     }
+  };
+  const handlePrompterEditButtonClick = () => {
+    setIsUpdateMode(true);
   };
   return (
     <div style={{ backgroundColor: "white " }}>
@@ -351,12 +359,28 @@ function ProfileSettings() {
             </p>
           </header>
           <section>
-            {hasSecurityQuestionsSet && securityQuestionData && (
-              <SecurityQuestionPrompter data={securityQuestionData} />
-            )}
-            {!hasSecurityQuestionsSet && (
+            {hasSecurityQuestionsSet &&
+              securityQuestionData &&
+              !isUpdateMode && (
+                <SecurityQuestionPrompter
+                  data={securityQuestionData}
+                  editButtonVisible={true}
+                  onEditButtonClick={handlePrompterEditButtonClick}
+                />
+              )}
+            {!hasSecurityQuestionsSet && !isUpdateMode && (
               <SecurityQuestionSelector
                 onSaveSubmit={handleSubmitNewSecurityQuestions}
+              />
+            )}
+            {hasSecurityQuestionsSet && isUpdateMode && (
+              <SecurityQuestionSelector
+                onSaveSubmit={handleSubmitNewSecurityQuestions}
+                existingQuestions={
+                  securityQuestionData
+                    ? securityQuestionData.questions.map((q) => q.prompt)
+                    : []
+                }
               />
             )}
           </section>

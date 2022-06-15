@@ -1,10 +1,4 @@
-import {
-  Button,
-  FormControl,
-  NativeSelect,
-  TextField,
-  Typography,
-} from "@mui/material";
+import { Button, FormControl, NativeSelect, TextField } from "@mui/material";
 import React, { useRef, useState } from "react";
 import { shallowEqual, useSelector } from "react-redux";
 import { selectPossibleSecurityQuestions } from "../../../reducers/app-slice";
@@ -29,6 +23,7 @@ interface IDropdownTextComboGroupProps {
 
 interface ISecurityQuestionSelector {
   onSaveSubmit?: (data: any) => void;
+  existingQuestions?: string[];
 }
 
 type TQuestionResponseType = {
@@ -114,7 +109,6 @@ function SecurityQuestionSelector(props: ISecurityQuestionSelector) {
   );
   const [submissionError, setSubmissionError] = useState<string | null>(null);
   const handleGroupDataChanged = (data: any) => {
-    console.log("data on group data change", data);
     qData.current = {
       ...qData.current,
       [data.id]: {
