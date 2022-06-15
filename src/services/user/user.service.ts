@@ -95,7 +95,6 @@ export const createNewUserSecurityQuestions = async ({
       },
       data,
     });
-    console.log("98 - ", res);
   } catch (exception: any) {
     throw new Error(exception.response.data.error);
   }

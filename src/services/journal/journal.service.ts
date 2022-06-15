@@ -61,7 +61,6 @@ export const submitNewJournal = async ({
         tags,
       },
     });
-    console.log(req.data);
     return req.data;
   } catch (exception: any) {
     throw new Error(exception.message);
