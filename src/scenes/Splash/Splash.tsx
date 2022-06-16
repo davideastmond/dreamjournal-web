@@ -72,9 +72,9 @@ function Splash() {
               New Account
             </Button>
           </div>
-          <div>
+          {/* <div>
             <p className="red-text cursor-hover thin">Forgot my credentials</p>
-          </div>
+          </div> */}
         </div>
       </div>
       <section className="Login__Main__app-blurb">
