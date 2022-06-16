@@ -16,6 +16,7 @@ import Divider from "@mui/material/Divider";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import AnalyticsIcon from "@mui/icons-material/Analytics";
+import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import { styled, alpha } from "@mui/material/styles";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { useState } from "react";
@@ -26,6 +27,7 @@ import {
 } from "../../reducers/search-slice";
 import { SearchResultsPopUp } from "../SearchResultsPopup";
 import { TSearchResults } from "../../services/search/search.types";
+import { useNavigate } from "react-router-dom";
 
 interface IAppNavBarProps {
   hasSession: boolean;
@@ -82,7 +84,7 @@ function AppNavBar(props: IAppNavBarProps) {
   };
 
   const dispatch = useDispatch();
-
+  const navigate = useNavigate();
   const handleLogout = () => {
     sessionStorage.setItem("token", "");
     dispatch(getHasActiveSessionAsync());
@@ -93,12 +95,17 @@ function AppNavBar(props: IAppNavBarProps) {
   const LoggedInMenuItems = () => {
     return (
       <div>
-        <MenuItem onClick={handleClose}>Settings</MenuItem>
+        <MenuItem onClick={handleClose}>
+          <ListItemIcon>
+            <ManageAccountsIcon fontSize="small" />
+          </ListItemIcon>
+          <ListItemText onClick={handleLaunchSettings}>Settings</ListItemText>
+        </MenuItem>
         <MenuItem>
           <ListItemIcon>
             <AnalyticsIcon fontSize="small" />
           </ListItemIcon>
-          <ListItemText>My Analytics</ListItemText>
+          <ListItemText>Analytics</ListItemText>
         </MenuItem>
         <Divider />
         <MenuItem>
@@ -109,6 +116,10 @@ function AppNavBar(props: IAppNavBarProps) {
         </MenuItem>
       </div>
     );
+  };
+
+  const handleLaunchSettings = () => {
+    navigate("/settings", { replace: true });
   };
 
   const handleSearchTextOnChange = (
@@ -142,6 +153,7 @@ function AppNavBar(props: IAppNavBarProps) {
       <AppBar position="static">
         <Toolbar>
           <IconButton
+            onClick={() => navigate("/home")}
             size="large"
             edge="start"
             color="inherit"

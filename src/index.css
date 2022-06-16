@@ -75,6 +75,14 @@ code {
   display: flex;
 }
 
+.black-text {
+  color: black;
+}
+
+.charcoal-text {
+  color: var(--grey-dark-1);
+}
+
 .flex-direction-column {
   flex-direction: column;
 }
@@ -121,4 +129,12 @@ code {
 
 .align-center {
   align-self: center;
+}
+
+.thin {
+  font-weight: lighter;
+}
+
+.justify-center-content {
+  justify-content: center;
 }

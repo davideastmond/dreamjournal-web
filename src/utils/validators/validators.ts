@@ -50,3 +50,30 @@ export function validateAndSanitizeNewJournalSubmissionData({
     tagsArray: nTags,
   });
 }
+
+export function isPasswordValid({
+  password1,
+  password2,
+  onFail,
+}: {
+  password1: string;
+  password2: string;
+  onFail: ({ field, message }: { field: string; message: string }) => void;
+}): boolean {
+  let foundError = true;
+  if (!password1 || password1.trim() === "") {
+    foundError = false;
+    onFail({
+      field: "password1",
+      message: "Enter a password that is at least 8 characters long",
+    });
+  }
+  if (password2.trim() !== password1.trim() || password2.trim() === "") {
+    foundError = false;
+    onFail({
+      field: "password2",
+      message: "Please confirm password, and ensure passwords match",
+    });
+  }
+  return foundError;
+}

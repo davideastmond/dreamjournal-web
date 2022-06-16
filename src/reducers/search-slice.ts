@@ -42,7 +42,6 @@ export const searchSlice = createSlice({
           status: EStatus.Error,
           message: action.error.message,
         };
-        console.log(action.error.message);
       }),
 });
 
