@@ -295,7 +295,7 @@ function ProfileSettings() {
     setValue(newValue);
   };
 
-  const securityQuestionsOn = async () => {
+  const getRefreshSecurityQuestions = async () => {
     if (sessionUser) {
       setIsDoingNetworkRequest(true);
       const data = await getSecurityQuestionsForUserByUserId({
@@ -304,11 +304,12 @@ function ProfileSettings() {
       setHasSecurityQuestionsSet(data.isSet);
       setSecurityQuestionData(data);
       setIsDoingNetworkRequest(false);
+      setIsUpdateMode(false);
     }
   };
 
   useEffect(() => {
-    securityQuestionsOn();
+    getRefreshSecurityQuestions();
   }, []);
 
   const handleSubmitNewSecurityQuestions = async (
@@ -320,7 +321,7 @@ function ProfileSettings() {
         userId: sessionUser._id,
         data,
       });
-      securityQuestionsOn();
+      getRefreshSecurityQuestions();
     } catch (exception: any) {
       console.log(exception.message);
       setIsDoingNetworkRequest(false);
@@ -353,11 +354,6 @@ function ProfileSettings() {
       <TabPanel value={value} index={1}>
         <PasswordSecurityPanel sessionUserId={sessionUser?._id} />
         <div className="security-question-section top-divider-border">
-          <header>
-            <p className="black-text">
-              Select password recovery security questions
-            </p>
-          </header>
           <section>
             {hasSecurityQuestionsSet &&
               securityQuestionData &&

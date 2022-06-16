@@ -3,7 +3,7 @@ import React, { useRef, useState } from "react";
 import { shallowEqual, useSelector } from "react-redux";
 import { selectPossibleSecurityQuestions } from "../../../reducers/app-slice";
 import { TSecurityQuestionTemplate } from "../../../services/authentication/authentication.types";
-
+import "./style.css";
 interface IDropdownTextComboGroupProps {
   defaultValue?: string;
   inputLabel: string;
@@ -172,6 +172,27 @@ function SecurityQuestionSelector(props: ISecurityQuestionSelector) {
 
   return (
     <div>
+      {props.existingQuestions && (
+        <div className="current-questions-box center-width top-margin-buffer responsive-padding">
+          <header className="black-text bold">Your current questions</header>
+          {props.existingQuestions.map((q) => (
+            <div className="charcoal-text">{q}</div>
+          ))}
+        </div>
+      )}
+      <header>
+        {props.existingQuestions ? (
+          <div>
+            <p className="black-text">Update your security questions</p>
+          </div>
+        ) : (
+          <div>
+            <p className="black-text">
+              Select password recovery security questions
+            </p>
+          </div>
+        )}
+      </header>
       <DropdownTextComboGroup
         inputLabel="Security Question 1"
         textLabel="Answer for Security question 1"
