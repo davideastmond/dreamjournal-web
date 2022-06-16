@@ -23,7 +23,6 @@ export const getTagCountByJournalId = async ({
     });
     return req.data;
   } catch (exception: any) {
-    console.error("Exception " + exception);
     throw new Error(exception.message);
   }
 };
@@ -46,7 +45,6 @@ export const getAllTagsCountByUserId = async ({
     });
     return req.data;
   } catch (exception: any) {
-    console.error("Exception " + exception);
     throw new Error(exception.message);
   }
 };

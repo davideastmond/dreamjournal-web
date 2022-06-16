@@ -8,7 +8,6 @@ interface IJournalListProps {
 }
 function JournaList(props: IJournalListProps) {
   const handleListItemClick = ({ journalId }: { journalId: string }) => {
-    console.log(journalId);
     //window.location.href = `/journals/$${journalId}`
     navigate(`/journals/${journalId}`, { replace: true });
   };

@@ -82,14 +82,8 @@ export const verifyActiveSession = async (): Promise<boolean> => {
     }
 
     if (renewedToken) {
-      console.log("renewal token", renewedToken);
       return true;
     }
-    console.log(
-      "87 authentication service hits false?",
-      activeToken,
-      renewedToken
-    );
     return false;
   } catch (exception) {
     return false;

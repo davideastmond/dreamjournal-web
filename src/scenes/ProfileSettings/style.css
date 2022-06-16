@@ -1,0 +1,17 @@
+@media only screen and (max-width: 480px) {
+  .justify-center-content-responsive {
+    justify-content: center;
+  }
+}
+
+.security-question-section {
+  margin-top: 20px;
+}
+
+.security-question-label {
+  color: black;
+}
+
+.top-divider-border {
+  border-top: 2px solid var(--aqua-blue-green);
+}

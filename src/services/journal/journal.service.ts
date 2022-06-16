@@ -27,7 +27,6 @@ export const getAllJournalsForUser = async (
       },
     });
     if (req.status === 200) {
-      console.log("22", req.data);
       return req.data as TJournal[];
     } else return [];
   } catch (exception: any) {
@@ -62,7 +61,6 @@ export const submitNewJournal = async ({
         tags,
       },
     });
-    console.log(req.data);
     return req.data;
   } catch (exception: any) {
     throw new Error(exception.message);
