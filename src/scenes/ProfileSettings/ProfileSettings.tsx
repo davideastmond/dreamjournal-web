@@ -1,12 +1,10 @@
 import { Button, Grid, Tab, Tabs, TextField, Typography } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import { TabPanel } from "../../components/tab-panel/TapPanel";
-import Paper from "@mui/material/Paper";
 import { styled } from "@mui/material/styles";
 import { useSelector, shallowEqual, useDispatch } from "react-redux";
 import {
   getAvailableSecurityQuestionsAsync,
-  patchUserBasicProfileDataAsync,
   selectSessionUser,
 } from "../../reducers/app-slice";
 import "./style.css";
@@ -25,156 +23,18 @@ import {
   TSecurityQuestionTemplate,
 } from "../../services/authentication/authentication.types";
 import { Spinner } from "../../components/Spinner";
+import { Item } from "./Item";
+import { PersonalPanel } from "./PersonalPanel";
 
 interface IProfilePanelProps {
   sessionUserId: string | undefined;
 }
-const Item = styled(Paper)(({ theme }: { theme: any }) => ({
-  backgroundColor: theme.palette.mode === "dark" ? "#1A2027" : "#fff",
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: "center",
-  color: theme.palette.text.secondary,
-}));
 
 function a11yProps(index: number) {
   return {
     id: `simple-tab-${index}`,
     "aria-controls": `simple-tabpanel-${index}`,
   };
-}
-
-const GridRow = ({
-  canEdit,
-  label,
-  contentData,
-  onEdit,
-  idTag,
-}: {
-  canEdit: boolean;
-  label: string;
-  contentData?: string;
-  onEdit?: (value: string) => void;
-  idTag?: string;
-}) => {
-  const handleOnTextInputChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    onEdit && onEdit(event.target.value);
-  };
-
-  return (
-    <>
-      <Grid item xs={6}>
-        <Item>{label}</Item>
-      </Grid>
-      {canEdit ? (
-        <Grid item xs={6}>
-          <Item>
-            <TextField
-              variant="outlined"
-              value={contentData}
-              onChange={handleOnTextInputChange}
-              id={idTag}
-            />
-          </Item>
-        </Grid>
-      ) : (
-        <Grid item xs={6}>
-          <Item>{contentData}</Item>
-        </Grid>
-      )}
-    </>
-  );
-};
-
-function PersonalPanel({
-  email,
-  firstName,
-  lastName,
-  sessionUserId,
-}: {
-  email: string;
-  firstName: string;
-  lastName: string;
-  sessionUserId: string | undefined;
-}) {
-  const [canEdit, setCanEdit] = useState<boolean>(false);
-  const [firstNameTextData, setFirstNameTextData] = useState<string>(firstName);
-  const [lastNameTextData, setLastNameTextData] = useState<string>(lastName);
-  const dispatch = useDispatch();
-
-  const handleSubmitPersonalData = () => {
-    if (sessionUserId) {
-      dispatch(
-        patchUserBasicProfileDataAsync({
-          firstName: firstNameTextData,
-          lastName: lastNameTextData,
-          userId: sessionUserId,
-        })
-      );
-      setCanEdit(false);
-    }
-  };
-
-  const originalFirstNameDataRef = useRef(firstName);
-  const originalLastNameDataRef = useRef(lastName);
-  const handleCancelEdit = () => {
-    setCanEdit(!canEdit);
-    setFirstNameTextData(originalFirstNameDataRef.current);
-    setLastNameTextData(originalLastNameDataRef.current);
-
-    const firstNameTextBox = document.getElementById(
-      "firstname"
-    ) as HTMLInputElement;
-    const lastNameTextBox = document.getElementById(
-      "lastname"
-    ) as HTMLInputElement;
-    firstNameTextBox.value = originalFirstNameDataRef.current;
-    lastNameTextBox.value = originalLastNameDataRef.current;
-  };
-  return (
-    <div>
-      <Typography sx={{ color: "black" }}>Basic personal info</Typography>
-      <Grid container spacing={2}>
-        <GridRow canEdit={false} label="E-mail" contentData={email} />
-        <GridRow
-          canEdit={canEdit}
-          label="First Name"
-          contentData={firstNameTextData}
-          onEdit={setFirstNameTextData}
-          idTag="firstname"
-        />
-        <GridRow
-          canEdit={canEdit}
-          label="Last Name"
-          contentData={lastNameTextData}
-          onEdit={setLastNameTextData}
-          idTag="lastname"
-        />
-      </Grid>
-      <footer className="top-margin-buffer">
-        {canEdit ? (
-          <Button variant="outlined" color="error" onClick={handleCancelEdit}>
-            Cancel edit
-          </Button>
-        ) : (
-          <Button
-            variant="outlined"
-            color="success"
-            onClick={() => setCanEdit(!canEdit)}
-          >
-            Edit
-          </Button>
-        )}
-        {canEdit && (
-          <Button variant="outlined" onClick={handleSubmitPersonalData}>
-            Save
-          </Button>
-        )}
-      </footer>
-    </div>
-  );
 }
 
 function PasswordSecurityPanel(props: IProfilePanelProps) {
@@ -341,6 +201,7 @@ function ProfileSettings() {
         >
           <Tab label="Personal Details" {...a11yProps(0)} />
           <Tab label="Password and security" {...a11yProps(1)} />
+          <Tab label="2FA" {...a11yProps(2)} />
         </Tabs>
       </header>
       <TabPanel value={value} index={0}>
