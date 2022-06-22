@@ -25,6 +25,7 @@ import {
 import { Spinner } from "../../components/Spinner";
 import { Item } from "./Item";
 import { PersonalPanel } from "./PersonalPanel";
+import TwoFactorAuthModule from "./TwoFactorAuthModule";
 
 interface IProfilePanelProps {
   sessionUserId: string | undefined;
@@ -243,6 +244,9 @@ function ProfileSettings() {
           </section>
           <footer></footer>
         </div>
+      </TabPanel>
+      <TabPanel value={value} index={2}>
+        <TwoFactorAuthModule />
       </TabPanel>
     </div>
   );
