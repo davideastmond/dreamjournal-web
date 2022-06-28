@@ -1,15 +1,22 @@
 import { Switch } from "@mui/material";
 import { useState } from "react";
 
-function ControlledSwitch(): JSX.Element {
-  const [checked, setChecked] = useState<boolean>(false);
+interface IControlledSwitchProps {
+  onStateChange?: (checked: boolean) => void;
+}
+
+function ControlledSwitch(props: IControlledSwitchProps) {
+  const [switchChecked, setSwitchChecked] = useState<boolean>(false);
 
   const handleSwitchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(event.target.checked);
+    const { checked } = event.target;
+    setSwitchChecked(checked);
+    props.onStateChange && props.onStateChange(checked);
   };
+
   return (
     <Switch
-      checked={checked}
+      checked={switchChecked}
       inputProps={{ "aria-label": "controlled" }}
       onChange={handleSwitchChange}
     />
