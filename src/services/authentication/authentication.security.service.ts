@@ -1,6 +1,7 @@
 import axios from "axios";
 import { API_URL, AUTH_HEADER } from "../../environment";
 import {
+  TGetTwoFactorEnabledResponse,
   TNewSecurityQuestionDataSubmission,
   TSecurityQuestionTemplate,
 } from "./authentication.types";
@@ -66,6 +67,28 @@ export const sendSecurityQuestionsSelection = async ({
       },
       data,
     });
+  } catch (exception: any) {
+    throw new Error(exception.response.data.error);
+  }
+};
+
+export const getIsTwoFactorAuthenticationEnabled = async ({
+  userId,
+}: {
+  userId: string;
+}): Promise<TGetTwoFactorEnabledResponse> => {
+  const token = sessionStorage.getItem("token");
+  try {
+    const res = await axios({
+      method: "GET",
+      url: `${API_URL}/api/user/${userId}/security/two_factor_status`,
+      withCredentials: true,
+      headers: {
+        ...AUTH_HEADER,
+        "X-JWT-Token": token!,
+      },
+    });
+    return res.data;
   } catch (exception: any) {
     throw new Error(exception.response.data.error);
   }
