@@ -81,7 +81,7 @@ export const getIsTwoFactorAuthenticationEnabled = async ({
   try {
     const res = await axios({
       method: "GET",
-      url: `${API_URL}/api/user/${userId}/security/two_factor_status`,
+      url: `${API_URL}/api/user/${userId}/profile/security/two_factor_status`,
       withCredentials: true,
       headers: {
         ...AUTH_HEADER,

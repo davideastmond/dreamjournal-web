@@ -246,7 +246,7 @@ function ProfileSettings() {
         </div>
       </TabPanel>
       <TabPanel value={value} index={2}>
-        <TwoFactorAuthModule />
+        {sessionUser && <TwoFactorAuthModule sessionUserId={sessionUser._id} />}
       </TabPanel>
     </div>
   );
