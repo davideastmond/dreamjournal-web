@@ -145,86 +145,84 @@ function RegistrationModal(props: IRegistrationModalProps) {
     });
   };
   return (
-    <div>
-      <Dialog open={props.open} onClose={props.onDismiss}>
-        {submitInProgress && <Spinner />}
-        <DialogTitle>Create new account</DialogTitle>
-        <DialogContent>
-          <DialogContentText>Enter your details</DialogContentText>
-          <TextField
-            required
-            autoFocus
-            id="email"
-            label="Email"
-            type="email"
-            fullWidth
-            onChange={handleInputsChanged}
-            error={emailErrorState}
-            helperText={emailErrorText}
-          />
-          <TextField
-            required
-            autoFocus
-            id="firstName"
-            label="First Name"
-            fullWidth
-            onChange={handleInputsChanged}
-            error={firstNameErrorState}
-            helperText={firstNameErrorText}
-          />
-          <TextField
-            required
-            autoFocus
-            id="lastName"
-            label="Last Name"
-            fullWidth
-            onChange={handleInputsChanged}
-            error={lastNameErrorState}
-            helperText={lastNameErrorText}
-          />
-          <TextField
-            required
-            autoFocus
-            margin="dense"
-            id="password1"
-            label="Password"
-            type="password"
-            fullWidth
-            onChange={handleInputsChanged}
-            error={password1ErrorState}
-            helperText={password1ErrorText}
-          />
-          <TextField
-            required
-            autoFocus
-            id="password2"
-            label="Confirm Password"
-            type="password"
-            fullWidth
-            onChange={handleInputsChanged}
-            error={password2ErrorState}
-            helperText={password2ErrorText}
-          />
-          {registrationAttemptErrorState && (
-            <DialogContentText color="error">
-              {registrationAttemptErrorText}
-            </DialogContentText>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={props.onDismiss} disabled={submitInProgress}>
-            Cancel
-          </Button>
-          <Button
-            color="success"
-            onClick={handleSubmitRegistrationRequest}
-            disabled={submitInProgress}
-          >
-            Register
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
+    <Dialog open={props.open} onClose={props.onDismiss}>
+      {submitInProgress && <Spinner />}
+      <DialogTitle>Create new account</DialogTitle>
+      <DialogContent>
+        <DialogContentText>Enter your details</DialogContentText>
+        <TextField
+          required
+          autoFocus
+          id="email"
+          label="Email"
+          type="email"
+          fullWidth
+          onChange={handleInputsChanged}
+          error={emailErrorState}
+          helperText={emailErrorText}
+        />
+        <TextField
+          required
+          autoFocus
+          id="firstName"
+          label="First Name"
+          fullWidth
+          onChange={handleInputsChanged}
+          error={firstNameErrorState}
+          helperText={firstNameErrorText}
+        />
+        <TextField
+          required
+          autoFocus
+          id="lastName"
+          label="Last Name"
+          fullWidth
+          onChange={handleInputsChanged}
+          error={lastNameErrorState}
+          helperText={lastNameErrorText}
+        />
+        <TextField
+          required
+          autoFocus
+          margin="dense"
+          id="password1"
+          label="Password"
+          type="password"
+          fullWidth
+          onChange={handleInputsChanged}
+          error={password1ErrorState}
+          helperText={password1ErrorText}
+        />
+        <TextField
+          required
+          autoFocus
+          id="password2"
+          label="Confirm Password"
+          type="password"
+          fullWidth
+          onChange={handleInputsChanged}
+          error={password2ErrorState}
+          helperText={password2ErrorText}
+        />
+        {registrationAttemptErrorState && (
+          <DialogContentText color="error">
+            {registrationAttemptErrorText}
+          </DialogContentText>
+        )}
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={props.onDismiss} disabled={submitInProgress}>
+          Cancel
+        </Button>
+        <Button
+          color="success"
+          onClick={handleSubmitRegistrationRequest}
+          disabled={submitInProgress}
+        >
+          Register
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 }
 

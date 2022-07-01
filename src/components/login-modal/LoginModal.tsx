@@ -88,58 +88,56 @@ function LoginModal(props: ILoginModalProps) {
     });
   };
   return (
-    <div className="Dialog_parent_container">
-      <Dialog open={props.open} onClose={props.onDismiss}>
-        {loginInProgress && <Spinner />}
-        <DialogTitle>Sign In</DialogTitle>
-        <DialogContent>
-          <form>
-            <DialogContentText>Enter your details</DialogContentText>
-            <TextField
-              required
-              autoFocus
-              margin="dense"
-              id="email"
-              label="Email"
-              type="email"
-              fullWidth
-              variant="filled"
-              onChange={handleTextInputChanged}
-              error={hasLoginEmailError}
-              helperText={loginEmailError}
-              autoComplete="email username"
-            />
-            <TextField
-              required
-              autoFocus
-              margin="dense"
-              id="filled-password"
-              label="Password"
-              type="password"
-              fullWidth
-              variant="filled"
-              onChange={handleTextInputChanged}
-              error={hasLoginPasswordError}
-              helperText={loginPasswordError}
-              autoComplete="password"
-            />
-            {hasLoginAttemptError && (
-              <DialogContentText color="error">
-                {loginAttemptErrorMessage}
-              </DialogContentText>
-            )}
-          </form>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={props.onDismiss} disabled={loginInProgress}>
-            Cancel
-          </Button>
-          <Button onClick={handleSubmitLogin} disabled={loginInProgress}>
-            Go
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
+    <Dialog open={props.open} onClose={props.onDismiss}>
+      {loginInProgress && <Spinner />}
+      <DialogTitle>Sign In</DialogTitle>
+      <DialogContent>
+        <form>
+          <DialogContentText>Enter your details</DialogContentText>
+          <TextField
+            required
+            autoFocus
+            margin="dense"
+            id="email"
+            label="Email"
+            type="email"
+            fullWidth
+            variant="filled"
+            onChange={handleTextInputChanged}
+            error={hasLoginEmailError}
+            helperText={loginEmailError}
+            autoComplete="email username"
+          />
+          <TextField
+            required
+            autoFocus
+            margin="dense"
+            id="filled-password"
+            label="Password"
+            type="password"
+            fullWidth
+            variant="filled"
+            onChange={handleTextInputChanged}
+            error={hasLoginPasswordError}
+            helperText={loginPasswordError}
+            autoComplete="password"
+          />
+          {hasLoginAttemptError && (
+            <DialogContentText color="error">
+              {loginAttemptErrorMessage}
+            </DialogContentText>
+          )}
+        </form>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={props.onDismiss} disabled={loginInProgress}>
+          Cancel
+        </Button>
+        <Button onClick={handleSubmitLogin} disabled={loginInProgress}>
+          Go
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 }
 
