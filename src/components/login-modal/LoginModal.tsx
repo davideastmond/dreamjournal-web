@@ -6,7 +6,6 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import TextField from "@mui/material/TextField";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
 import { logInUser } from "../../services/authentication/authentication.service";
 import { Spinner } from "../Spinner";
 
@@ -35,9 +34,6 @@ function LoginModal(props: ILoginModalProps) {
     useState<string>("");
 
   const [loginInProgress, setLoginInProgress] = useState<boolean>(false);
-
-  const dispatch = useDispatch();
-
   const handleTextInputChanged = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -92,7 +88,7 @@ function LoginModal(props: ILoginModalProps) {
     });
   };
   return (
-    <div>
+    <div className="Dialog_parent_container">
       <Dialog open={props.open} onClose={props.onDismiss}>
         {loginInProgress && <Spinner />}
         <DialogTitle>Sign In</DialogTitle>
