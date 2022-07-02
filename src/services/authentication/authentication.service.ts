@@ -19,7 +19,7 @@ export const registerUser = async (data: TRegistrationRequestDetails) => {
     await logInUser({ email: data.email, password: data.plainTextPassword });
     data.onSuccess();
   } catch (exception: any) {
-    data.onError(`${exception.response.data.error}`);
+    data.onError(`${exception.response?.data.error || "Registration Error"}`);
   }
 };
 
@@ -41,14 +41,10 @@ export const logInUser = async ({
         password,
       },
     });
-    if (req.status === 200) {
-      writeTokenDataToSessionStorage(req.data);
-      return req.data;
-    } else {
-      throw new Error("Received some other status than 200 from login request");
-    }
+    writeTokenDataToSessionStorage(req.data);
+    return req.data;
   } catch (exception: any) {
-    throw new Error(`${exception.response.data.error}`);
+    throw new Error(`${exception.response?.data.error || "Login error"}`);
   }
 };
 
@@ -60,8 +56,6 @@ function writeTokenDataToSessionStorage(data: TLoginResponseData) {
 
 export const verifyActiveSession = async (): Promise<boolean> => {
   const token = sessionStorage.getItem("token");
-  //if (!token) return false;
-
   try {
     const res = await axios({
       url: `${API_URL}/api/auth/session`,

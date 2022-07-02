@@ -86,7 +86,7 @@ export const createNewUserSecurityQuestions = async ({
 }): Promise<void> => {
   const token = sessionStorage.getItem("token");
   try {
-    const res = await axios({
+    await axios({
       method: "PUT",
       url: `${API_URL}/api/user/${userId}/profile/security`,
       headers: {
