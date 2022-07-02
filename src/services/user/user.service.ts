@@ -17,7 +17,9 @@ export const getSessionUser = async (): Promise<TSecureUser> => {
     });
     return req.data as TSecureUser;
   } catch (exception: any) {
-    throw new Error(exception.response.data.error);
+    throw new Error(
+      exception.response?.data.error || "Error getting session user from server"
+    );
   }
 };
 
@@ -47,7 +49,9 @@ export const patchUserProfile = async ({
     });
     return req.data as TSecureUser;
   } catch (exception: any) {
-    throw new Error(exception.response.data.error);
+    throw new Error(
+      exception.response?.data.error || "Error patching user profile"
+    );
   }
 };
 

@@ -68,6 +68,14 @@ export function isPasswordValid({
       message: "Enter a password that is at least 8 characters long",
     });
   }
+
+  if (password1.length < 8) {
+    foundError = false;
+    onFail({
+      field: "password1",
+      message: "Enter a password that is at least 8 characters long",
+    });
+  }
   if (password2.trim() !== password1.trim() || password2.trim() === "") {
     foundError = false;
     onFail({
