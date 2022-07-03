@@ -39,7 +39,7 @@ describe("login validator tests", () => {
     expect(failPasswordCondition).toHaveBeenCalled();
     expect(failPasswordCondition).toHaveBeenCalledWith({
       field: "password",
-      message: "Enter a password that is at least 8 characters long",
+      message: "Please enter a password that is at least 8 characters long",
     });
   });
   test("fail condition: password is empty string", () => {
@@ -53,7 +53,7 @@ describe("login validator tests", () => {
     expect(failPasswordCondition).toHaveBeenCalled();
     expect(failPasswordCondition).toHaveBeenCalledWith({
       field: "password",
-      message: "Enter a password that is at least 8 characters long",
+      message: "Please enter a password that is at least 8 characters long",
     });
   });
   test("success condition is called", () => {

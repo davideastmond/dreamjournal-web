@@ -186,7 +186,7 @@ function RegistrationModal(props: IRegistrationModalProps) {
           autoFocus
           margin="dense"
           id="password1"
-          label="Password"
+          label="Enter a password"
           type="password"
           fullWidth
           onChange={handleInputsChanged}

@@ -83,7 +83,7 @@ describe("validator tests", () => {
       const response = isPasswordValid({ ...mockData, onFail: mockFail });
       expect(mockFail).toHaveBeenCalledWith({
         field: "password1",
-        message: "Enter a password that is at least 8 characters long",
+        message: "Please enter a password that is at least 8 characters long",
       });
       expect(response).toBe(false);
     });
@@ -97,7 +97,8 @@ describe("validator tests", () => {
       isPasswordValid({ ...mockData, onFail: mockFail });
       expect(mockFail).toHaveBeenCalledWith({
         field: "password2",
-        message: "Please confirm password, and ensure passwords match",
+        message:
+          "Please enter or confirm your password. Please ensure the passwords match",
       });
     });
     test("function returns error free true", () => {

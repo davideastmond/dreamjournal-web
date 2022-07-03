@@ -33,7 +33,7 @@ export function validateLoginData({
     foundError = true;
     onFail({
       field: "password",
-      message: "Enter a password that is at least 8 characters long",
+      message: "Please enter a password that is at least 8 characters long",
     });
   }
 
