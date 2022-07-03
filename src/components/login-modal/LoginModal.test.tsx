@@ -30,7 +30,7 @@ describe("login modal tests", () => {
       "Please enter a valid e-mail address"
     );
     const passwordValidationError = screen.getByText(
-      "Enter a password that is at least 8 characters long"
+      "Please enter a password that is at least 8 characters long"
     );
     expect(emailValidationError).toBeInTheDocument();
     expect(passwordValidationError).toBeInTheDocument();
