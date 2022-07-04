@@ -6,13 +6,87 @@ import {
   waitFor,
 } from "../../utils/test-utils/test-utils";
 import { BrowserRouter, BrowserRouter as Router } from "react-router-dom";
-import LoginModal from "./LoginModal";
-import axios from "axios";
-jest.mock("axios");
+import { setupServer } from "msw/node";
+import { rest } from "msw";
+import { API_URL } from "../../environment";
 
-describe("login modal tests", () => {
+import LoginModal from "./LoginModal";
+
+const server = setupServer(
+  rest.post(`${API_URL}/api/auth/login`, (_, res, context) => {
+    return res(
+      context.json({
+        token: "mockToken",
+        issued: 12345,
+        expires: 12345,
+      })
+    );
+  })
+);
+
+const serverWithErrorResponse = setupServer(
+  rest.post(`${API_URL}/api/auth/login`, (_, res) => {
+    return res((response) => {
+      response.status = 401;
+      response.body = {
+        error:
+          "Authentication error: please check the email address and password combination.",
+      };
+      return response;
+    });
+  })
+);
+afterEach(() => {
+  jest.resetAllMocks();
+});
+
+describe("login modal error response tests", () => {
+  beforeAll(() => {
+    serverWithErrorResponse.listen();
+  });
   afterEach(() => {
-    jest.resetAllMocks();
+    serverWithErrorResponse.resetHandlers();
+  });
+  afterAll(() => {
+    serverWithErrorResponse.close();
+  });
+  test("error message displays when HTTP request fails", async () => {
+    const spy = jest.fn();
+    render(
+      <BrowserRouter>
+        <LoginModal
+          open={true}
+          onDismiss={() => null}
+          onSuccessfulLogin={spy}
+        />
+      </BrowserRouter>
+    );
+    const emailTextInputElement = screen.getByLabelText(/email/i);
+    const passwordTextInputElement = screen.getByLabelText(/password/i);
+
+    fireEvent.change(emailTextInputElement, {
+      target: { value: "email@example.com" },
+    });
+    fireEvent.change(passwordTextInputElement, {
+      target: { value: "password123" },
+    });
+    const goButton = screen.getByRole("button", { name: "Go" });
+    fireEvent.click(goButton);
+    await waitFor(() => {
+      const serverResponseError = screen.getByText(/Authentication error/i);
+      expect(serverResponseError).toBeInTheDocument();
+    });
+  });
+});
+describe("login modal tests", () => {
+  beforeAll(() => {
+    server.listen();
+  });
+  afterAll(() => {
+    server.close();
+  });
+  afterEach(() => {
+    server.resetHandlers();
   });
   test("validation error messages display", () => {
     render(
@@ -55,18 +129,7 @@ describe("login modal tests", () => {
     fireEvent.change(passwordTextInputElement, {
       target: { value: "password123" },
     });
-
     const goButton = screen.getByRole("button", { name: "Go" });
-    (axios as any).mockImplementation(() => {
-      return Promise.resolve({
-        status: 200,
-        data: {
-          token: "mockToken",
-          issued: 12345,
-          expires: 12345,
-        },
-      });
-    });
     fireEvent.click(goButton);
     await waitFor(() => expect(spy).toHaveBeenCalled());
   });
