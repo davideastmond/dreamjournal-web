@@ -86,6 +86,7 @@ function AppNavBar(props: IAppNavBarProps) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleLogout = () => {
+    handleClose();
     sessionStorage.setItem("token", "");
     dispatch(getHasActiveSessionAsync());
   };
@@ -181,7 +182,7 @@ function AppNavBar(props: IAppNavBarProps) {
             </Search>
           )}
           {props.hasSession && (
-            <div>
+            <div aria-label="accountPopupMenu">
               <IconButton
                 size="large"
                 aria-label="account of current user"
@@ -193,6 +194,7 @@ function AppNavBar(props: IAppNavBarProps) {
                 <AccountCircle />
               </IconButton>
               <Menu
+                aria-label="popupMenu"
                 id="menu-appbar"
                 anchorEl={anchorEl}
                 anchorOrigin={{
