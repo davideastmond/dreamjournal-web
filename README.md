@@ -11,9 +11,17 @@ tbi
 - react
 - typescript
 - mui / mui icons
-- redux / redux toolskit
-- jest
+- redux / redux toolkit
+- jest, react testing library
 
-### The back-end/API can be found here
+### Tests
 
-### Live deploy [here](https://www.oneiro.live)
+- run tests with `npm test`
+
+### Back-end/API repo
+
+- The back-end/API can be found [here](https://github.com/davideastmond/dreamjournal-api)
+
+### Live deploy
+
+- [here](https://www.oneiro.live)
