@@ -1,4 +1,3 @@
-import { Sd } from "@mui/icons-material";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { EStatus, IStateStatus, TGlobalAppStore } from "../definitions";
 import { doSearch } from "../services/search/search.service";

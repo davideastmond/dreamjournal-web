@@ -19,6 +19,7 @@ import { NewJournalEntryScene } from "./scenes/NewJournalEntryScene";
 import { NotFound404 } from "./scenes/NotFound404";
 import { ProfileSettings } from "./scenes/ProfileSettings";
 import Splash from "./scenes/Splash";
+import { TwoFactorAuthVerifyScene } from "./scenes/TwoFactorAuthVerifyScene";
 
 function App() {
   const hasSession = useSelector(selectHasActiveSession, shallowEqual);
@@ -95,6 +96,14 @@ function App() {
             element={
               <ProtectedRoute redirectPath="/">
                 <ProfileSettings />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/tfa/verify"
+            element={
+              <ProtectedRoute redirectPath="/">
+                <TwoFactorAuthVerifyScene />
               </ProtectedRoute>
             }
           />

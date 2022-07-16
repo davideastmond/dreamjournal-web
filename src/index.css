@@ -138,3 +138,7 @@ code {
 .justify-center-content {
   justify-content: center;
 }
+
+.slight-round-corners {
+  border-radius: 2px;
+}

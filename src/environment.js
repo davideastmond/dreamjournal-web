@@ -1,6 +1,9 @@
-const isProductionMode = !(
-  process.env.NODE_ENV && process.env.NODE_ENV.match("development")
-);
+const determineProductionMode = () => {
+  if (process.env.NODE_ENV.match("test")) return false;
+  return !(process.env.NODE_ENV && process.env.NODE_ENV.match("development"));
+};
+
+const isProductionMode = determineProductionMode();
 
 const api_token = isProductionMode
   ? process.env.REACT_APP_PRODUCTION_API_KEY

@@ -32,3 +32,9 @@ export type TSecurityQuestionSecureDisplay = {
     selectedQuestionPrompt: string;
   };
 };
+
+export type TGetTwoFactorEnabledResponse = {
+  twoFactorAuthentication: {
+    enabled: boolean;
+  };
+};

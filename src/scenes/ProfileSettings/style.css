@@ -1,7 +1,5 @@
-@media only screen and (max-width: 480px) {
-  .justify-center-content-responsive {
-    justify-content: center;
-  }
+.justify-center-content-responsive {
+  justify-content: center;
 }
 
 .security-question-section {

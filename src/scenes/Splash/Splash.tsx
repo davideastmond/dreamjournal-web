@@ -69,7 +69,7 @@ function Splash() {
               startIcon={<AppRegistrationIcon />}
               onClick={handleOpenRegisterModal}
             >
-              New Account
+              New account
             </Button>
           </div>
           {/* <div>

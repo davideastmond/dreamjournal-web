@@ -1,0 +1,12 @@
+.PhoneInputCountry {
+  color: black;
+}
+
+input[type|="tel"] {
+  color: black;
+  padding: 0.5rem;
+}
+
+.TwoFactorSubmission__enrollButtonSection__main {
+  margin-top: 1rem;
+}

@@ -96,7 +96,7 @@ export function SearchResultsPopup(props: ISearchResultsPopupProps) {
       className="SearchResultsPopup__main context-menu-fade-in"
       onClick={handleOverlayClick}
     >
-      <div className="SearchResultsPopup__context-menu">
+      <div className="SearchResultsPopup__context-menu  slight-round-corners">
         {hasSearchData() === false && <EmptyResultCard />}
         {hasSearchData() &&
           props.searchData.journals &&
