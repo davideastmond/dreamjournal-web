@@ -42,7 +42,7 @@ function JournalTagAnalytics(props: IJournalTagAnalyticsProps) {
     props.context === "journalSpecific" ? 0 : 1
   );
   const [tagCount, setTagCount] = useState<{ [keyof: string]: number }>({});
-  const [journalCount, setJournalCount] = useState<number>(0);
+  const [_, setJournalCount] = useState<number>(0);
   const handleClose = () => {
     props.onClickClose && props.onClickClose();
   };

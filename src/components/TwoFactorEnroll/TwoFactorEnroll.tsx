@@ -2,7 +2,7 @@ import InternationalNumberInput, {
   isPossiblePhoneNumber,
 } from "react-phone-number-input";
 import { Button } from "@mui/material";
-import React, { useState } from "react";
+import { useState } from "react";
 import "./style.css";
 import "react-phone-number-input/style.css";
 
