@@ -1,5 +1,6 @@
 import axios from "axios";
 import { API_URL, AUTH_HEADER } from "../../environment";
+import { TTFAValidationResponse } from "./authentication.types";
 type TEnrollTFAResponse = {
   token: string;
 };
@@ -35,14 +36,16 @@ export async function submitVerifyTFA({
   userId,
   authCode,
   tfaToken,
+  isEnrolling,
 }: {
   userId: string;
   authCode: string;
   tfaToken: string;
-}): Promise<void> {
+  isEnrolling: boolean;
+}): Promise<TTFAValidationResponse> {
   const token = sessionStorage.getItem("token");
   try {
-    await axios({
+    const req = await axios({
       method: "POST",
       url: `${API_URL}/api/auth/security/tfa/verify`,
       withCredentials: true,
@@ -54,9 +57,11 @@ export async function submitVerifyTFA({
         userId,
         authCode,
         tfaToken,
+        isEnrolling,
       },
     });
+    return req.data;
   } catch (exception: any) {
-    throw new Error(exception.response.data.error);
+    throw new Error(exception.response.data.statusMessage);
   }
 }

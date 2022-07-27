@@ -7,3 +7,10 @@ export type TSecureUser = {
   createdAt: Date;
   updatedAt: Date;
 };
+
+export type T2FADeEnrollResponse = {
+  status: "error" | "ok" | string;
+  twoFactorEnabled: boolean;
+  statusMessage: string;
+  redirectPath?: string;
+};

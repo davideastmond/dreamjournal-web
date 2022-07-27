@@ -13,3 +13,8 @@
 .top-divider-border {
   border-top: 2px solid var(--aqua-blue-green);
 }
+
+.tfaTextFieldSection {
+  display: flex;
+  justify-content: center;
+}

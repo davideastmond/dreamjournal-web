@@ -26,6 +26,7 @@ import { Spinner } from "../../components/Spinner";
 import { Item } from "./Item";
 import { PersonalPanel } from "./PersonalPanel";
 import TwoFactorAuthModule from "./TwoFactorAuthModule";
+import { styled } from "@mui/material/styles";
 
 interface IProfilePanelProps {
   sessionUserId: string | undefined;
@@ -38,6 +39,10 @@ function a11yProps(index: number) {
   };
 }
 
+const StyledTabs = styled(Tabs)({
+  display: "block",
+  justifyContent: "right",
+});
 function PasswordSecurityPanel(props: IProfilePanelProps) {
   const [password1, setPassword1] = useState<string>("");
   const [password2, setPassword2] = useState<string>("");
@@ -85,7 +90,7 @@ function PasswordSecurityPanel(props: IProfilePanelProps) {
   return (
     <div className="container-flex flex justify-center-content-responsive">
       <div>
-        <Typography sx={{ color: "black" }}>Security settings</Typography>
+        <h3 className="black-text">Security settings</h3>
         {!passwordUpdated ? (
           <>
             <Grid container spacing={2}>
@@ -191,20 +196,26 @@ function ProfileSettings() {
   const handlePrompterEditButtonClick = () => {
     setIsUpdateMode(true);
   };
+
+  const handleSecurityQuestionSelectorCancelClicked = () => {
+    setIsUpdateMode(false);
+  };
   return (
     <div style={{ backgroundColor: "white " }}>
       {isDoingNetworkRequest && <Spinner />}
-      <header>
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          aria-label="basic tabs example"
-        >
-          <Tab label="Personal Details" {...a11yProps(0)} />
-          <Tab label="Password and security" {...a11yProps(1)} />
-          <Tab label="2FA" {...a11yProps(2)} />
-        </Tabs>
-      </header>
+      <StyledTabs
+        value={value}
+        onChange={handleChange}
+        aria-label="basic tabs example order"
+        sx={{
+          display: "block",
+        }}
+        centered={true}
+      >
+        <Tab label="Personal Details" {...a11yProps(0)} />
+        <Tab label="Password and security" {...a11yProps(1)} />
+        <Tab label="2FA" {...a11yProps(2)} />
+      </StyledTabs>
       <TabPanel value={value} index={0}>
         <PersonalPanel
           email={sessionUser?.email || "no e-mail"}
@@ -217,6 +228,9 @@ function ProfileSettings() {
         <PasswordSecurityPanel sessionUserId={sessionUser?._id} />
         <div className="security-question-section top-divider-border">
           <section>
+            <header>
+              <h3 className="black-text">Security Questions</h3>
+            </header>
             {hasSecurityQuestionsSet &&
               securityQuestionData &&
               !isUpdateMode && (
@@ -229,11 +243,13 @@ function ProfileSettings() {
             {!hasSecurityQuestionsSet && !isUpdateMode && (
               <SecurityQuestionSelector
                 onSaveSubmit={handleSubmitNewSecurityQuestions}
+                onCancelClicked={handleSecurityQuestionSelectorCancelClicked}
               />
             )}
             {hasSecurityQuestionsSet && isUpdateMode && (
               <SecurityQuestionSelector
                 onSaveSubmit={handleSubmitNewSecurityQuestions}
+                onCancelClicked={handleSecurityQuestionSelectorCancelClicked}
                 existingQuestions={
                   securityQuestionData
                     ? securityQuestionData.questions.map((q) => q.prompt)

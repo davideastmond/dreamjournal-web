@@ -1,4 +1,4 @@
-import { Typography, Grid, Button } from "@mui/material";
+import { Grid, Button } from "@mui/material";
 import { useState, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { patchUserBasicProfileDataAsync } from "../../reducers/app-slice";
@@ -51,7 +51,9 @@ export function PersonalPanel({
   };
   return (
     <div>
-      <Typography sx={{ color: "black" }}>Basic personal info</Typography>
+      <header>
+        <h3 className="black-text">Basic personal info</h3>
+      </header>
       <Grid container spacing={2}>
         <GridRow canEdit={false} label="E-mail" contentData={email} />
         <GridRow

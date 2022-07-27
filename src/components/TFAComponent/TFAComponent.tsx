@@ -5,6 +5,7 @@ import { AppLogo } from "../AppLogo";
 import "./style.css";
 interface ITFAComponentProps {
   token: string;
+  errorElement?: JSX.Element[];
   onConfirmClick?: ({
     tfaToken,
     authCode,
@@ -15,7 +16,7 @@ interface ITFAComponentProps {
 }
 function TFAComponent(props: ITFAComponentProps) {
   const [code, setCode] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [_, setIsLoading] = useState<boolean>(false);
   const [isVerifyButtonDisabled, setIsVerifyButtonDisabled] =
     useState<boolean>(true);
   const [errText, setErrText] = useState<string | null>(null);
@@ -79,7 +80,7 @@ function TFAComponent(props: ITFAComponentProps) {
       </div>
       <footer className="top-margin-buffer">
         <LoadingButton
-          loading={isLoading}
+          // loading={isLoading}
           onClick={handleConfirmButtonClick}
           variant="contained"
           disabled={isVerifyButtonDisabled}
@@ -92,6 +93,7 @@ function TFAComponent(props: ITFAComponentProps) {
           <p className="red-text">{errText}</p>
         </footer>
       )}
+      {props.errorElement}
     </div>
   );
 }
