@@ -101,7 +101,7 @@ describe("new account modal tests", () => {
       name: "Create new account",
     });
     const presentationElement = screen.getAllByRole("generic");
-    fireEvent.click(presentationElement[13]);
+    fireEvent.click(presentationElement[14]);
     expect(registrationDialog).not.toBeInTheDocument();
   });
 });
