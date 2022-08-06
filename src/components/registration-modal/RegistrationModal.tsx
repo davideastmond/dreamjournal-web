@@ -14,6 +14,7 @@ import { registerUser } from "../../services/authentication/authentication.servi
 import { Spinner } from "../Spinner";
 import { validateRegistrationData } from "./validators/registration-validator";
 import "./style.css";
+import { CustomDatePicker } from "../CustomDatePicker";
 
 interface IRegistrationModalProps {
   open: boolean;
