@@ -41,6 +41,7 @@ function TwoFactorEnroll(props: ITwoFactorEnrollProps) {
             onChange={handle2faNumberChange}
             placeholder="Enter phone number"
             value={phoneNumber2fa || undefined}
+            className="numberInput__Section"
           />
         </>
         <div className="TwoFactorSubmission__enrollButtonSection__main">

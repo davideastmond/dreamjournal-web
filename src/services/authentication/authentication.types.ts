@@ -5,6 +5,7 @@ export type TRegistrationRequestDetails = {
   lastName: string;
   email: string;
   plainTextPassword: string;
+  dateOfBirth: string;
 } & TBaseServiceRequest;
 
 export type TRegistrationResponseData = {
