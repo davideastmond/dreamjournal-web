@@ -1,5 +1,11 @@
-import { validateAndSanitizeNewJournalSubmissionData } from "./validators";
+import {
+  isPasswordValid,
+  validateAndSanitizeNewJournalSubmissionData,
+} from "./validators";
 
+afterEach(() => {
+  jest.resetAllMocks();
+});
 describe("validator tests", () => {
   test("returns validated strings and a success response", () => {
     function handleSuccessValidation({
@@ -65,5 +71,45 @@ describe("validator tests", () => {
       onSuccess: mockCallBack,
     });
     expect(mockCallBack).not.toHaveBeenCalled();
+  });
+  describe("password valid tests", () => {
+    test("password too short", () => {
+      const mockData = {
+        password1: "12345",
+        password2: "12345",
+      };
+
+      const mockFail = jest.fn();
+      const response = isPasswordValid({ ...mockData, onFail: mockFail });
+      expect(mockFail).toHaveBeenCalledWith({
+        field: "password1",
+        message: "Please enter a password that is at least 8 characters long",
+      });
+      expect(response).toBe(false);
+    });
+    test("passwords don't match", () => {
+      const mockData = {
+        password1: "password123456",
+        password2: "password1234567",
+      };
+
+      const mockFail = jest.fn();
+      isPasswordValid({ ...mockData, onFail: mockFail });
+      expect(mockFail).toHaveBeenCalledWith({
+        field: "password2",
+        message:
+          "Please enter or confirm your password. Please ensure the passwords match",
+      });
+    });
+    test("function returns error free true", () => {
+      const mockFail = jest.fn();
+      const mockData = {
+        password1: "password1234567",
+        password2: "password1234567",
+      };
+      const res = isPasswordValid({ ...mockData, onFail: mockFail });
+      expect(res).toBe(true);
+      expect(mockFail).not.toHaveBeenCalled();
+    });
   });
 });

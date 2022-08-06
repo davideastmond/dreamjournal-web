@@ -15,7 +15,7 @@ interface ISecurityQuestionPrompterProps {
  * Readonly mode will show the question prompt and a redacted password answer
  */
 function SecurityQuestionPrompter(props: ISecurityQuestionPrompterProps) {
-  const [mode, setMode] = useState<"readonly" | "answer" | null>(
+  const [mode, _] = useState<"readonly" | "answer" | null>(
     props.defaultMode ?? "readonly"
   );
   return props.data && props.data.questions ? (

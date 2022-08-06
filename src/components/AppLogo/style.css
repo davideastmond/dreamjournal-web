@@ -1,0 +1,9 @@
+.AppLogo {
+  width: 10%;
+}
+
+@media only screen and (max-width: 768px) {
+  .AppLogo {
+    width: 100px;
+  }
+}

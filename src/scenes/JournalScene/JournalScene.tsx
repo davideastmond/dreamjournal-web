@@ -55,6 +55,7 @@ function JournalScene() {
         setRawJournalTagString(journalContext.tags.join(", "));
     }
   }, [journalContext]);
+
   const handleTextInputChanged = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {

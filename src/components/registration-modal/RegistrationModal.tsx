@@ -6,17 +6,25 @@ import {
   TextField,
   DialogActions,
   Button,
+  FormControl,
 } from "@mui/material";
+
 import { useState } from "react";
 import { registerUser } from "../../services/authentication/authentication.service";
 import { Spinner } from "../Spinner";
 import { validateRegistrationData } from "./validators/registration-validator";
+import "./style.css";
+import { CustomDatePicker } from "../CustomDatePicker";
 
 interface IRegistrationModalProps {
   open: boolean;
   onDismiss: () => void;
   onSuccessDismiss: (message?: string) => void;
 }
+
+const bottomSpacing = {
+  marginBottom: "20px",
+};
 
 function RegistrationModal(props: IRegistrationModalProps) {
   const [registrationEmail, setRegistrationEmail] = useState<string>("");
@@ -36,12 +44,16 @@ function RegistrationModal(props: IRegistrationModalProps) {
     useState<boolean>(false);
   const [password2ErrorState, setPassword2ErrorState] =
     useState<boolean>(false);
+  const [dobErrorState, setDobErrorState] = useState<boolean>(false);
 
   const [emailErrorText, setEmailErrorText] = useState<string>("");
   const [firstNameErrorText, setFirstNameErrorText] = useState<string>("");
   const [lastNameErrorText, setLastNameErrorText] = useState<string>("");
   const [password1ErrorText, setPassword1ErrorText] = useState<string>("");
   const [password2ErrorText, setPassword2ErrorText] = useState<string>("");
+  const [dobErrorText, setDobErrorText] = useState<string>("");
+
+  const [dateOfBirthValue, setDateOfBirthValue] = useState<any>(null);
 
   const [registrationAttemptErrorState, setRegistrationAttemptErrorState] =
     useState<boolean>(false);
@@ -56,7 +68,6 @@ function RegistrationModal(props: IRegistrationModalProps) {
     switch (id) {
       case "email":
         setRegistrationEmail(value);
-
         break;
       case "firstName":
         setRegistrationFirstName(value);
@@ -80,6 +91,7 @@ function RegistrationModal(props: IRegistrationModalProps) {
     setPassword1ErrorState(false);
     setPassword2ErrorState(false);
     setRegistrationAttemptErrorState(false);
+    setDobErrorState(false);
 
     setEmailErrorText("");
     setFirstNameErrorText("");
@@ -87,6 +99,7 @@ function RegistrationModal(props: IRegistrationModalProps) {
     setPassword1ErrorText("");
     setPassword2ErrorText("");
     setRegistrationAttemptErrorText("");
+    setDobErrorText("");
   };
 
   const handleSubmitRegistrationRequest = async () => {
@@ -98,12 +111,14 @@ function RegistrationModal(props: IRegistrationModalProps) {
       lastName: registrationLastName,
       password1: registrationPassword1,
       password2: registrationPassword2,
+      dateOfBirth: dateOfBirthValue?.$d,
       onSuccess: async () => {
         await registerUser({
           email: registrationEmail,
           firstName: registrationFirstName,
           lastName: registrationLastName,
           plainTextPassword: registrationPassword1,
+          dateOfBirth: dateOfBirthValue,
           onSuccess: () => {
             props.onSuccessDismiss();
             setSubmitInProgress(false);
@@ -140,17 +155,23 @@ function RegistrationModal(props: IRegistrationModalProps) {
             setPassword2ErrorText(message);
             setPassword2ErrorState(true);
             break;
+          case "dateOfBirth":
+            setDobErrorText(message);
+            setDobErrorState(true);
+            break;
         }
       },
     });
   };
+
   return (
-    <div>
-      <Dialog open={props.open} onClose={props.onDismiss}>
-        {submitInProgress && <Spinner />}
-        <DialogTitle>Create new account</DialogTitle>
-        <DialogContent>
-          <DialogContentText>Enter your details</DialogContentText>
+    <Dialog open={props.open} onClose={props.onDismiss}>
+      {submitInProgress && <Spinner />}
+      <DialogTitle sx={{ textAlign: "center", marginBottom: "5px" }}>
+        Create new account
+      </DialogTitle>
+      <DialogContent>
+        <FormControl sx={{ width: "100%" }}>
           <TextField
             required
             autoFocus
@@ -161,6 +182,7 @@ function RegistrationModal(props: IRegistrationModalProps) {
             onChange={handleInputsChanged}
             error={emailErrorState}
             helperText={emailErrorText}
+            sx={bottomSpacing}
           />
           <TextField
             required
@@ -171,6 +193,7 @@ function RegistrationModal(props: IRegistrationModalProps) {
             onChange={handleInputsChanged}
             error={firstNameErrorState}
             helperText={firstNameErrorText}
+            sx={bottomSpacing}
           />
           <TextField
             required
@@ -181,18 +204,20 @@ function RegistrationModal(props: IRegistrationModalProps) {
             onChange={handleInputsChanged}
             error={lastNameErrorState}
             helperText={lastNameErrorText}
+            sx={bottomSpacing}
           />
           <TextField
             required
             autoFocus
             margin="dense"
             id="password1"
-            label="Password"
+            label="Enter a password"
             type="password"
             fullWidth
             onChange={handleInputsChanged}
             error={password1ErrorState}
             helperText={password1ErrorText}
+            sx={bottomSpacing}
           />
           <TextField
             required
@@ -204,27 +229,34 @@ function RegistrationModal(props: IRegistrationModalProps) {
             onChange={handleInputsChanged}
             error={password2ErrorState}
             helperText={password2ErrorText}
+            sx={bottomSpacing}
           />
-          {registrationAttemptErrorState && (
-            <DialogContentText color="error">
-              {registrationAttemptErrorText}
-            </DialogContentText>
-          )}
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={props.onDismiss} disabled={submitInProgress}>
-            Cancel
-          </Button>
-          <Button
-            color="success"
-            onClick={handleSubmitRegistrationRequest}
-            disabled={submitInProgress}
-          >
-            Register
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
+          <CustomDatePicker
+            onDateChange={setDateOfBirthValue}
+            isError={dobErrorState}
+            errorText={dobErrorText}
+            label="Date of birth"
+          />
+        </FormControl>
+        {registrationAttemptErrorState && (
+          <DialogContentText color="error">
+            {registrationAttemptErrorText}
+          </DialogContentText>
+        )}
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={props.onDismiss} disabled={submitInProgress}>
+          Cancel
+        </Button>
+        <Button
+          color="success"
+          onClick={handleSubmitRegistrationRequest}
+          disabled={submitInProgress}
+        >
+          Register
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 }
 
