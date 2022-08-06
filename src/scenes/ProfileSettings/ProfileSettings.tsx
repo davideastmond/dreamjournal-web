@@ -26,7 +26,6 @@ import { Spinner } from "../../components/Spinner";
 import { Item } from "./Item";
 import { PersonalPanel } from "./PersonalPanel";
 import TwoFactorAuthModule from "./TwoFactorAuthModule";
-import { styled } from "@mui/material/styles";
 
 interface IProfilePanelProps {
   sessionUserId: string | undefined;
@@ -39,10 +38,6 @@ function a11yProps(index: number) {
   };
 }
 
-const StyledTabs = styled(Tabs)({
-  display: "block",
-  justifyContent: "right",
-});
 function PasswordSecurityPanel(props: IProfilePanelProps) {
   const [password1, setPassword1] = useState<string>("");
   const [password2, setPassword2] = useState<string>("");
@@ -201,26 +196,25 @@ function ProfileSettings() {
     setIsUpdateMode(false);
   };
   return (
-    <div style={{ backgroundColor: "white " }}>
+    <div style={{ backgroundColor: "white" }}>
       {isDoingNetworkRequest && <Spinner />}
-      <StyledTabs
+      <Tabs
         value={value}
         onChange={handleChange}
-        aria-label="basic tabs example order"
-        sx={{
-          display: "block",
-        }}
-        centered={true}
+        variant="scrollable"
+        scrollButtons="auto"
+        aria-label="scrollable auto tabs example"
       >
         <Tab label="Personal Details" {...a11yProps(0)} />
         <Tab label="Password and security" {...a11yProps(1)} />
-        <Tab label="2FA" {...a11yProps(2)} />
-      </StyledTabs>
+        <Tab label="2FA" {...a11yProps(2)} disabled={true} />
+      </Tabs>
       <TabPanel value={value} index={0}>
         <PersonalPanel
           email={sessionUser?.email || "no e-mail"}
           firstName={sessionUser?.firstName || "no first name"}
           lastName={sessionUser?.lastName || "no last name"}
+          dateOfBirth={sessionUser?.dateOfBirth?.toString() || "unspecified"}
           sessionUserId={sessionUser?._id}
         />
       </TabPanel>

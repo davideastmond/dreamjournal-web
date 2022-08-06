@@ -43,12 +43,14 @@ export const patchUserBasicProfileDataAsync = createAsyncThunk(
     firstName,
     lastName,
     userId,
+    dateOfBirth,
   }: {
     firstName: string;
     lastName: string;
     userId: string;
+    dateOfBirth: string;
   }) => {
-    return patchUserProfile({ firstName, lastName, userId });
+    return patchUserProfile({ firstName, lastName, userId, dateOfBirth });
   }
 );
 

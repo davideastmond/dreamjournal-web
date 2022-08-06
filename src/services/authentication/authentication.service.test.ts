@@ -10,6 +10,7 @@ const mockData = {
   lastName: "last",
   email: "test@example.com",
   plainTextPassword: "password$1234",
+  dateOfBirth: new Date().toString(),
 };
 describe("authentication service tests", () => {
   describe("logInUser tests", () => {

@@ -8,6 +8,7 @@ const mockRegistrationData = {
   lastName: "last",
   password1: "testPassword123",
   password2: "testPassword123",
+  dateOfBirth: new Date(),
   onFail: () => null,
 };
 describe("registration validator tests", () => {

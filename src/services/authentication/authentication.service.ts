@@ -13,6 +13,7 @@ export const registerUser = async (data: TRegistrationRequestDetails) => {
         firstName: data.firstName,
         lastName: data.lastName,
         password: data.plainTextPassword,
+        dateOfBirth: data.dateOfBirth,
         email: data.email,
       },
     });

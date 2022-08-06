@@ -27,10 +27,12 @@ export const patchUserProfile = async ({
   firstName,
   lastName,
   userId,
+  dateOfBirth,
 }: {
   firstName: string;
   lastName: string;
   userId: string;
+  dateOfBirth: string;
 }): Promise<TSecureUser> => {
   const token = sessionStorage.getItem("token");
   try {
@@ -45,6 +47,7 @@ export const patchUserProfile = async ({
       data: {
         firstName,
         lastName,
+        dateOfBirth,
       },
     });
     return req.data as TSecureUser;
