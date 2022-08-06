@@ -7,6 +7,7 @@ type TRegistrationValidationInput = {
   lastName: string;
   password1: string;
   password2: string;
+  dateOfBirth: Date;
   onSuccess: () => void;
   onFail: ({
     field,
@@ -18,6 +19,7 @@ type TRegistrationValidationInput = {
       | "lastName"
       | "password1"
       | "password2"
+      | "dateOfBirth"
       | "unknown"
       | string;
     message: string;
@@ -30,6 +32,7 @@ export function validateRegistrationData({
   lastName,
   password1,
   password2,
+  dateOfBirth,
   onSuccess,
   onFail,
 }: TRegistrationValidationInput): void {
@@ -49,6 +52,11 @@ export function validateRegistrationData({
   if (!lastName || lastName.trim() === "") {
     foundError = true;
     onFail({ field: "lastName", message: "Please enter a last name" });
+  }
+
+  if (!dateOfBirth) {
+    foundError = true;
+    onFail({ field: "dateOfBirth", message: "Please enter a date of birth" });
   }
 
   const passwordFailMessage = ({

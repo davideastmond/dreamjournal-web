@@ -23,6 +23,7 @@ interface IDropdownTextComboGroupProps {
 
 interface ISecurityQuestionSelector {
   onSaveSubmit?: (data: any) => void;
+  onCancelClicked: () => void;
   existingQuestions?: string[];
 }
 
@@ -170,6 +171,10 @@ function SecurityQuestionSelector(props: ISecurityQuestionSelector) {
     return Object.keys(obj).length === 3;
   };
 
+  const handleSubmitCancel = () => {
+    // Do something
+    props.onCancelClicked();
+  };
   return (
     <div>
       {props.existingQuestions && (
@@ -250,6 +255,9 @@ function SecurityQuestionSelector(props: ISecurityQuestionSelector) {
           disabled={!canSubmit}
         >
           Save
+        </Button>
+        <Button variant="outlined" onClick={handleSubmitCancel}>
+          Cancel
         </Button>
       </footer>
     </div>

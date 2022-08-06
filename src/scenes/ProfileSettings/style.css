@@ -1,7 +1,5 @@
-@media only screen and (max-width: 480px) {
-  .justify-center-content-responsive {
-    justify-content: center;
-  }
+.justify-center-content-responsive {
+  justify-content: center;
 }
 
 .security-question-section {
@@ -14,4 +12,13 @@
 
 .top-divider-border {
   border-top: 2px solid var(--aqua-blue-green);
+}
+
+.tfaTextFieldSection {
+  display: flex;
+  justify-content: center;
+}
+
+.MuiTabs-flexContainer {
+  flex-wrap: wrap;
 }

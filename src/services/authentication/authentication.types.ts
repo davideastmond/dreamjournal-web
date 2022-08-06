@@ -5,6 +5,7 @@ export type TRegistrationRequestDetails = {
   lastName: string;
   email: string;
   plainTextPassword: string;
+  dateOfBirth: string;
 } & TBaseServiceRequest;
 
 export type TRegistrationResponseData = {
@@ -31,4 +32,17 @@ export type TSecurityQuestionSecureDisplay = {
     selectedQuestionId: string;
     selectedQuestionPrompt: string;
   };
+};
+
+export type TGetTwoFactorEnabledResponse = {
+  twoFactorAuthentication: {
+    enabled: boolean;
+  };
+};
+
+export type TTFAValidationResponse = {
+  status: "error" | "ok" | string;
+  isEnrollment: boolean;
+  statusMessage: string;
+  redirectPath?: string;
 };
