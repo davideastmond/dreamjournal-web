@@ -1,4 +1,13 @@
-import { Button, Grid, Tab, Tabs, TextField, Typography } from "@mui/material";
+import {
+  Button,
+  Grid,
+  Tab,
+  Tabs,
+  TextField,
+  Typography,
+  styled,
+  FormControl,
+} from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { TabPanel } from "../../components/tab-panel/TapPanel";
 
@@ -26,6 +35,8 @@ import { Spinner } from "../../components/Spinner";
 import { Item } from "./Item";
 import { PersonalPanel } from "./PersonalPanel";
 import TwoFactorAuthModule from "./TwoFactorAuthModule";
+import { pallet } from "../../styling/pallets";
+import { StyledHeaderComponent } from "../../components/StyledHeader";
 
 interface IProfilePanelProps {
   sessionUserId: string | undefined;
@@ -38,6 +49,24 @@ function a11yProps(index: number) {
   };
 }
 
+const StyledTab = styled(Tabs)((props) => ({
+  "& .MuiTab-root.Mui-selected": {
+    color: pallet.lightSalmon,
+    fontWeight: "600",
+  },
+  "& .MuiTab-root.Mui-disabled": {
+    fontStyle: "italic",
+    color: pallet.greyDark2,
+    fontWeight: "300",
+  },
+  "& .MuiTab-root": {
+    color: pallet.greyDark3,
+    fontWeight: "100",
+  },
+  "& .MuiTabs-indicator": {
+    backgroundColor: pallet.lightSalmon,
+  },
+}));
 function PasswordSecurityPanel(props: IProfilePanelProps) {
   const [password1, setPassword1] = useState<string>("");
   const [password2, setPassword2] = useState<string>("");
@@ -85,31 +114,33 @@ function PasswordSecurityPanel(props: IProfilePanelProps) {
   return (
     <div className="container-flex flex justify-center-content-responsive">
       <div>
-        <h3 className="black-text">Security settings</h3>
+        <StyledHeaderComponent text="Security settings" sizeVariant="h5" />
         {!passwordUpdated ? (
           <>
             <Grid container spacing={2}>
               <Grid item>
-                <Item>
-                  <Typography>Enter new password</Typography>
-                  <TextField
-                    id="password1"
-                    variant="outlined"
-                    value={password1}
-                    onChange={handlePasswordInputTextChange}
-                    type="password"
-                  />
-                </Item>
-                <Item>
-                  <Typography>Confirm new password</Typography>
-                  <TextField
-                    id="password2"
-                    variant="outlined"
-                    value={password2}
-                    onChange={handlePasswordInputTextChange}
-                    type="password"
-                  />
-                </Item>
+                <FormControl>
+                  <Item>
+                    <Typography>Enter new password</Typography>
+                    <TextField
+                      id="password1"
+                      variant="outlined"
+                      value={password1}
+                      onChange={handlePasswordInputTextChange}
+                      type="password"
+                    />
+                  </Item>
+                  <Item>
+                    <Typography>Confirm new password</Typography>
+                    <TextField
+                      id="password2"
+                      variant="outlined"
+                      value={password2}
+                      onChange={handlePasswordInputTextChange}
+                      type="password"
+                    />
+                  </Item>
+                </FormControl>
               </Grid>
             </Grid>
             <footer className="top-margin-buffer">
@@ -196,9 +227,9 @@ function ProfileSettings() {
     setIsUpdateMode(false);
   };
   return (
-    <div style={{ backgroundColor: "white" }}>
+    <div style={{ backgroundColor: "black" }}>
       {isDoingNetworkRequest && <Spinner />}
-      <Tabs
+      <StyledTab
         value={value}
         onChange={handleChange}
         variant="scrollable"
@@ -208,7 +239,7 @@ function ProfileSettings() {
         <Tab label="Personal Details" {...a11yProps(0)} />
         <Tab label="Password and security" {...a11yProps(1)} />
         <Tab label="2FA" {...a11yProps(2)} disabled={true} />
-      </Tabs>
+      </StyledTab>
       <TabPanel value={value} index={0}>
         <PersonalPanel
           email={sessionUser?.email || "no e-mail"}
@@ -221,10 +252,8 @@ function ProfileSettings() {
       <TabPanel value={value} index={1}>
         <PasswordSecurityPanel sessionUserId={sessionUser?._id} />
         <div className="security-question-section top-divider-border">
+          <StyledHeaderComponent text="Security questions" sizeVariant="h5" />
           <section>
-            <header>
-              <h3 className="black-text">Security Questions</h3>
-            </header>
             {hasSecurityQuestionsSet &&
               securityQuestionData &&
               !isUpdateMode && (
