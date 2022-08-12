@@ -1,14 +1,23 @@
-import { Grid } from "@mui/material";
+import { Grid, Box, styled } from "@mui/material";
 import { useState, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { CustomDatePicker } from "../../components/CustomDatePicker";
 import { patchUserBasicProfileDataAsync } from "../../reducers/app-slice";
-import { GridRow } from "./GridRow";
+
 import dayjs from "dayjs";
 import { StyledHeaderComponent } from "../../components/StyledHeader";
 import { StyledButtonComponent } from "../../components/StyledButton";
 import { pallet } from "../../styling/pallets";
+import { GridRow } from "./components/grid-row";
 
+const StyledBox = styled(Box)((props) => ({
+  [props.theme.breakpoints.up("md")]: {
+    "&.MuiBox-root": {
+      marginLeft: "10%",
+      marginRight: "10%",
+    },
+  },
+}));
 export function PersonalPanel({
   email,
   firstName,
@@ -105,11 +114,12 @@ export function PersonalPanel({
         onDateChange={handleCalendarDateChange}
         isError={hasDobError}
         errorText={dobErrorText || undefined}
+        lightText={true}
       />
     );
   };
   return (
-    <div>
+    <StyledBox>
       <StyledHeaderComponent text="Basic personal info" sizeVariant="h5" />
       <Grid container spacing={2}>
         <GridRow canEdit={false} label="E-mail" contentData={email} />
@@ -171,6 +181,6 @@ export function PersonalPanel({
           />
         )}
       </footer>
-    </div>
+    </StyledBox>
   );
 }

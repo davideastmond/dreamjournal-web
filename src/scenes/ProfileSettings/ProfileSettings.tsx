@@ -1,27 +1,11 @@
-import {
-  Button,
-  Grid,
-  Tab,
-  Tabs,
-  TextField,
-  Typography,
-  styled,
-  FormControl,
-} from "@mui/material";
+import { Tab, Tabs, styled } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { TabPanel } from "../../components/tab-panel/TapPanel";
 
-import { useSelector, shallowEqual, useDispatch } from "react-redux";
-import {
-  getAvailableSecurityQuestionsAsync,
-  selectSessionUser,
-} from "../../reducers/app-slice";
+import { useSelector, shallowEqual } from "react-redux";
+import { selectSessionUser } from "../../reducers/app-slice";
 import "./style.css";
-import {
-  createNewUserSecurityQuestions,
-  patchUserSecurePassword,
-} from "../../services/user/user.service";
-import { Link } from "react-router-dom";
+import { createNewUserSecurityQuestions } from "../../services/user/user.service";
 import {
   SecurityQuestionPrompter,
   SecurityQuestionSelector,
@@ -32,16 +16,12 @@ import {
   TSecurityQuestionTemplate,
 } from "../../services/authentication/authentication.types";
 import { Spinner } from "../../components/Spinner";
-import { Item } from "./Item";
 import { PersonalPanel } from "./PersonalPanel";
 import TwoFactorAuthModule from "./TwoFactorAuthModule";
 import { pallet } from "../../styling/pallets";
 import { StyledHeaderComponent } from "../../components/StyledHeader";
 
-interface IProfilePanelProps {
-  sessionUserId: string | undefined;
-}
-
+import { PasswordSecurityPanel } from "./components/password-security-panel";
 function a11yProps(index: number) {
   return {
     id: `simple-tab-${index}`,
@@ -67,108 +47,6 @@ const StyledTab = styled(Tabs)((props) => ({
     backgroundColor: pallet.lightSalmon,
   },
 }));
-function PasswordSecurityPanel(props: IProfilePanelProps) {
-  const [password1, setPassword1] = useState<string>("");
-  const [password2, setPassword2] = useState<string>("");
-  const [passwordUpdated, setPasswordUpdated] = useState<boolean>(false);
-  const [passwordUpdateError, setPasswordUpdateError] = useState<string | null>(
-    null
-  );
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(getAvailableSecurityQuestionsAsync());
-  }, []);
-
-  const handlePasswordInputTextChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const targetId = event.target.id;
-    switch (targetId) {
-      case "password1":
-        setPassword1(event.target.value);
-        break;
-      case "password2":
-        setPassword2(event.target.value);
-    }
-  };
-
-  const submitPasswordUpdate = async () => {
-    if (props.sessionUserId) {
-      try {
-        await patchUserSecurePassword({
-          password: password1,
-          userId: props.sessionUserId,
-        });
-        setPasswordUpdated(true);
-      } catch (exception) {
-        setPasswordUpdateError("Unable to perform password update");
-      }
-    }
-  };
-
-  const passwordValidationRules =
-    password1.length > 5 && password2.length > 5 && password1 === password2;
-
-  return (
-    <div className="container-flex flex justify-center-content-responsive">
-      <div>
-        <StyledHeaderComponent text="Security settings" sizeVariant="h5" />
-        {!passwordUpdated ? (
-          <>
-            <Grid container spacing={2}>
-              <Grid item>
-                <FormControl>
-                  <Item>
-                    <Typography>Enter new password</Typography>
-                    <TextField
-                      id="password1"
-                      variant="outlined"
-                      value={password1}
-                      onChange={handlePasswordInputTextChange}
-                      type="password"
-                    />
-                  </Item>
-                  <Item>
-                    <Typography>Confirm new password</Typography>
-                    <TextField
-                      id="password2"
-                      variant="outlined"
-                      value={password2}
-                      onChange={handlePasswordInputTextChange}
-                      type="password"
-                    />
-                  </Item>
-                </FormControl>
-              </Grid>
-            </Grid>
-            <footer className="top-margin-buffer">
-              <div className="validation-message"></div>
-              <Button
-                variant="outlined"
-                disabled={!passwordValidationRules}
-                onClick={submitPasswordUpdate}
-              >
-                Save
-              </Button>
-              {passwordUpdateError && (
-                <>
-                  <Typography>{passwordUpdateError}</Typography>
-                </>
-              )}
-            </footer>
-          </>
-        ) : (
-          <>
-            <Typography> Password has been updated </Typography>
-            <Link to="/settings">Back to settings</Link>
-          </>
-        )}
-      </div>
-    </div>
-  );
-}
 
 function ProfileSettings() {
   const [value, setValue] = useState<number>(0);
@@ -281,7 +159,6 @@ function ProfileSettings() {
               />
             )}
           </section>
-          <footer></footer>
         </div>
       </TabPanel>
       <TabPanel value={value} index={2}>
