@@ -4,7 +4,7 @@ import { pallet } from "../../styling/pallets";
 const StyledButton = styled(Button)<IStyledButtonProps>(
   ({ theme, ...props }) => ({
     backgroundColor: `${props.fillColor}`,
-    color: `${props.fontColor || pallet.white}`,
+    color: `${props.fontColor || pallet.eggShellWhite}`,
   })
 );
 
@@ -15,6 +15,7 @@ interface IStyledButtonProps {
   onClick?: () => void;
   variant?: "text" | "outlined" | "contained";
   customStyles?: any;
+  disabled?: boolean;
 }
 function StyledButtonComponent(props: IStyledButtonProps) {
   return (
@@ -23,6 +24,7 @@ function StyledButtonComponent(props: IStyledButtonProps) {
       onClick={props.onClick}
       variant={props.variant}
       sx={{ ...props.customStyles }}
+      disabled={props.disabled}
     >
       {props.textLabel}
     </StyledButton>

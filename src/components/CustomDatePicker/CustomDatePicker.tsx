@@ -17,6 +17,7 @@ interface IDatePickerProps {
   slim?: boolean;
   inputProps?: any;
   calendarIconColor?: string;
+  lightText?: boolean;
 }
 
 type TCalendarStyledTextInputProps = {
@@ -62,6 +63,7 @@ function CustomDatePicker(props: IDatePickerProps) {
         openTo={props.openTo || "month"}
         value={dateOfBirthValue}
         onChange={(newValue: any) => {
+          console.debug("calendar change new value", newValue);
           props.onDateChange && props.onDateChange(newValue);
           setDateOfBirthValue(newValue);
         }}
@@ -72,6 +74,7 @@ function CustomDatePicker(props: IDatePickerProps) {
             error={props.isError}
             helperText={props.errorText}
             calendarIconColor={props.calendarIconColor}
+            lightText={props.lightText}
             required
           />
         )}
