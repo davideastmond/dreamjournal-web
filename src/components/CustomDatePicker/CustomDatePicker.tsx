@@ -18,6 +18,7 @@ interface IDatePickerProps {
   inputProps?: any;
   calendarIconColor?: string;
   lightText?: boolean;
+  maxDate?: Date;
 }
 
 type TCalendarStyledTextInputProps = {
@@ -59,6 +60,7 @@ function CustomDatePicker(props: IDatePickerProps) {
         label={props.label}
         disableFuture={props.disableFuture}
         disableHighlightToday={props.disableHighlightToday}
+        maxDate={props.maxDate}
         autoFocus
         openTo={props.openTo || "month"}
         value={dateOfBirthValue}
