@@ -1,6 +1,6 @@
 import { Tab, Tabs, styled } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { TabPanel } from "../../components/tab-panel/TapPanel";
+import { TabPanel } from "../../components/tab-panel";
 
 import { useSelector, shallowEqual } from "react-redux";
 import { selectSessionUser } from "../../reducers/app-slice";
@@ -45,6 +45,15 @@ const StyledTab = styled(Tabs)((props) => ({
   },
   "& .MuiTabs-indicator": {
     backgroundColor: pallet.lightSalmon,
+  },
+}));
+
+const StyledTabPanel = styled(TabPanel)((props) => ({
+  [props.theme.breakpoints.up("md")]: {
+    "& .MuiBox-root": {
+      display: "flex",
+      justifyContent: "space-evenly",
+    },
   },
 }));
 
@@ -127,7 +136,7 @@ function ProfileSettings() {
           sessionUserId={sessionUser?._id}
         />
       </TabPanel>
-      <TabPanel value={value} index={1}>
+      <StyledTabPanel value={value} index={1}>
         <PasswordSecurityPanel sessionUserId={sessionUser?._id} />
         <div className="security-question-section top-divider-border">
           <StyledHeaderComponent text="Security questions" sizeVariant="h5" />
@@ -160,7 +169,7 @@ function ProfileSettings() {
             )}
           </section>
         </div>
-      </TabPanel>
+      </StyledTabPanel>
       <TabPanel value={value} index={2}>
         {sessionUser && <TwoFactorAuthModule sessionUserId={sessionUser._id} />}
       </TabPanel>
