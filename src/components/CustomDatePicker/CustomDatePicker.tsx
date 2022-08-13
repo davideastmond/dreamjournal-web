@@ -65,7 +65,6 @@ function CustomDatePicker(props: IDatePickerProps) {
         openTo={props.openTo || "month"}
         value={dateOfBirthValue}
         onChange={(newValue: any) => {
-          console.debug("calendar change new value", newValue);
           props.onDateChange && props.onDateChange(newValue);
           setDateOfBirthValue(newValue);
         }}
