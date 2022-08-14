@@ -24,6 +24,10 @@ const StyledFormControl = styled(FormControl)((props) => ({
   marginTop: "2%",
 }));
 
+const textFieldSpacingStyle = {
+  marginTop: "10px",
+  marginBottom: "10px",
+};
 export function NewJournal() {
   const userData = useSelector(selectSessionUser, shallowEqual);
   const [journalTitleText, setJournalTitleText] = useState("");
@@ -104,6 +108,7 @@ export function NewJournal() {
             required={true}
             fullWidth
             focused
+            customStyles={textFieldSpacingStyle}
           />
           <StyledTextFieldComponent
             onChange={handleOnTextChange}
@@ -114,6 +119,7 @@ export function NewJournal() {
             required={true}
             fullWidth
             focused
+            customStyles={textFieldSpacingStyle}
           />
           <StyledTextFieldComponent
             onChange={handleOnTextChange}
@@ -125,6 +131,7 @@ export function NewJournal() {
             variant="outlined"
             focused
             fullWidth
+            customStyles={textFieldSpacingStyle}
           />
           {hasSubmissionError && (
             <Stack sx={{ width: "100%" }} spacing={0}>
