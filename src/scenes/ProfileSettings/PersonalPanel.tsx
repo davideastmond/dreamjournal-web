@@ -9,6 +9,7 @@ import { StyledHeaderComponent } from "../../components/StyledHeader";
 import { StyledButtonComponent } from "../../components/StyledButton";
 import { pallet } from "../../styling/pallets";
 import { GridRow } from "./components/grid-row";
+import { DATE_CONSTANTS } from "../../definitions";
 
 const StyledBox = styled(Box)((props) => ({
   [props.theme.breakpoints.up("md")]: {
@@ -115,6 +116,7 @@ export function PersonalPanel({
         isError={hasDobError}
         errorText={dobErrorText || undefined}
         lightText={true}
+        maxDate={DATE_CONSTANTS.ADULT_AGE as any}
       />
     );
   };

@@ -1,4 +1,4 @@
-import { Tab, Tabs, styled } from "@mui/material";
+import { Tab, Tabs, styled, Fade } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { TabPanel } from "../../components/tab-panel";
 
@@ -137,7 +137,12 @@ function ProfileSettings() {
         />
       </TabPanel>
       <StyledTabPanel value={value} index={1}>
-        <PasswordSecurityPanel sessionUserId={sessionUser?._id} />
+        <PasswordSecurityPanel
+          sessionUserId={sessionUser?._id}
+          customClasses={`${
+            isUpdateMode ? "security-panel-update-hidden" : ""
+          }`}
+        />
         <div className="security-question-section top-divider-border">
           <StyledHeaderComponent text="Security questions" sizeVariant="h5" />
           <section>

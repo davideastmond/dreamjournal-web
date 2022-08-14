@@ -1,4 +1,4 @@
-import { Box, Grid, FormControl, Typography } from "@mui/material";
+import { Grid, FormControl, Typography, styled } from "@mui/material";
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
@@ -10,8 +10,14 @@ import { patchUserSecurePassword } from "../../../../services/user/user.service"
 import { pallet } from "../../../../styling/pallets";
 import { StyledGridItem } from "../styled-grid-item";
 
+const StyledDiv = styled("div")((props) => ({
+  "&.security-panel-update-hidden": {
+    display: "none",
+  },
+}));
 interface IProfilePanelProps {
   sessionUserId: string | undefined;
+  customClasses?: string;
 }
 
 function PasswordSecurityPanel(props: IProfilePanelProps) {
@@ -59,7 +65,7 @@ function PasswordSecurityPanel(props: IProfilePanelProps) {
     password1.length > 5 && password2.length > 5 && password1 === password2;
 
   return (
-    <Box>
+    <StyledDiv className={`${props.customClasses || ""}`}>
       <StyledHeaderComponent text="Security settings" sizeVariant="h5" />
       {!passwordUpdated ? (
         <>
@@ -118,7 +124,7 @@ function PasswordSecurityPanel(props: IProfilePanelProps) {
           <Link to="/settings">Back to settings</Link>
         </>
       )}
-    </Box>
+    </StyledDiv>
   );
 }
 
