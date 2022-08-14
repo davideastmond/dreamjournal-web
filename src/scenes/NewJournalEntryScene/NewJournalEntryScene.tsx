@@ -53,7 +53,7 @@ function NewJournalEntryScene() {
   };
 
   const handleCancelNewJournal = () => {
-    navigate("/home");
+    navigate(-1);
   };
   const handleValidateAndSubmit = () => {
     clearSubmissionErrors();

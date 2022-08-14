@@ -25,6 +25,7 @@ import { JournalTagAnalytics } from "../TagAnalytics";
 function JournalScene() {
   const { journalId } = useParams();
   const navigate = useNavigate();
+
   const journalContext = useSelector(
     selectJournalById(journalId!),
     shallowEqual
