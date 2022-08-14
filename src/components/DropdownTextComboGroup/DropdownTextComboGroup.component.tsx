@@ -1,25 +1,30 @@
-import { FormControl, NativeSelect, TextField } from "@mui/material";
+import { FormControl, NativeSelect } from "@mui/material";
 import { useState, useRef } from "react";
-import { TSecurityQuestionTemplate } from "../../services/authentication/authentication.types";
+import { StyledTextFieldComponent } from "../StyledTextField";
+// import { TSecurityQuestionTemplate } from "../../services/authentication/authentication.types";
 
-interface IDropdownTextComboGroupProps {
+interface IDropdownTextComboGroupProps<T> {
   defaultValue?: string;
   inputLabel: string;
   textLabel: string;
   nativeSelectProps: {
     name: string;
     id: string;
+    styles?: any;
   };
   textInputProps: {
     id: string;
     name: string;
+    styles?: any;
   };
   identifier: string;
   onDataChanged?: (data: any) => void;
-  items: TSecurityQuestionTemplate[];
+  items: T[]; // POIJ
 }
 
-const DropdownTextComboGroup = (props: IDropdownTextComboGroupProps) => {
+const DropdownTextComboGroup = <T extends { id: string; prompt: string }>(
+  props: IDropdownTextComboGroupProps<T>
+) => {
   const [changeDisabled, setChangeDisabled] = useState<boolean>(true);
   const currentRefData = useRef<any>(null);
 
@@ -52,15 +57,11 @@ const DropdownTextComboGroup = (props: IDropdownTextComboGroupProps) => {
   return (
     <>
       <FormControl fullWidth>
-        <label
-          className="security-question-label"
-          htmlFor={props.nativeSelectProps.name}
-        >
-          {props.inputLabel}
-        </label>
+        <label htmlFor={props.nativeSelectProps.name}>{props.inputLabel}</label>
         <NativeSelect
           defaultValue={props.defaultValue}
           onChange={handleNativeSelectDropDownChange}
+          sx={{ ...props.nativeSelectProps.styles }}
           inputProps={{
             name: props.nativeSelectProps.name,
             id: props.nativeSelectProps.id,
@@ -74,12 +75,18 @@ const DropdownTextComboGroup = (props: IDropdownTextComboGroupProps) => {
               <option value={question.id}>{question.prompt}</option>
             ))}
         </NativeSelect>
-        <TextField
+        <StyledTextFieldComponent
           label={props.textLabel}
           name={props.textInputProps.name}
           id={props.textInputProps.id}
           onChange={handleTextInputChange}
           disabled={changeDisabled}
+          fullWidth
+          focused
+          customStyles={{
+            marginTop: "20px",
+            marginBottom: "20px",
+          }}
         />
       </FormControl>
     </>
