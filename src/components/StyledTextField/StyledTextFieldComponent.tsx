@@ -27,6 +27,7 @@ const StyledTextField = styled(TextField)<TextFieldProps>(() => ({
 type TStyledTextFieldComponentProps = {
   customStyles?: any;
   textFieldType?: "password" | "text";
+  onKeyDown?: (e: any) => void;
 } & TextFieldProps;
 
 function StyledTextFieldComponent(props: TStyledTextFieldComponentProps) {
@@ -35,6 +36,7 @@ function StyledTextFieldComponent(props: TStyledTextFieldComponentProps) {
       {...props}
       sx={{ ...props.customStyles }}
       type={props.textFieldType}
+      onKeyDown={props.onKeyDown}
     />
   );
 }
