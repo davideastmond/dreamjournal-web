@@ -12,6 +12,7 @@ import {
 } from "./reducers/app-slice";
 import { getAllJournalsForUserAsync } from "./reducers/journal-slice";
 import { HomePage } from "./scenes/HomePage";
+import { JournalEntryListScene } from "./scenes/JournalEntryListScene";
 import { JournalEntryScene } from "./scenes/JournalEntryScene";
 import { JournalScene } from "./scenes/JournalScene";
 import { NewJournal } from "./scenes/NewJournal";
@@ -72,6 +73,14 @@ function App() {
             element={
               <ProtectedRoute redirectPath="/">
                 <JournalScene />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/journals/:journalId/entries"
+            element={
+              <ProtectedRoute redirectPath="/">
+                <JournalEntryListScene />
               </ProtectedRoute>
             }
           />

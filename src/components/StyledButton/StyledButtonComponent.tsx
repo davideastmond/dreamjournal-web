@@ -16,6 +16,7 @@ interface IStyledButtonProps {
   variant?: "text" | "outlined" | "contained";
   customStyles?: any;
   disabled?: boolean;
+  buttonIcon?: JSX.Element;
 }
 function StyledButtonComponent(props: IStyledButtonProps) {
   return (
@@ -26,6 +27,7 @@ function StyledButtonComponent(props: IStyledButtonProps) {
       sx={{ ...props.customStyles }}
       disabled={props.disabled}
     >
+      {props.buttonIcon}
       {props.textLabel}
     </StyledButton>
   );

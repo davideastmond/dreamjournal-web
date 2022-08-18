@@ -1,31 +1,20 @@
 import {
-  Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
-  IconButton,
 } from "@mui/material";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 
 interface IActionDialogProps {
   promptText: string;
   onActionConfirmed: () => void;
   onDismiss: () => void;
   open: boolean;
-  type: "delete";
+  buttonOptions: JSX.Element[];
 }
 
 function ActionDialog(props: IActionDialogProps) {
-  const handleConfirmAction = () => {
-    props.onActionConfirmed();
-  };
-
-  const handleClose = () => {
-    props.onDismiss();
-  };
-
   return (
     <div className="ActionDialog__main">
       <Dialog
@@ -43,11 +32,7 @@ function ActionDialog(props: IActionDialogProps) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <IconButton onClick={handleConfirmAction} autoFocus color="error">
-            {props.type === "delete" && <DeleteForeverIcon />}
-            OK
-          </IconButton>
+          {props.buttonOptions.map((buttonOption) => buttonOption)}
         </DialogActions>
       </Dialog>
     </div>

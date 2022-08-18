@@ -1,8 +1,6 @@
 import { FormControl, NativeSelect } from "@mui/material";
 import { useState, useRef } from "react";
 import { StyledTextFieldComponent } from "../StyledTextField";
-// import { TSecurityQuestionTemplate } from "../../services/authentication/authentication.types";
-
 interface IDropdownTextComboGroupProps<T> {
   defaultValue?: string;
   inputLabel: string;

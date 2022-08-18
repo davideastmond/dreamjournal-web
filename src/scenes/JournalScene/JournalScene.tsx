@@ -1,4 +1,4 @@
-import { InputAdornment, TextField } from "@mui/material";
+import { InputAdornment } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -8,19 +8,45 @@ import {
   selectJournalById,
 } from "../../reducers/journal-slice";
 import EditIcon from "@mui/icons-material/Edit";
-import ArrowLeftIcon from "@mui/icons-material/ArrowLeft";
 import "./style.css";
 import { getFormattedDate } from "../../utils/string-helpers";
-import { JournalEntriesList } from "../../components/JournalEntriesList";
+
 import { NotFound404 } from "../NotFound404";
-import { textAreaStyling } from "../../styling/text-styling";
-import { patchJournalAttribute } from "../../services/journal/journal.service";
+
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import {
   getSessionUserAsync,
   selectSessionUser,
 } from "../../reducers/app-slice";
 import { ActionDialog } from "../../components/ActionDialog";
 import { JournalTagAnalytics } from "../TagAnalytics";
+import {
+  EJournalPatcherField,
+  JournalPatcher,
+} from "./journal-patch-dispatcher";
+import { StyledButtonComponent } from "../../components/StyledButton";
+import { pallet } from "../../styling/pallets";
+import { StyledHeaderComponent } from "../../components/StyledHeader";
+import { StyledTextFieldComponent } from "../../components/StyledTextField";
+
+const StyledTextFieldSection = (props: any) => {
+  return <div style={{ marginTop: "20px" }}>{props.children}</div>;
+};
+
+const StyledReadOnlyJournalPropertiesSection = (props: any) => {
+  return (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-evenly",
+        marginTop: "10px",
+        flexWrap: "wrap",
+      }}
+    >
+      {props.children}
+    </div>
+  );
+};
 
 function JournalScene() {
   const { journalId } = useParams();
@@ -92,210 +118,175 @@ function JournalScene() {
   ) => {
     if (!journalContext || !sessionUser) return;
     const element = event.target.id;
+    const patcher = new JournalPatcher({ journalId: journalContext?._id });
     switch (element) {
       case "journalTitle":
-        if (journalTitleText && journalTitleText.trim() !== "") {
-          await patchJournalAttribute({
-            journalId: journalContext?._id,
-            patchObject: {
-              title: { action: "update", data: journalTitleText },
-            },
-          });
-          dispatch(getAllJournalsForUserAsync({ userId: sessionUser._id }));
-        } else if (journalTitleText && journalTitleText.trim() === "") {
-          await patchJournalAttribute({
-            journalId: journalContext._id,
-            patchObject: { title: { action: "delete", data: "" } },
-          });
-          dispatch(getAllJournalsForUserAsync({ userId: sessionUser._id }));
-        }
+        await patcher.patch({
+          field: EJournalPatcherField.JournalTitle,
+          data: journalTitleText!,
+        });
         break;
       case "journalDescription":
-        if (journalDescriptionText && journalDescriptionText.trim() !== "") {
-          await patchJournalAttribute({
-            journalId: journalContext?._id,
-            patchObject: {
-              description: { action: "update", data: journalDescriptionText },
-            },
-          });
-          dispatch(getAllJournalsForUserAsync({ userId: sessionUser._id }));
-        } else if (
-          journalDescriptionText &&
-          journalDescriptionText.trim() === ""
-        ) {
-          await patchJournalAttribute({
-            journalId: journalContext._id,
-            patchObject: { description: { action: "delete", data: "" } },
-          });
-          dispatch(getAllJournalsForUserAsync({ userId: sessionUser._id }));
-        }
+        await patcher.patch({
+          field: EJournalPatcherField.JournalDescription,
+          data: journalDescriptionText!,
+        });
         break;
       case "journalTags":
-        if (rawJournalTagString.trim() === "") {
-          await patchJournalAttribute({
-            journalId: journalContext._id,
-            patchObject: { tags: { action: "delete", data: [] } },
-          });
-          dispatch(getAllJournalsForUserAsync({ userId: sessionUser._id }));
-        } else {
-          const parsedTags = rawJournalTagString.split(",");
-          const trimmedTags = parsedTags.map((tag) => tag.trim());
-          await patchJournalAttribute({
-            journalId: journalContext._id,
-            patchObject: { tags: { action: "update", data: trimmedTags } },
-          });
-          dispatch(getAllJournalsForUserAsync({ userId: sessionUser._id }));
-        }
+        await patcher.patch({
+          field: EJournalPatcherField.JournalTags,
+          data: rawJournalTagString,
+        });
     }
-  };
-
-  const handleNavigateToNewJournalEntry = () => {
-    journalContext && navigate(`/journals/${journalContext?._id}/new`);
+    dispatch(getAllJournalsForUserAsync({ userId: sessionUser._id }));
   };
 
   return journalContext ? (
     <div className="JournalContext__main">
       <div className="JournalContext__main__backToJournals">
         <Link to="/home">
-          <div>
-            <ArrowLeftIcon />
-            Journals
-          </div>
+          <ArrowBackIcon
+            sx={{
+              padding: "10px",
+            }}
+          />
         </Link>
+        <StyledButtonComponent
+          textLabel="Entries"
+          onClick={() => {
+            navigate(`/journals/${journalId}/entries`);
+          }}
+        />
       </div>
-      <header className="JournalContext__main__Header">
-        <div className="JournalContext__main__titleHeader">
-          <div>
-            <h2>{journalContext?.title}</h2>
-          </div>
-          <div>Journal</div>
-        </div>
-        <TextField
-          sx={textAreaStyling}
-          autoFocus
-          margin="dense"
+      <StyledHeaderComponent text={journalContext?.title} sizeVariant="h6" />
+      <StyledTextFieldSection>
+        <StyledTextFieldComponent
           id="journalTitle"
           type="text"
           label="Title"
-          fullWidth
-          focused
-          variant="filled"
           onChange={handleTextInputChanged}
           value={journalTitleText}
           onBlur={handleOnElementOnBlur}
+          customInputStyles={{
+            padding: "20px",
+          }}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <EditIcon htmlColor="white" />
+                <EditIcon htmlColor={pallet.greyDark3} />
               </InputAdornment>
             ),
           }}
         />
-        <TextField
-          sx={textAreaStyling}
-          autoFocus
-          margin="dense"
+      </StyledTextFieldSection>
+      <StyledTextFieldSection>
+        <StyledTextFieldComponent
           id="journalDescription"
           type="text"
           label="Description"
-          fullWidth
-          focused
-          variant="filled"
           onChange={handleTextInputChanged}
           value={journalDescriptionText}
           onBlur={handleOnElementOnBlur}
+          customInputStyles={{
+            padding: "20px",
+          }}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <EditIcon htmlColor="white" />
+                <EditIcon htmlColor={pallet.greyDark3} />
               </InputAdornment>
             ),
           }}
         />
-        <div className="JournalContext__main__updateDateSection">
-          <TextField
+      </StyledTextFieldSection>
+      <StyledReadOnlyJournalPropertiesSection>
+        <StyledTextFieldSection>
+          <StyledTextFieldComponent
             label="Created"
-            sx={textAreaStyling}
-            focused
-            variant="filled"
+            customInputStyles={{
+              padding: "20px",
+            }}
             value={getFormattedDate({
               dateString: journalContext?.createdAt.toString()!,
             })}
           />
-          <TextField
+        </StyledTextFieldSection>
+        <StyledTextFieldSection>
+          <StyledTextFieldComponent
             label="Last updated"
-            sx={textAreaStyling}
-            focused
-            variant="filled"
+            customInputStyles={{
+              padding: "20px",
+            }}
             value={getFormattedDate({
               dateString: journalContext?.updatedAt.toString()!,
             })}
           />
-          <TextField
+        </StyledTextFieldSection>
+        <StyledTextFieldSection>
+          <StyledTextFieldComponent
             label="id"
-            sx={textAreaStyling}
-            focused
-            variant="filled"
+            customInputStyles={{
+              padding: "20px",
+            }}
             value={journalContext?._id}
           />
-        </div>
-        <div className="JournalContext__tags-enclosure">
-          <TextField
-            sx={textAreaStyling}
-            autoFocus
-            margin="dense"
-            id="journalTags"
-            type="text"
-            label="Tags"
-            fullWidth
-            focused
-            variant="filled"
-            onChange={handleTextInputChanged}
-            value={rawJournalTagString}
-            onBlur={handleOnElementOnBlur}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <EditIcon htmlColor="white" />
-                </InputAdornment>
-              ),
+        </StyledTextFieldSection>
+      </StyledReadOnlyJournalPropertiesSection>
+      <StyledTextFieldSection>
+        <StyledTextFieldComponent
+          id="journalTags"
+          type="text"
+          label="Tags"
+          onChange={handleTextInputChanged}
+          value={rawJournalTagString}
+          onBlur={handleOnElementOnBlur}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <EditIcon htmlColor={pallet.greyDark3} />
+              </InputAdornment>
+            ),
+          }}
+        />
+      </StyledTextFieldSection>
+      <section className="JournalScene__ControlSection">
+        <div>
+          <StyledButtonComponent
+            onClick={() => setActionDialogOpen(true)}
+            variant={"outlined"}
+            textLabel="Delete Journal"
+            customStyles={{
+              backgroundColor: pallet.darkSalmon,
+            }}
+          />
+          <StyledButtonComponent
+            //className="tag-stats-journal align-right cursor-hover warning-color"
+            textLabel="Tag Analytics"
+            onClick={() => setTagsDialogOpen(true)}
+            variant={"outlined"}
+            customStyles={{
+              marginLeft: "20px",
             }}
           />
         </div>
-      </header>
-      <section>
-        <div
-          className="delete-journal align-right cursor-hover warning-color"
-          onClick={() => setActionDialogOpen(true)}
-        >
-          Delete Journal
-        </div>
-        <div
-          className="tag-stats-journal align-right cursor-hover warning-color"
-          onClick={() => setTagsDialogOpen(true)}
-        >
-          Tag Analytics
-        </div>
-      </section>
-      <section className="JournalEntries__main__body">
-        <header className="top-margin-buffer">
-          <h2>Entries</h2>
-        </header>
-        <JournalEntriesList
-          entries={
-            journalContext && journalContext.journalEntries
-              ? journalContext.journalEntries
-              : []
-          }
-          onClickAddNewJournalEntry={handleNavigateToNewJournalEntry}
-        />
       </section>
       <ActionDialog
-        type={"delete"}
         open={actionDialogOpen}
         promptText={`Are you sure you want to delete journal "${journalContext.title}" ?`}
         onActionConfirmed={handleDeleteJournal}
         onDismiss={() => setActionDialogOpen(false)}
+        buttonOptions={[
+          <StyledButtonComponent
+            onClick={() => setActionDialogOpen(false)}
+            textLabel="Cancel"
+            fontColor={pallet.darkerSkyBlue}
+          />,
+          <StyledButtonComponent
+            onClick={handleDeleteJournal}
+            fontColor={pallet.redText}
+            textLabel="Delete"
+          />,
+        ]}
       />
       <JournalTagAnalytics
         open={tagsDialogOpen}

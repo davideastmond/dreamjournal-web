@@ -17,6 +17,9 @@ interface IJournalListProps {
   journals: TJournal[];
 }
 
+const StyledDiv = styled("div")(() => ({
+  marginTop: "20px",
+}));
 const StyledAddNewJournalButton = styled(Button)((props) => ({
   backgroundColor: pallet.redWine,
   [props.theme.breakpoints.down("sm")]: {
@@ -75,7 +78,7 @@ function JournalList(props: IJournalListProps) {
 
   const generateAddJournalButtons = () => {
     return (
-      <div className="NewJournals__Controls">
+      <StyledDiv className="NewJournals__Controls">
         <StyledAddNewJournalButton variant="outlined">
           <Link to="/new_journal">New Journal</Link>
         </StyledAddNewJournalButton>
@@ -84,7 +87,7 @@ function JournalList(props: IJournalListProps) {
             <AddIcon />
           </Link>
         </StyledAddIconButton>
-      </div>
+      </StyledDiv>
     );
   };
   return (

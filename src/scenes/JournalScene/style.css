@@ -12,9 +12,23 @@
 
 .JournalContext__main__backToJournals {
   display: flex;
-  justify-content: left;
 }
 
-.JournalContext__main__backToJournals:hover {
-  cursor: pointer;
+.JournalScene__ControlSection {
+  margin-top: 20px;
+}
+
+@media only screen and (max-width: 480px) {
+  .JournalScene__ControlSection {
+    display: flex;
+    justify-content: space-evenly;
+  }
+}
+
+@media only screen and (min-width: 481px) {
+  .JournalScene__ControlSection {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+  }
 }
