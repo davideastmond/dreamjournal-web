@@ -57,14 +57,17 @@ export function validateRegistrationData({
 
   if (!dateOfBirth) {
     foundError = true;
-    onFail({ field: "dateOfBirth", message: "Please enter a date of birth" });
+    onFail({
+      field: "dateOfBirth",
+      message: "Please enter a date of birth (missing or empty value)",
+    });
   }
 
   if (!dayjs(dateOfBirth, "MMM-DD-YYYY", true).isValid()) {
     foundError = true;
     onFail({
       field: "dateOfBirth",
-      message: "Please enter a valid date of birth",
+      message: "Please enter a valid date of birth in the correct format",
     });
   }
 
