@@ -9,11 +9,24 @@ import Paper from "@mui/material/Paper";
 import { getFormattedDate } from "../../utils/string-helpers";
 import { useNavigate } from "react-router-dom";
 import "./style.css";
-import AddIcon from "@mui/icons-material/Add";
+
+import { styled } from "@mui/material";
 interface IJournalEntriesListProps {
   entries: TJournalEntry[];
-  onClickAddNewJournalEntry?: (journalContextId?: string) => void;
 }
+
+const StyledHeaderCell = styled(TableCell)(() => ({
+  "&.MuiTableCell-root": {
+    borderBottom: "unset",
+    fontSize: "20px",
+  },
+}));
+
+const StyledCellData = styled(TableCell)(() => ({
+  "&.MuiTableCell-root": {
+    borderBottomWidth: "0.5px",
+  },
+}));
 
 const cellStyling = { color: "white" };
 const boldFontWeight = { fontWeight: "bold" };
@@ -31,35 +44,25 @@ function JournalEntriesList(props: IJournalEntriesListProps) {
       { replace: true }
     );
   };
-  const handleAddNewJournalEntry = () => {
-    props.onClickAddNewJournalEntry && props.onClickAddNewJournalEntry();
-  };
+
   return (
     <div>
-      <header>
-        <div className="cursor-hover" onClick={handleAddNewJournalEntry}>
-          <AddIcon color="primary" />
-          New entry
-        </div>
-      </header>
       <TableContainer component={Paper} sx={{ marginTop: "10px" }}>
         <Table sx={{ backgroundColor: "black" }} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell
+              <StyledHeaderCell
                 align="left"
                 sx={{ ...cellStyling, ...boldFontWeight }}
               >
-                {" "}
-                Entry Title{" "}
-              </TableCell>
-              <TableCell
+                Entry Title
+              </StyledHeaderCell>
+              <StyledHeaderCell
                 align="left"
                 sx={{ ...cellStyling, ...boldFontWeight }}
               >
-                {" "}
-                Last Updated{" "}
-              </TableCell>
+                Last Updated
+              </StyledHeaderCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -69,7 +72,7 @@ function JournalEntriesList(props: IJournalEntriesListProps) {
                   key={entry._id}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                 >
-                  <TableCell
+                  <StyledCellData
                     align="left"
                     sx={cellStyling}
                     onClick={() =>
@@ -80,16 +83,18 @@ function JournalEntriesList(props: IJournalEntriesListProps) {
                     }
                   >
                     {entry.title}
-                  </TableCell>
-                  <TableCell align="left" sx={cellStyling}>
+                  </StyledCellData>
+                  <StyledCellData align="left" sx={cellStyling}>
                     {getFormattedDate({
                       dateString: entry.updatedAt?.toString()!,
                     })}
-                  </TableCell>
+                  </StyledCellData>
                 </TableRow>
               ))}
             {props.entries.length === 0 && (
-              <TableCell align="left">Empty </TableCell>
+              <StyledCellData align="left" sx={{ color: "white" }}>
+                Empty{" "}
+              </StyledCellData>
             )}
           </TableBody>
         </Table>

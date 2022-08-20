@@ -1,5 +1,6 @@
 import { TextField } from "@mui/material";
 import React, { useState } from "react";
+import { StyledTextFieldComponent } from "../../components/StyledTextField";
 import { textAreaStyling } from "../../styling/text-styling";
 
 interface NewJournalEntryHeaderProps {
@@ -38,45 +39,39 @@ function NewJournalEntryHeader(props: NewJournalEntryHeaderProps) {
   return (
     <div className="NewJournalEntry__header__main">
       <header>
-        <TextField
+        <StyledTextFieldComponent
           sx={textAreaStyling}
-          autoFocus
           margin="dense"
           id="journalEntryTitle"
           type="text"
           label="Title"
           fullWidth
           focused
-          variant="filled"
           onChange={handleTextInputChanged}
           value={journalEntryTitle}
           required
         />
-        <TextField
+        <StyledTextFieldComponent
           sx={textAreaStyling}
-          autoFocus
           margin="dense"
           id="journalEntryDescription"
           type="text"
           label="Description"
           fullWidth
           focused
-          variant="filled"
           onChange={handleTextInputChanged}
           value={journalEntryDescription}
           required
         />
         <div className="JournalEntryContext__tags-enclosure">
-          <TextField
+          <StyledTextFieldComponent
             sx={textAreaStyling}
-            autoFocus
             margin="dense"
             id="journalEntryTags"
             type="text"
             label="Tags"
             fullWidth
             focused
-            variant="filled"
             onChange={handleTextInputChanged}
             value={journalEntryTags}
           />

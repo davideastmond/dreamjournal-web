@@ -1,11 +1,24 @@
-import { Grid, Button } from "@mui/material";
+import { Grid, Box, styled } from "@mui/material";
 import { useState, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { CustomDatePicker } from "../../components/CustomDatePicker";
 import { patchUserBasicProfileDataAsync } from "../../reducers/app-slice";
-import { GridRow } from "./GridRow";
-import dayjs from "dayjs";
 
+import dayjs from "dayjs";
+import { StyledHeaderComponent } from "../../components/StyledHeader";
+import { StyledButtonComponent } from "../../components/StyledButton";
+import { pallet } from "../../styling/pallets";
+import { GridRow } from "./components/grid-row";
+import { DATE_CONSTANTS } from "../../definitions";
+
+const StyledBox = styled(Box)((props) => ({
+  [props.theme.breakpoints.up("md")]: {
+    "&.MuiBox-root": {
+      marginLeft: "10%",
+      marginRight: "10%",
+    },
+  },
+}));
 export function PersonalPanel({
   email,
   firstName,
@@ -93,11 +106,23 @@ export function PersonalPanel({
     }
     return "Not set";
   };
+
+  const getCustomDatePicker = () => {
+    return (
+      <CustomDatePicker
+        label="Enter date of birth"
+        slim={true}
+        onDateChange={handleCalendarDateChange}
+        isError={hasDobError}
+        errorText={dobErrorText || undefined}
+        lightText={true}
+        maxDate={DATE_CONSTANTS.ADULT_AGE as any}
+      />
+    );
+  };
   return (
-    <div>
-      <header>
-        <h3 className="black-text">Basic personal info</h3>
-      </header>
+    <StyledBox>
+      <StyledHeaderComponent text="Basic personal info" sizeVariant="h5" />
       <Grid container spacing={2}>
         <GridRow canEdit={false} label="E-mail" contentData={email} />
         <GridRow
@@ -119,15 +144,7 @@ export function PersonalPanel({
             canEdit={canEdit}
             idTag="dob"
             label="Date of birth"
-            component={
-              <CustomDatePicker
-                label="Enter date of birth"
-                slim={true}
-                onDateChange={handleCalendarDateChange}
-                isError={hasDobError}
-                errorText={dobErrorText || undefined}
-              />
-            }
+            component={getCustomDatePicker()}
             contentData={
               formatDob((dobTextData as any).$d?.toString()) || "Unspecified"
             }
@@ -138,39 +155,34 @@ export function PersonalPanel({
             canEdit={canEdit}
             idTag="dob"
             label="Date of birth"
-            component={
-              <CustomDatePicker
-                label="Enter date of birth"
-                slim={true}
-                onDateChange={handleCalendarDateChange}
-                isError={hasDobError}
-                errorText={dobErrorText || undefined}
-              />
-            }
+            component={getCustomDatePicker()}
             contentData={formatDob(dobTextData)}
           />
         )}
       </Grid>
       <footer className="top-margin-buffer">
         {canEdit ? (
-          <Button variant="outlined" color="error" onClick={handleCancelEdit}>
-            Cancel edit
-          </Button>
+          <StyledButtonComponent
+            textLabel="Cancel edit"
+            fillColor={pallet.redText}
+            onClick={handleCancelEdit}
+          />
         ) : (
-          <Button
-            variant="outlined"
-            color="success"
+          <StyledButtonComponent
+            textLabel="Edit"
+            fillColor={pallet.aquaBlueGreen}
             onClick={() => setCanEdit(!canEdit)}
-          >
-            Edit
-          </Button>
+          />
         )}
         {canEdit && (
-          <Button variant="outlined" onClick={handleSubmitPersonalData}>
-            Save
-          </Button>
+          <StyledButtonComponent
+            textLabel="Save"
+            fillColor={pallet.aquaBlueGreen}
+            onClick={handleSubmitPersonalData}
+            customStyles={{ marginLeft: "10px" }}
+          />
         )}
       </footer>
-    </div>
+    </StyledBox>
   );
 }

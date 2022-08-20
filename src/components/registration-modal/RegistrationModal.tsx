@@ -15,6 +15,7 @@ import { Spinner } from "../Spinner";
 import { validateRegistrationData } from "./validators/registration-validator";
 import "./style.css";
 import { CustomDatePicker } from "../CustomDatePicker";
+import { DATE_CONSTANTS } from "../../definitions";
 
 interface IRegistrationModalProps {
   open: boolean;
@@ -233,9 +234,11 @@ function RegistrationModal(props: IRegistrationModalProps) {
           />
           <CustomDatePicker
             onDateChange={setDateOfBirthValue}
+            disableFuture
             isError={dobErrorState}
             errorText={dobErrorText}
             label="Date of birth"
+            maxDate={DATE_CONSTANTS.ADULT_AGE as any}
           />
         </FormControl>
         {registrationAttemptErrorState && (

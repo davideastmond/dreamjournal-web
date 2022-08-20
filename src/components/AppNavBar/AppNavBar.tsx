@@ -28,6 +28,7 @@ import {
 import { SearchResultsPopUp } from "../SearchResultsPopup";
 import { TSearchResults } from "../../services/search/search.types";
 import { useNavigate } from "react-router-dom";
+import { pallet } from "../../styling/pallets";
 
 interface IAppNavBarProps {
   hasSession: boolean;
@@ -126,8 +127,9 @@ function AppNavBar(props: IAppNavBarProps) {
   const handleSearchTextOnChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    setSearchActive(true);
-    setSearchValue(event.target.value);
+    // POIJ search disable for now until we can work with this
+    // setSearchActive(true);
+    // setSearchValue(event.target.value);
   };
 
   const handleSearchMenuClickAway = () => {
@@ -140,10 +142,8 @@ function AppNavBar(props: IAppNavBarProps) {
   };
 
   const handleClickIntoSearchTextBox = (event: any) => {
-    if (event.target.value.length > 0 && !searchActive) {
-      setSearchActive(true);
-      setSearchValue(event.target.value);
-    }
+    // POIJ search
+    return;
   };
   return (
     <Box
@@ -151,7 +151,7 @@ function AppNavBar(props: IAppNavBarProps) {
         flexGrow: 1,
       }}
     >
-      <AppBar position="static">
+      <AppBar position="static" sx={{ backgroundColor: pallet.redWine }}>
         <Toolbar>
           <IconButton
             onClick={() => navigate("/home")}

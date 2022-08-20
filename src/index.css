@@ -99,6 +99,10 @@ code {
   margin-top: 5%;
 }
 
+.small-top-margin {
+  margin-top: 10px;
+}
+
 .light-salmon-bkg {
   background-color: var(--light-salmon);
 }

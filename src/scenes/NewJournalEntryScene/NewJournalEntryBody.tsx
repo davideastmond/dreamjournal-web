@@ -1,11 +1,11 @@
-import { TextField } from "@mui/material";
-import { textAreaStyling } from "../../styling/text-styling";
 import React, { useState } from "react";
+import { StyledHeaderComponent } from "../../components/StyledHeader";
+import { StyledTextFieldComponent } from "../../components/StyledTextField";
 
-interface NewJournalEntryBodyTextProps {
+interface NewJournalEntryBody {
   onTextChange: (text: string) => void;
 }
-function NewJournalEntryBodyText(props: NewJournalEntryBodyTextProps) {
+function NewJournalEntryBody(props: NewJournalEntryBody) {
   const [journalEntryText, setJournalEntryText] = useState<string | null>(null);
   const handleTextInputChanged = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -15,20 +15,21 @@ function NewJournalEntryBodyText(props: NewJournalEntryBodyTextProps) {
   };
   return (
     <div className="JournalEntryText__multilineText">
-      <header>
-        <div>Write your journal entry</div>
-      </header>
-      <TextField
-        sx={textAreaStyling}
-        autoFocus
-        margin="dense"
+      <StyledHeaderComponent
+        text="Entry text"
+        sizeVariant="h5"
+        headerEnclosureStylings={{
+          marginTop: "10px",
+          marginBottom: "10px",
+        }}
+      />
+      <StyledTextFieldComponent
         id="journalEntryText"
         multiline
         type="text"
         label="Text"
-        fullWidth
         focused
-        variant="filled"
+        fullWidth
         onChange={handleTextInputChanged}
         value={journalEntryText}
         rows={6}
@@ -37,4 +38,4 @@ function NewJournalEntryBodyText(props: NewJournalEntryBodyTextProps) {
   );
 }
 
-export default NewJournalEntryBodyText;
+export default NewJournalEntryBody;
