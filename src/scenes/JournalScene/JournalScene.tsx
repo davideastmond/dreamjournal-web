@@ -68,7 +68,7 @@ function JournalScene() {
     journalContext?.tags ? journalContext.tags.join(", ") : ""
   );
   const [actionDialogOpen, setActionDialogOpen] = useState<boolean>(false);
-  const [tagsDialogOpen, setTagsDialogOpen] = useState<boolean>(false);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -259,15 +259,6 @@ function JournalScene() {
               backgroundColor: pallet.darkSalmon,
             }}
           />
-          <StyledButtonComponent
-            //className="tag-stats-journal align-right cursor-hover warning-color"
-            textLabel="Tag Analytics"
-            onClick={() => setTagsDialogOpen(true)}
-            variant={"outlined"}
-            customStyles={{
-              marginLeft: "20px",
-            }}
-          />
         </div>
       </section>
       <ActionDialog
@@ -287,13 +278,6 @@ function JournalScene() {
             textLabel="Delete"
           />,
         ]}
-      />
-      <JournalTagAnalytics
-        open={tagsDialogOpen}
-        onClickClose={() => setTagsDialogOpen(false)}
-        context={"journalSpecific"}
-        userId={sessionUser?._id!}
-        journalContext={journalContext}
       />
     </div>
   ) : (
