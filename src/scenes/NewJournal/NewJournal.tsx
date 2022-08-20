@@ -8,11 +8,12 @@ import { submitNewJournal } from "../../services/journal/journal.service";
 import { selectSessionUser } from "../../reducers/app-slice";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { getAllJournalsForUserAsync } from "../../reducers/journal-slice";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { validateAndSanitizeNewJournalSubmissionData } from "../../utils/validators/validators";
 import { StyledHeaderComponent } from "../../components/StyledHeader";
 import { pallet } from "../../styling/pallets";
 import { StyledTextFieldComponent } from "../../components/StyledTextField";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 const StyledFormControl = styled(FormControl)((props) => ({
   [props.theme.breakpoints.down("sm")]: {
@@ -96,6 +97,15 @@ export function NewJournal() {
   }, []);
   return (
     <div className="Scene NewJournal__Main">
+      <Box display="flex" justifyContent={"space-between"}>
+        <Link to="/home">
+          <ArrowBackIcon
+            sx={{
+              padding: "10px",
+            }}
+          />
+        </Link>
+      </Box>
       <StyledHeaderComponent text="Create new journal" />
       <Box>
         <StyledFormControl>
