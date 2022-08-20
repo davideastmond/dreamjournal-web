@@ -24,6 +24,9 @@ const StyledTextField = styled(TextField)<TStyledTextFieldComponentProps>(
     "&&& .MuiFormLabel-root": {
       color: pallet.eggShellWhite,
     },
+    "& .MuiInputBase-inputMultiline": {
+      color: pallet.skyBlue,
+    },
   })
 );
 

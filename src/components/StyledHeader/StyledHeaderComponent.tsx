@@ -14,13 +14,13 @@ interface IStyledHeaderComponentProps {
   children?: JSX.Element | JSX.Element[];
   sizeVariant?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
   customClassNames?: string;
+  headerEnclosureStylings?: { [keyof: string]: string };
 }
 function StyledHeaderComponent(props: IStyledHeaderComponentProps) {
   return (
     <StyledHeader
-      className={`${
-        props.customClassNames || ""
-      } JournalList__Main__div top-margin-buffer`}
+      className={`${props.customClassNames || ""} JournalList__Main__div`}
+      sx={props.headerEnclosureStylings}
     >
       <Typography
         id="journalsTitle"
