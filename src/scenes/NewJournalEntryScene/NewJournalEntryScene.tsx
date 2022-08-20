@@ -12,7 +12,7 @@ import {
 import { addEntryToJournal } from "../../services/journal/journal.service";
 import { pallet } from "../../styling/pallets";
 import { validateAndSanitizeNewJournalSubmissionData } from "../../utils/validators/validators";
-import NewJournalEntryBodyText from "./NewJournalEntryBody";
+import NewJournalEntryBody from "./NewJournalEntryBody";
 import NewJournalEntryHeader from "./NewJournalEntryHeader";
 
 function NewJournalEntryScene() {
@@ -123,9 +123,7 @@ function NewJournalEntryScene() {
           customClassNames="small-top-margin"
         />
         <NewJournalEntryHeader onHeaderDataChanged={handleHeaderDataChanged} />
-        <NewJournalEntryBodyText
-          onTextChange={handleJournalEntryBodyTextChange}
-        />
+        <NewJournalEntryBody onTextChange={handleJournalEntryBodyTextChange} />
         <footer className="JournalEntryText__footer__main">
           {hasSubmissionError && (
             <Stack sx={{ width: "100%" }} spacing={0}>
