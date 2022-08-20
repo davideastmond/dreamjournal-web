@@ -10,12 +10,9 @@ import { getFormattedDate } from "../../utils/string-helpers";
 import { useNavigate } from "react-router-dom";
 import "./style.css";
 
-import { StyledButtonComponent } from "../StyledButton";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { styled } from "@mui/material";
 interface IJournalEntriesListProps {
   entries: TJournalEntry[];
-  onClickAddNewJournalEntry?: (journalContextId?: string) => void;
 }
 
 const StyledHeaderCell = styled(TableCell)(() => ({
@@ -47,24 +44,9 @@ function JournalEntriesList(props: IJournalEntriesListProps) {
       { replace: true }
     );
   };
-  const handleAddNewJournalEntry = () => {
-    props.onClickAddNewJournalEntry && props.onClickAddNewJournalEntry();
-  };
+
   return (
     <div>
-      <div className="JournalContext__main__backToJournals">
-        <div className="cursor-hover" onClick={() => navigate(-1)}>
-          <ArrowBackIcon
-            sx={{
-              padding: "10px",
-            }}
-          />
-        </div>
-        <StyledButtonComponent
-          textLabel="New Entry"
-          onClick={handleAddNewJournalEntry}
-        />
-      </div>
       <TableContainer component={Paper} sx={{ marginTop: "10px" }}>
         <Table sx={{ backgroundColor: "black" }} aria-label="simple table">
           <TableHead>
