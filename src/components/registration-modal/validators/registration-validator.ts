@@ -1,3 +1,4 @@
+import dayjs from "dayjs";
 import { isEmailValid } from "../../../utils/string-helpers";
 import { isPasswordValid } from "../../../utils/validators/validators";
 
@@ -57,6 +58,14 @@ export function validateRegistrationData({
   if (!dateOfBirth) {
     foundError = true;
     onFail({ field: "dateOfBirth", message: "Please enter a date of birth" });
+  }
+
+  if (!dayjs(dateOfBirth, "MMM-DD-YYYY", true).isValid()) {
+    foundError = true;
+    onFail({
+      field: "dateOfBirth",
+      message: "Please enter a valid date of birth",
+    });
   }
 
   const passwordFailMessage = ({

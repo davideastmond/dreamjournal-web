@@ -40,7 +40,7 @@ export type TTagsPatchRequest = {
   tags: { action: "update" | "delete"; data: string[] };
 };
 export type TPhotoURLPatchRequest = {
-  photoUrl: { action: "update" | "delete"; data: string };
+  photoUrl?: { action: "update" | "delete"; data: string };
 };
 
 export type TTextBodyPatchRequest = {

@@ -1,54 +1,124 @@
-import { List, ListItem, ListItemText, Typography } from "@mui/material";
+import {
+  Button,
+  IconButton,
+  List,
+  ListItem,
+  ListItemText,
+  styled,
+} from "@mui/material";
+import JournalBookMarkIcon from "@mui/icons-material/CollectionsBookmark";
 import { Link, useNavigate } from "react-router-dom";
 import { TJournal } from "../../services/journal/journal.types";
-import "./style.css";
+import AddIcon from "@mui/icons-material/Add";
+import { pallet } from "../../styling/pallets";
+import { StyledHeaderComponent } from "../StyledHeader";
 
 interface IJournalListProps {
   journals: TJournal[];
 }
-function JournaList(props: IJournalListProps) {
+
+const StyledDiv = styled("div")(() => ({
+  marginTop: "20px",
+}));
+const StyledAddNewJournalButton = styled(Button)((props) => ({
+  backgroundColor: pallet.redWine,
+  [props.theme.breakpoints.down("sm")]: {
+    display: "none",
+  },
+}));
+
+const StyledAddIconButton = styled(IconButton)((props) => ({
+  color: pallet.redWine,
+  [props.theme.breakpoints.up("sm")]: {
+    display: "none",
+  },
+  "&:hover": {
+    cursor: "pointer",
+    color: pallet.eggShellWhite,
+    backgroundColor: pallet.redWine,
+  },
+  paddingTop: "5px",
+  border: "1px solid",
+  borderRadius: "20%",
+}));
+
+const StyledList = styled(List)(() => ({
+  marginLeft: "20%",
+  marginRight: "20%",
+}));
+
+const StyledListItemText = styled(ListItemText)((props) => ({
+  color: pallet.eggShellWhite,
+  marginLeft: "10px",
+  [props.theme.breakpoints.down("sm")]: {
+    "&& .MuiTypography-root": {
+      fontSize: "1rem",
+    },
+  },
+  "& .MuiTypography-root": {
+    fontSize: "1.5rem",
+  },
+}));
+
+const StyledJournalBookMarkIcon = styled(JournalBookMarkIcon)(() => ({
+  color: pallet.lightSalmon,
+}));
+
+const StyledListItem = styled(ListItem)(() => ({
+  "&:hover": {
+    cursor: "pointer",
+  },
+}));
+
+function JournalList(props: IJournalListProps) {
   const handleListItemClick = ({ journalId }: { journalId: string }) => {
-    //window.location.href = `/journals/$${journalId}`
     navigate(`/journals/${journalId}`, { replace: true });
   };
   const navigate = useNavigate();
+
+  const generateAddJournalButtons = () => {
+    return (
+      <StyledDiv className="NewJournals__Controls">
+        <StyledAddNewJournalButton variant="outlined">
+          <Link to="/new_journal">New Journal</Link>
+        </StyledAddNewJournalButton>
+        <StyledAddIconButton color="primary">
+          <Link to="/new_journal">
+            <AddIcon />
+          </Link>
+        </StyledAddIconButton>
+      </StyledDiv>
+    );
+  };
   return (
     <div className="JournaList__Main">
-      <Typography
-        id="journalsTitle"
-        variant="h5"
-        sx={{
-          color: "white",
-        }}
-      >
-        Journals
-      </Typography>
-      <div className="NewJournals__Controls">
-        <div className="warning-color cursor-hover">
-          <Link to="/new_journal">+ New Journal</Link>
-        </div>
-      </div>
-      <List dense={true}>
+      <StyledHeaderComponent text="Your journals">
+        {generateAddJournalButtons()}
+      </StyledHeaderComponent>
+      <StyledList dense={true}>
         {props.journals &&
           props.journals.length > 0 &&
           props.journals.map((journalItem) => (
-            <ListItem key={journalItem._id}>
-              <ListItemText
+            <StyledListItem key={journalItem._id}>
+              <StyledJournalBookMarkIcon />
+              <StyledListItemText
                 primary={journalItem.title}
                 onClick={() =>
                   handleListItemClick({ journalId: journalItem._id })
                 }
               />
-            </ListItem>
+            </StyledListItem>
           ))}
         {(!props.journals || props.journals.length === 0) && (
           <ListItem>
-            <ListItemText primary="No journals">No Journals</ListItemText>
+            <ListItemText primary="No journals">
+              You don't have any journals
+            </ListItemText>
           </ListItem>
         )}
-      </List>
+      </StyledList>
     </div>
   );
 }
 
-export default JournaList;
+export default JournalList;

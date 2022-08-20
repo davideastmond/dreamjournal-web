@@ -1,4 +1,4 @@
-import { TextField, Box, Typography, Button } from "@mui/material";
+import { Box, Button, FormControl, styled } from "@mui/material";
 import { useEffect, useState } from "react";
 import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
@@ -8,18 +8,28 @@ import { submitNewJournal } from "../../services/journal/journal.service";
 import { selectSessionUser } from "../../reducers/app-slice";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { getAllJournalsForUserAsync } from "../../reducers/journal-slice";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { validateAndSanitizeNewJournalSubmissionData } from "../../utils/validators/validators";
+import { StyledHeaderComponent } from "../../components/StyledHeader";
+import { pallet } from "../../styling/pallets";
+import { StyledTextFieldComponent } from "../../components/StyledTextField";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
-export interface INewJournalSubmissionProps {
-  onSuccessfulSubmission?: () => void;
-}
-/**
- * This will appear when the user has no journal
- *
- * @returns
- */
-export function NewJournal(props: INewJournalSubmissionProps) {
+const StyledFormControl = styled(FormControl)((props) => ({
+  [props.theme.breakpoints.down("sm")]: {
+    width: "90%",
+  },
+  [props.theme.breakpoints.up("sm")]: {
+    width: "70%",
+  },
+  marginTop: "2%",
+}));
+
+const textFieldSpacingStyle = {
+  marginTop: "10px",
+  marginBottom: "10px",
+};
+export function NewJournal() {
   const userData = useSelector(selectSessionUser, shallowEqual);
   const [journalTitleText, setJournalTitleText] = useState("");
   const [journalDescriptionText, setJournalDescriptionText] = useState("");
@@ -59,7 +69,6 @@ export function NewJournal(props: INewJournalSubmissionProps) {
             });
             dispatch(getAllJournalsForUserAsync({ userId: userData._id }));
             navigate(`/journals/${newJournal.journal._id}`);
-            //props.onSuccessfulSubmission && props.onSuccessfulSubmission();
           } catch (exception: any) {
             setHasSubmissionError(true);
             setSubmissionErrors([`${exception.message}`]);
@@ -88,109 +97,74 @@ export function NewJournal(props: INewJournalSubmissionProps) {
   }, []);
   return (
     <div className="Scene NewJournal__Main">
-      <Typography
-        variant="h4"
-        sx={{
-          color: "white",
-        }}
-      >
-        Create New Journal
-      </Typography>
-      <TextField
-        sx={{
-          "& .MuiOutlinedInput-input": {
-            color: "white",
-          },
-          "& .MuiOutlinedInput-root": {
-            borderColor: "white",
-            borderLeftStyle: "solid",
-            borderRightStyle: "solid",
-            borderWidth: "1px",
-          },
-          "& .MuiTextField-root": {
-            marginTop: "20",
-          },
-        }}
-        onChange={handleOnTextChange}
-        label="Title"
-        id="title"
-        name="title"
-        placeholder="Enter a journal title"
-        required={true}
-        color="primary"
-        variant="outlined"
-        fullWidth
-        focused
-        margin="normal"
-      />
-      <TextField
-        sx={{
-          "& .MuiOutlinedInput-input": {
-            color: "white",
-          },
-          "& .MuiOutlinedInput-root": {
-            borderColor: "white",
-            borderLeftStyle: "solid",
-            borderRightStyle: "solid",
-            borderWidth: "1px",
-          },
-          marginTop: "16px",
-        }}
-        onChange={handleOnTextChange}
-        label="Description"
-        id="description"
-        name="description"
-        placeholder="Enter a description"
-        required={true}
-        color="primary"
-        variant="outlined"
-        fullWidth
-        focused
-      />
-      <TextField
-        onChange={handleOnTextChange}
-        label="tags"
-        id="tags"
-        name="tags"
-        placeholder="Enter some optional tags"
-        color="primary"
-        variant="outlined"
-        focused
-        fullWidth
-        sx={{
-          "& .MuiOutlinedInput-input": {
-            color: "white",
-          },
-          "& .MuiOutlinedInput-root": {
-            borderColor: "white",
-            borderLeftStyle: "solid",
-            borderRightStyle: "solid",
-            borderWidth: "1px",
-          },
-          marginTop: "16px",
-        }}
-      ></TextField>
-      {hasSubmissionError && (
-        <Stack sx={{ width: "100%" }} spacing={0}>
-          {submissionErrors &&
-            submissionErrors.map((error, index) => (
-              <Alert key={`${index}_error`} severity="error">
-                {error}
-              </Alert>
-            ))}
-        </Stack>
-      )}
+      <Box display="flex" justifyContent={"space-between"}>
+        <Link to="/home">
+          <ArrowBackIcon
+            sx={{
+              padding: "10px",
+            }}
+          />
+        </Link>
+      </Box>
+      <StyledHeaderComponent text="Create new journal" />
       <Box>
-        <Button
-          onClick={handleSubmitAndValidate}
-          fullWidth
-          variant="contained"
-          sx={{
-            marginTop: "16px",
-          }}
-        >
-          Go
-        </Button>
+        <StyledFormControl>
+          <StyledTextFieldComponent
+            onChange={handleOnTextChange}
+            label="Title"
+            id="title"
+            name="title"
+            placeholder="Enter a journal title"
+            required={true}
+            fullWidth
+            focused
+            customStyles={textFieldSpacingStyle}
+          />
+          <StyledTextFieldComponent
+            onChange={handleOnTextChange}
+            label="Description"
+            id="description"
+            name="description"
+            placeholder="Enter a description"
+            required={true}
+            fullWidth
+            focused
+            customStyles={textFieldSpacingStyle}
+          />
+          <StyledTextFieldComponent
+            onChange={handleOnTextChange}
+            label="tags"
+            id="tags"
+            name="tags"
+            placeholder="Enter some optional tags"
+            color="primary"
+            variant="outlined"
+            focused
+            fullWidth
+            customStyles={textFieldSpacingStyle}
+          />
+          {hasSubmissionError && (
+            <Stack sx={{ width: "100%" }} spacing={0}>
+              {submissionErrors &&
+                submissionErrors.map((error, index) => (
+                  <Alert key={`${index}_error`} severity="error">
+                    {error}
+                  </Alert>
+                ))}
+            </Stack>
+          )}
+          <Button
+            onClick={handleSubmitAndValidate}
+            fullWidth
+            variant="contained"
+            sx={{
+              marginTop: "16px",
+              backgroundColor: pallet.redWine,
+            }}
+          >
+            Create
+          </Button>
+        </StyledFormControl>
       </Box>
     </div>
   );

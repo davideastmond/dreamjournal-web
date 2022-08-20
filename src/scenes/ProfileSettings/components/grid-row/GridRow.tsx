@@ -1,9 +1,16 @@
-import { Grid, TextField } from "@mui/material";
-import { TextFieldProps } from "@mui/material/TextField";
+import { Grid } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { Item } from "./Item";
+import { StyledTextFieldComponent } from "../../../../components/StyledTextField";
+import { pallet } from "../../../../styling/pallets";
+import { StyledGridItem } from "../styled-grid-item";
 
-export const GridRow = ({
+const StyledItem = styled(StyledGridItem)((props) => ({
+  color: pallet.eggShellWhite,
+  backgroundColor: pallet.black,
+  border: `1px solid ${pallet.eggShellWhite}`,
+}));
+
+const GridRow = ({
   canEdit,
   label,
   contentData,
@@ -24,28 +31,19 @@ export const GridRow = ({
     onEdit && onEdit(event.target.value);
   };
 
-  const StyledTextField = styled(TextField)<TextFieldProps>(() => ({
-    "&&& input": {
-      height: "0",
-      width: "100%",
-    },
-    "&.MuiTextField-root": {
-      width: "100%",
-    },
-  }));
-
   return (
     <>
       <Grid item xs={6}>
-        <Item>{label}</Item>
+        <StyledItem>{label}</StyledItem>
       </Grid>
       {canEdit ? (
         <Grid item xs={6}>
           {component ? (
             component
           ) : (
-            <StyledTextField
+            <StyledTextFieldComponent
               variant="outlined"
+              label={label}
               value={contentData}
               onChange={handleOnTextInputChange}
               id={idTag}
@@ -54,9 +52,11 @@ export const GridRow = ({
         </Grid>
       ) : (
         <Grid item xs={6}>
-          <Item>{contentData}</Item>
+          <StyledItem>{contentData}</StyledItem>
         </Grid>
       )}
     </>
   );
 };
+
+export default GridRow;

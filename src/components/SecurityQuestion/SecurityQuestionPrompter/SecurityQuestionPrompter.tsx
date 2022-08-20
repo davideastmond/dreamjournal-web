@@ -1,6 +1,8 @@
 import { Button, TextField } from "@mui/material";
 import { useState } from "react";
 import { TSecurityQuestionTemplate } from "../../../services/authentication/authentication.types";
+import { pallet } from "../../../styling/pallets";
+import { StyledButtonComponent } from "../../StyledButton";
 import "./style.css";
 interface ISecurityQuestionPrompterProps {
   data: { isSet: boolean; questions: TSecurityQuestionTemplate[] };
@@ -49,9 +51,11 @@ function SecurityQuestionPrompter(props: ISecurityQuestionPrompterProps) {
       </div>
       <footer>
         {props.editButtonVisible && (
-          <div>
-            <Button onClick={props.onEditButtonClick}>Edit</Button>
-          </div>
+          <StyledButtonComponent
+            textLabel="Edit"
+            fillColor={pallet.aquaBlueGreen}
+            onClick={props.onEditButtonClick}
+          />
         )}
         {props.submitButtonVisible && <Button>Submit</Button>}
       </footer>

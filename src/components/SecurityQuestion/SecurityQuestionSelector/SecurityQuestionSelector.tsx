@@ -1,25 +1,20 @@
-import { Button, FormControl, NativeSelect, TextField } from "@mui/material";
-import React, { useRef, useState } from "react";
+import { styled } from "@mui/material";
+import { useRef, useState } from "react";
 import { shallowEqual, useSelector } from "react-redux";
 import { selectPossibleSecurityQuestions } from "../../../reducers/app-slice";
-import { TSecurityQuestionTemplate } from "../../../services/authentication/authentication.types";
+import { pallet } from "../../../styling/pallets";
+import { DropdownTextComboGroup } from "../../DropdownTextComboGroup";
+import { StyledButtonComponent } from "../../StyledButton";
+import { StyledHeaderComponent } from "../../StyledHeader";
 import "./style.css";
-interface IDropdownTextComboGroupProps {
-  defaultValue?: string;
-  inputLabel: string;
-  textLabel: string;
-  nativeSelectProps: {
-    name: string;
-    id: string;
-  };
-  textInputProps: {
-    id: string;
-    name: string;
-  };
-  identifier: string;
-  onDataChanged?: (data: any) => void;
-  items: TSecurityQuestionTemplate[];
-}
+
+const StyledDropdownTextComboGroup = styled(DropdownTextComboGroup)(
+  (props) => ({
+    "&&& .MuiInputBase-input": {
+      backgroundColor: "white",
+    },
+  })
+);
 
 interface ISecurityQuestionSelector {
   onSaveSubmit?: (data: any) => void;
@@ -32,73 +27,6 @@ type TQuestionResponseType = {
   selectedQuestionId: string;
   selectedQuestionPrompt: string;
   response: string;
-};
-
-const DropdownTextComboGroup = (props: IDropdownTextComboGroupProps) => {
-  const [changeDisabled, setChangeDisabled] = useState<boolean>(true);
-  const currentRefData = useRef<any>(null);
-
-  const handleTextInputChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    currentRefData.current = {
-      ...currentRefData.current,
-      id: props.identifier,
-      response: event.target.value,
-    };
-    props.onDataChanged && props.onDataChanged(currentRefData.current);
-  };
-
-  const handleNativeSelectDropDownChange = (
-    event: React.FormEvent<HTMLSelectElement>
-  ) => {
-    currentRefData.current = {
-      ...currentRefData.current,
-      selectedQuestionId:
-        event.currentTarget.options[event.currentTarget.selectedIndex].value,
-      selectedQuestionPrompt:
-        event.currentTarget.options[event.currentTarget.selectedIndex].text,
-      id: props.identifier,
-    };
-    setChangeDisabled(false);
-    props.onDataChanged && props.onDataChanged(currentRefData.current);
-  };
-
-  return (
-    <>
-      <FormControl fullWidth>
-        <label
-          className="security-question-label"
-          htmlFor={props.nativeSelectProps.name}
-        >
-          {props.inputLabel}
-        </label>
-        <NativeSelect
-          defaultValue={props.defaultValue}
-          onChange={handleNativeSelectDropDownChange}
-          inputProps={{
-            name: props.nativeSelectProps.name,
-            id: props.nativeSelectProps.id,
-          }}
-        >
-          <option aria-label="None" value="" disabled selected>
-            -- Please select --
-          </option>
-          {props.items &&
-            props.items.map((question) => (
-              <option value={question.id}>{question.prompt}</option>
-            ))}
-        </NativeSelect>
-        <TextField
-          label={props.textLabel}
-          name={props.textInputProps.name}
-          id={props.textInputProps.id}
-          onChange={handleTextInputChange}
-          disabled={changeDisabled}
-        />
-      </FormControl>
-    </>
-  );
 };
 
 function SecurityQuestionSelector(props: ISecurityQuestionSelector) {
@@ -176,20 +104,25 @@ function SecurityQuestionSelector(props: ISecurityQuestionSelector) {
     props.onCancelClicked();
   };
   return (
-    <div>
+    <div className="security-question-selector-enclosure">
       {props.existingQuestions && (
         <div className="current-questions-box center-width top-margin-buffer responsive-padding">
-          <header className="black-text bold">Your current questions</header>
+          <StyledHeaderComponent
+            customClassNames="black-text bold"
+            text="Your current questions"
+            sizeVariant="h6"
+          />
           {props.existingQuestions.map((q) => (
-            <div className="charcoal-text">{q}</div>
+            <div style={{ color: pallet.greyDark4 }}>{q}</div>
           ))}
         </div>
       )}
       <header>
         {props.existingQuestions ? (
-          <div>
-            <p className="black-text">Update your security questions</p>
-          </div>
+          <StyledHeaderComponent
+            text="Update your security questions"
+            sizeVariant="h6"
+          />
         ) : (
           <div>
             <p className="black-text">
@@ -198,12 +131,13 @@ function SecurityQuestionSelector(props: ISecurityQuestionSelector) {
           </div>
         )}
       </header>
-      <DropdownTextComboGroup
+      <StyledDropdownTextComboGroup
         inputLabel="Security Question 1"
         textLabel="Answer for Security question 1"
         nativeSelectProps={{
           id: "qone",
           name: "qone",
+          styles: { backgroundColor: pallet.eggShellWhite },
         }}
         textInputProps={{
           id: "textone",
@@ -213,12 +147,13 @@ function SecurityQuestionSelector(props: ISecurityQuestionSelector) {
         onDataChanged={handleGroupDataChanged}
         items={securityQuestions}
       />
-      <DropdownTextComboGroup
+      <StyledDropdownTextComboGroup
         inputLabel="Security Question 2"
         textLabel="Answer for Security question 2"
         nativeSelectProps={{
           id: "qtwo",
           name: "qtwo",
+          styles: { backgroundColor: pallet.eggShellWhite },
         }}
         textInputProps={{
           id: "texttwo",
@@ -228,12 +163,13 @@ function SecurityQuestionSelector(props: ISecurityQuestionSelector) {
         onDataChanged={handleGroupDataChanged}
         items={securityQuestions}
       />
-      <DropdownTextComboGroup
+      <StyledDropdownTextComboGroup
         inputLabel="Security Question 3"
         textLabel="Answer for Security question 3"
         nativeSelectProps={{
           id: "qthree",
           name: "qthree",
+          styles: { backgroundColor: pallet.eggShellWhite },
         }}
         textInputProps={{
           id: "textthree",
@@ -249,16 +185,22 @@ function SecurityQuestionSelector(props: ISecurityQuestionSelector) {
             <p className="warning-color">{submissionError}</p>
           </div>
         )}
-        <Button
+        <StyledButtonComponent
+          textLabel="Save"
           variant="outlined"
           onClick={handleSubmitSave}
           disabled={!canSubmit}
-        >
-          Save
-        </Button>
-        <Button variant="outlined" onClick={handleSubmitCancel}>
-          Cancel
-        </Button>
+          customStyles={{ backgroundColor: pallet.aquaBlueGreen }}
+        />
+        <StyledButtonComponent
+          textLabel="Cancel"
+          variant="outlined"
+          customStyles={{
+            backgroundColor: pallet.darkSalmon,
+            marginLeft: "10px",
+          }}
+          onClick={handleSubmitCancel}
+        />
       </footer>
     </div>
   );

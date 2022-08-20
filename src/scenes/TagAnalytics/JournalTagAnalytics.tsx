@@ -13,7 +13,7 @@ import {
 import { TJournal } from "../../services/journal/journal.types";
 import "./style.css";
 import { JournalTagTable } from "./JournalTagTable";
-import { TabPanel } from "../../components/tab-panel/TapPanel";
+import { TabPanel } from "../../components/tab-panel";
 interface IJournalTagAnalyticsProps {
   context?: "journalSpecific" | "allJournals";
   journalContext?: TJournal;
