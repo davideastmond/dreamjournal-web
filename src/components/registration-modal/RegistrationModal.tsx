@@ -112,7 +112,7 @@ function RegistrationModal(props: IRegistrationModalProps) {
       lastName: registrationLastName,
       password1: registrationPassword1,
       password2: registrationPassword2,
-      dateOfBirth: dateOfBirthValue?.$d,
+      dateOfBirth: dateOfBirthValue,
       onSuccess: async () => {
         await registerUser({
           email: registrationEmail,
