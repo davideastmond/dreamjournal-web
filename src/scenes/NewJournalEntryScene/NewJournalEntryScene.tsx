@@ -1,13 +1,16 @@
-import { Stack, Alert } from "@mui/material";
+import { Stack, Alert, styled, Box, FormControl } from "@mui/material";
 import { useState } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
+import { StyledButtonComponent } from "../../components/StyledButton";
+import { StyledHeaderComponent } from "../../components/StyledHeader";
 import { selectSessionUser } from "../../reducers/app-slice";
 import {
   getAllJournalsForUserAsync,
   selectJournalById,
 } from "../../reducers/journal-slice";
 import { addEntryToJournal } from "../../services/journal/journal.service";
+import { pallet } from "../../styling/pallets";
 import { validateAndSanitizeNewJournalSubmissionData } from "../../utils/validators/validators";
 import NewJournalEntryBodyText from "./NewJournalEntryBody";
 import NewJournalEntryHeader from "./NewJournalEntryHeader";
@@ -24,7 +27,7 @@ function NewJournalEntryScene() {
   const { journalId } = useParams();
   const journalContext = useSelector(selectJournalById(journalId!));
   const userContext = useSelector(selectSessionUser, shallowEqual);
-  const handleJouralEntryBodyTextChange = (text: string) => {
+  const handleJournalEntryBodyTextChange = (text: string) => {
     setBodyText(text);
   };
 
@@ -46,6 +49,13 @@ function NewJournalEntryScene() {
         break;
     }
   };
+
+  const StyledAlert = styled(Alert)((props) => ({
+    "&.MuiAlert-root": {
+      backgroundColor: pallet.black,
+      color: pallet.lightSalmon,
+    },
+  }));
 
   const validateJournalContext = (): boolean => {
     if (journalContext && journalContext._id === journalId) return true;
@@ -105,37 +115,51 @@ function NewJournalEntryScene() {
     setSubmissionErrors([]);
   };
   return (
-    <div className="NewJournalEntryScene__main">
-      <header>
-        <div className="top-margin-buffer">New Journal Entry</div>
-      </header>
-      <NewJournalEntryHeader onHeaderDataChanged={handleHeaderDataChanged} />
-      <NewJournalEntryBodyText onTextChange={handleJouralEntryBodyTextChange} />
-      <footer className="JournalEntryText__footer__main">
-        {hasSubmissionError && (
-          <Stack sx={{ width: "100%" }} spacing={0}>
-            {submissionErrors &&
-              submissionErrors.map((error, index) => (
-                <Alert key={`${index}_error`} severity="error">
-                  {error}
-                </Alert>
-              ))}
-          </Stack>
-        )}
-        <div
-          className="JournalEntryText__footer__submit cursor-hover"
-          onClick={handleValidateAndSubmit}
-        >
-          Submit
-        </div>
-        <div
-          className="JournalEntryText__footer__submit cursor-hover"
-          onClick={handleCancelNewJournal}
-        >
-          Cancel
-        </div>
-      </footer>
-    </div>
+    <FormControl>
+      <Box>
+        <StyledHeaderComponent
+          text="New Journal Entry"
+          sizeVariant="h4"
+          customClassNames="small-top-margin"
+        />
+        <NewJournalEntryHeader onHeaderDataChanged={handleHeaderDataChanged} />
+        <NewJournalEntryBodyText
+          onTextChange={handleJournalEntryBodyTextChange}
+        />
+        <footer className="JournalEntryText__footer__main">
+          {hasSubmissionError && (
+            <Stack sx={{ width: "100%" }} spacing={0}>
+              {submissionErrors &&
+                submissionErrors.map((error, index) => (
+                  <StyledAlert key={`${index}_error`} severity="error">
+                    {error}
+                  </StyledAlert>
+                ))}
+            </Stack>
+          )}
+          <Box
+            mt={4}
+            display={"flex"}
+            justifyContent={"space-between"}
+            pl={7}
+            pr={7}
+          >
+            <StyledButtonComponent
+              textLabel="Submit"
+              variant="contained"
+              onClick={handleValidateAndSubmit}
+              fillColor={pallet.aquaBlueGreen}
+            />
+            <StyledButtonComponent
+              textLabel="Cancel"
+              variant="contained"
+              onClick={handleCancelNewJournal}
+              fillColor={pallet.lightSalmon}
+            />
+          </Box>
+        </footer>
+      </Box>
+    </FormControl>
   );
 }
 
