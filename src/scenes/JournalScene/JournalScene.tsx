@@ -19,7 +19,6 @@ import {
   selectSessionUser,
 } from "../../reducers/app-slice";
 import { ActionDialog } from "../../components/ActionDialog";
-import { JournalTagAnalytics } from "../TagAnalytics";
 import {
   EJournalPatcherField,
   JournalPatcher,
@@ -28,25 +27,8 @@ import { StyledButtonComponent } from "../../components/StyledButton";
 import { pallet } from "../../styling/pallets";
 import { StyledHeaderComponent } from "../../components/StyledHeader";
 import { StyledTextFieldComponent } from "../../components/StyledTextField";
-
-const StyledTextFieldSection = (props: any) => {
-  return <div style={{ marginTop: "20px" }}>{props.children}</div>;
-};
-
-const StyledReadOnlyJournalPropertiesSection = (props: any) => {
-  return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "space-evenly",
-        marginTop: "10px",
-        flexWrap: "wrap",
-      }}
-    >
-      {props.children}
-    </div>
-  );
-};
+import { StyledTextFieldDivSection } from "../../components/StyledTextFieldDivSection";
+import { StyledReadOnlyPropertiesSection } from "../../components/StyledReadOnlyJournalPropertiesSection";
 
 function JournalScene() {
   const { journalId } = useParams();
@@ -159,7 +141,7 @@ function JournalScene() {
         />
       </div>
       <StyledHeaderComponent text={journalContext?.title} sizeVariant="h6" />
-      <StyledTextFieldSection>
+      <StyledTextFieldDivSection>
         <StyledTextFieldComponent
           id="journalTitle"
           type="text"
@@ -178,8 +160,8 @@ function JournalScene() {
             ),
           }}
         />
-      </StyledTextFieldSection>
-      <StyledTextFieldSection>
+      </StyledTextFieldDivSection>
+      <StyledTextFieldDivSection>
         <StyledTextFieldComponent
           id="journalDescription"
           type="text"
@@ -198,9 +180,9 @@ function JournalScene() {
             ),
           }}
         />
-      </StyledTextFieldSection>
-      <StyledReadOnlyJournalPropertiesSection>
-        <StyledTextFieldSection>
+      </StyledTextFieldDivSection>
+      <StyledReadOnlyPropertiesSection>
+        <StyledTextFieldDivSection>
           <StyledTextFieldComponent
             label="Created"
             customInputStyles={{
@@ -210,8 +192,8 @@ function JournalScene() {
               dateString: journalContext?.createdAt.toString()!,
             })}
           />
-        </StyledTextFieldSection>
-        <StyledTextFieldSection>
+        </StyledTextFieldDivSection>
+        <StyledTextFieldDivSection>
           <StyledTextFieldComponent
             label="Last updated"
             customInputStyles={{
@@ -221,8 +203,8 @@ function JournalScene() {
               dateString: journalContext?.updatedAt.toString()!,
             })}
           />
-        </StyledTextFieldSection>
-        <StyledTextFieldSection>
+        </StyledTextFieldDivSection>
+        <StyledTextFieldDivSection>
           <StyledTextFieldComponent
             label="id"
             customInputStyles={{
@@ -230,9 +212,9 @@ function JournalScene() {
             }}
             value={journalContext?._id}
           />
-        </StyledTextFieldSection>
-      </StyledReadOnlyJournalPropertiesSection>
-      <StyledTextFieldSection>
+        </StyledTextFieldDivSection>
+      </StyledReadOnlyPropertiesSection>
+      <StyledTextFieldDivSection>
         <StyledTextFieldComponent
           id="journalTags"
           type="text"
@@ -248,7 +230,7 @@ function JournalScene() {
             ),
           }}
         />
-      </StyledTextFieldSection>
+      </StyledTextFieldDivSection>
       <section className="JournalScene__ControlSection">
         <div>
           <StyledButtonComponent

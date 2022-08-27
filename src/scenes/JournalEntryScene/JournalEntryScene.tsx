@@ -1,7 +1,7 @@
 import { InputAdornment, TextField, Typography } from "@mui/material";
 import React, { useState } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import {
   getAllJournalsForUserAsync,
   selectJournalEntryById,
@@ -13,9 +13,18 @@ import { getFormattedDate } from "../../utils/string-helpers";
 import "./style.css";
 import { patchJournalEntry } from "../../services/journal/journal.service";
 import { selectSessionUser } from "../../reducers/app-slice";
+import { StyledTextFieldComponent } from "../../components/StyledTextField";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { StyledTextFieldDivSection } from "../../components/StyledTextFieldDivSection";
+import { StyledHeaderComponent } from "../../components/StyledHeader";
+import { StyledReadOnlyPropertiesSection } from "../../components/StyledReadOnlyJournalPropertiesSection";
 /**
  * Title, description, text, created, updated, tags
  */
+const textFieldSpacingStyle = {
+  marginTop: "10px",
+  marginBottom: "10px",
+};
 
 function JournalEntryScene() {
   const [searchParams] = useSearchParams();
@@ -39,6 +48,7 @@ function JournalEntryScene() {
   );
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const handleTextInputChanged = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -153,26 +163,31 @@ function JournalEntryScene() {
 
   return journalEntryContext ? (
     <div className="JournalEntry__Main">
-      {journalId && journalId !== "" && (
-        <section className="JournalEntryContext__navigate">
-          <Link to={`/journals/${journalId}`}>Back to journal</Link>
-        </section>
-      )}
-      <header>
-        <Typography variant="h4">{journalEntryContext.title}</Typography>
-        <TextField
-          sx={textAreaStyling}
-          autoFocus
-          margin="dense"
+      <div className="JournalContext__main__backToJournals">
+        {journalId && journalId !== "" && (
+          <div className="cursor-hover" onClick={() => navigate(-1)}>
+            <ArrowBackIcon
+              sx={{
+                padding: "10px",
+              }}
+            />
+          </div>
+        )}
+      </div>
+      <StyledHeaderComponent
+        text={journalEntryContext.title}
+        sizeVariant="h4"
+      />
+      <StyledHeaderComponent text="Journal Entry" sizeVariant="h6" />
+      <StyledTextFieldDivSection>
+        <StyledTextFieldComponent
           id="journalEntryTitle"
           type="text"
           label="Title"
-          fullWidth
-          focused
-          variant="filled"
           onChange={handleTextInputChanged}
           value={journalEntryTitle}
           onBlur={handleElementOnBlur}
+          customStyles={textFieldSpacingStyle}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -181,19 +196,16 @@ function JournalEntryScene() {
             ),
           }}
         />
-        <TextField
-          sx={textAreaStyling}
-          autoFocus
-          margin="dense"
+      </StyledTextFieldDivSection>
+      <StyledTextFieldDivSection>
+        <StyledTextFieldComponent
           id="journalEntryDescription"
           type="text"
           label="Description"
-          fullWidth
-          focused
-          variant="filled"
           onChange={handleTextInputChanged}
           value={journalEntryDescription}
           onBlur={handleElementOnBlur}
+          customStyles={textFieldSpacingStyle}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -202,87 +214,81 @@ function JournalEntryScene() {
             ),
           }}
         />
-        {journalEntryContext && (
-          <div className="JournalEntryContext__main__updateDateSection">
-            <TextField
+      </StyledTextFieldDivSection>
+      {journalEntryContext && (
+        <StyledReadOnlyPropertiesSection>
+          <StyledTextFieldDivSection>
+            <StyledTextFieldComponent
               label="Created"
-              sx={textAreaStyling}
-              focused
-              variant="filled"
+              customInputStyles={{
+                padding: "20px",
+              }}
               value={getFormattedDate({
                 dateString: journalEntryContext?.createdAt?.toString()!,
               })}
             />
-            <TextField
+          </StyledTextFieldDivSection>
+          <StyledTextFieldDivSection>
+            <StyledTextFieldComponent
               label="Last updated"
-              sx={textAreaStyling}
-              focused
-              variant="filled"
+              customInputStyles={{
+                padding: "20px",
+              }}
               value={getFormattedDate({
                 dateString: journalEntryContext?.updatedAt?.toString()!,
               })}
             />
-            <TextField
+          </StyledTextFieldDivSection>
+          <StyledTextFieldDivSection>
+            <StyledTextFieldComponent
               label="id"
-              sx={textAreaStyling}
-              focused
-              variant="filled"
+              customInputStyles={{
+                padding: "20px",
+              }}
               value={journalEntryContext?._id}
             />
-          </div>
-        )}
-        <div className="JournalEntryContext__tags-enclosure">
-          <TextField
-            sx={textAreaStyling}
-            autoFocus
-            margin="dense"
-            id="journalEntryTags"
-            type="text"
-            label="Tags"
-            fullWidth
-            focused
-            variant="filled"
-            onChange={handleTextInputChanged}
-            value={journalEntryTags}
-            onBlur={handleElementOnBlur}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <EditIcon htmlColor="white" />
-                </InputAdornment>
-              ),
-            }}
-          />
-        </div>
-        <div className="JournalEntryContext__multilineText">
-          <TextField
-            sx={textAreaStyling}
-            autoFocus
-            margin="dense"
-            id="journalEntryText"
-            multiline
-            type="text"
-            label="Text"
-            fullWidth
-            focused
-            onBlur={handleElementOnBlur}
-            variant="filled"
-            onChange={handleTextInputChanged}
-            value={journalEntryText}
-            rows={6}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <EditIcon htmlColor="white" />
-                </InputAdornment>
-              ),
-            }}
-          />
-        </div>
-      </header>
-      <footer className="top-margin-buffer">
-        <div className="EditJournalEntry__submit pointer-hover">Submit</div>
-      </footer>
+          </StyledTextFieldDivSection>
+        </StyledReadOnlyPropertiesSection>
+      )}
+      <StyledTextFieldDivSection>
+        <StyledTextFieldComponent
+          id="journalEntryTags"
+          type="text"
+          label="Tags"
+          onChange={handleTextInputChanged}
+          value={journalEntryTags}
+          onBlur={handleElementOnBlur}
+          customStyles={textFieldSpacingStyle}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <EditIcon htmlColor="white" />
+              </InputAdornment>
+            ),
+          }}
+        />
+      </StyledTextFieldDivSection>
+      <StyledTextFieldDivSection>
+        <StyledTextFieldComponent
+          id="journalEntryText"
+          multiline
+          type="text"
+          label="Text"
+          fullWidth
+          focused
+          onBlur={handleElementOnBlur}
+          onChange={handleTextInputChanged}
+          value={journalEntryText}
+          rows={6}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <EditIcon htmlColor="white" />
+              </InputAdornment>
+            ),
+          }}
+        />
+      </StyledTextFieldDivSection>
     </div>
   ) : (
     <NotFound404 />
