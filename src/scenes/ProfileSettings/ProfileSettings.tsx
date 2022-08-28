@@ -1,5 +1,5 @@
 import { Tab, Tabs, styled } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { TabPanel } from "../../components/tab-panel";
 
 import { useSelector, shallowEqual } from "react-redux";
@@ -19,7 +19,7 @@ function a11yProps(index: number) {
   };
 }
 
-const StyledTab = styled(Tabs)((props) => ({
+const StyledTab = styled(Tabs)(() => ({
   "& .MuiTab-root.Mui-selected": {
     color: pallet.lightSalmon,
     fontWeight: "600",
@@ -50,9 +50,8 @@ const StyledTabPanel = styled(TabPanel)((props) => ({
 function ProfileSettings() {
   const [value, setValue] = useState<number>(0);
   const sessionUser = useSelector(selectSessionUser, shallowEqual);
-  const [isUpdateMode, setIsUpdateMode] = useState<boolean>(false);
-  const [isDoingNetworkRequest, setIsDoingNetworkRequest] =
-    useState<boolean>(false);
+  const [isUpdateMode] = useState<boolean>(false);
+  const [isDoingNetworkRequest] = useState<boolean>(false);
 
   const handleChange = (_: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);

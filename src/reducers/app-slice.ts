@@ -1,8 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { EStatus, IStateStatus, TGlobalAppStore } from "../definitions";
-import { getAvailableSecurityQuestions } from "../services/authentication/authentication.security.service";
 import { verifyActiveSession } from "../services/authentication/authentication.service";
-import { TSecurityQuestionTemplate } from "../services/authentication/authentication.types";
+
 import {
   getSessionUser,
   patchUserProfile,
@@ -13,14 +12,12 @@ export interface TAppState {
   stateStatus: IStateStatus;
   sessionUser: TSecureUser | null;
   hasActiveSession: boolean;
-  allSecurityQuestions: TSecurityQuestionTemplate[];
 }
 
 const initialState: TAppState = {
   stateStatus: { status: EStatus.Idle },
   sessionUser: null,
   hasActiveSession: false,
-  allSecurityQuestions: [],
 };
 
 export const getSessionUserAsync = createAsyncThunk(
@@ -54,12 +51,6 @@ export const patchUserBasicProfileDataAsync = createAsyncThunk(
   }
 );
 
-export const getAvailableSecurityQuestionsAsync = createAsyncThunk(
-  "app/getAvailableSecurityQuestionsAsync",
-  async () => {
-    return getAvailableSecurityQuestions();
-  }
-);
 const appSlice = createSlice({
   name: "app",
   initialState,
@@ -121,27 +112,6 @@ const appSlice = createSlice({
           status: EStatus.Error,
           message: action.error.message,
         };
-      })
-      .addCase(getAvailableSecurityQuestionsAsync.pending, (state) => {
-        state.stateStatus = {
-          status: EStatus.Loading,
-          message: "Fetching possible security questions",
-        };
-      })
-      .addCase(
-        getAvailableSecurityQuestionsAsync.fulfilled,
-        (state, action) => {
-          state.stateStatus = {
-            status: EStatus.Idle,
-          };
-          state.allSecurityQuestions = action.payload;
-        }
-      )
-      .addCase(getAvailableSecurityQuestionsAsync.rejected, (state, action) => {
-        state.stateStatus = {
-          status: EStatus.Error,
-          message: action.error.message,
-        };
       });
   },
 });
@@ -154,9 +124,5 @@ export const selectSessionUser = (state: TGlobalAppStore): TSecureUser | null =>
 
 export const selectHasActiveSession = (state: TGlobalAppStore): boolean =>
   state.app.hasActiveSession;
-
-export const selectPossibleSecurityQuestions = (
-  state: TGlobalAppStore
-): TSecurityQuestionTemplate[] => state.app.allSecurityQuestions;
 
 export default appSlice.reducer;

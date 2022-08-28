@@ -1,12 +1,11 @@
-import { InputAdornment, TextField, Typography } from "@mui/material";
+import { InputAdornment } from "@mui/material";
 import React, { useState } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
-import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import {
   getAllJournalsForUserAsync,
   selectJournalEntryById,
 } from "../../reducers/journal-slice";
-import { textAreaStyling } from "../../styling/text-styling";
 import { NotFound404 } from "../NotFound404";
 import EditIcon from "@mui/icons-material/Edit";
 import { getFormattedDate } from "../../utils/string-helpers";
