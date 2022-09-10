@@ -1,6 +1,5 @@
 import axios from "axios";
 import { API_URL, AUTH_HEADER } from "../../environment";
-import { TNewSecurityQuestionDataSubmission } from "../authentication/authentication.types";
 import { T2FADeEnrollResponse, TSecureUser } from "./user.types";
 
 export const getSessionUser = async (): Promise<TSecureUser> => {
@@ -78,29 +77,6 @@ export const patchUserSecurePassword = async ({
       data: {
         password,
       },
-    });
-  } catch (exception: any) {
-    throw new Error(exception.response.data.error);
-  }
-};
-
-export const createNewUserSecurityQuestions = async ({
-  userId,
-  data,
-}: {
-  userId: string;
-  data: TNewSecurityQuestionDataSubmission;
-}): Promise<void> => {
-  const token = sessionStorage.getItem("token");
-  try {
-    await axios({
-      method: "PUT",
-      url: `${API_URL}/api/user/${userId}/profile/security`,
-      headers: {
-        ...AUTH_HEADER,
-        "X-JWT-Token": token!,
-      },
-      data,
     });
   } catch (exception: any) {
     throw new Error(exception.response.data.error);

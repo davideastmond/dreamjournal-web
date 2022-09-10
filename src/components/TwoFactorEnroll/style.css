@@ -1,11 +1,15 @@
-.PhoneInputCountry {
-  color: black;
-}
-
 input[type|="tel"] {
+  padding: 5px;
+  width: 100%;
+  font-weight: 300;
   color: black;
+  border-radius: 2px;
+  border: none;
 }
 
+input[type|="tel"]:hover {
+  border-color: #f6f6f6;
+}
 .TwoFactorSubmission__enrollButtonSection__main {
   margin-top: 1rem;
 }
