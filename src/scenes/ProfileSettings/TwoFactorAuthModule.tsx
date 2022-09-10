@@ -4,6 +4,8 @@ import {
   Button,
   Snackbar,
   Alert,
+  Box,
+  styled,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { ControlledSwitch } from "../../components/ControlledSwitch";
@@ -15,10 +17,24 @@ import { TwoFactorEnroll } from "../../components/TwoFactorEnroll";
 import { useNavigate } from "react-router-dom";
 import { enrollTFA } from "../../services/authentication/authentication.security.tfa.service";
 import { TFADeactivationConfirmationDialog } from "../../components/TFADeactivationConfirmationDialog";
+import { StyledHeaderComponent } from "../../components/StyledHeader";
+import { pallet } from "../../styling/pallets";
+import { StyledBoxContainer } from "../../components/StyledBoxContainer";
 
 interface ITwoFactorAuthenticationModuleProps {
   sessionUserId: string;
 }
+
+const StyledFormControlLabel = styled(FormControlLabel)((props) => ({
+  "&.MuiFormControlLabel-root": {
+    color: pallet.eggShellWhite,
+  },
+}));
+
+const StyledDiv = styled("div")((props) => ({
+  marginTop: "10px",
+  marginBottom: "10px",
+}));
 
 function TwoFactorAuthModule(props: ITwoFactorAuthenticationModuleProps) {
   const [isTwoFactorSetup, setIsTwoFactorSetup] = useState<boolean>(false);
@@ -77,23 +93,30 @@ function TwoFactorAuthModule(props: ITwoFactorAuthenticationModuleProps) {
     checkIfTwoFactorAuthenticationEnabled();
   }, []);
 
+  const getSwitchLabel = (): string => {
+    if (isTwoFactorChecked) return "ON";
+    if (isTwoFactorSetup) return "ON";
+    return "OFF";
+  };
   return (
-    <div className="flex justify-center-content">
+    <StyledBoxContainer>
       <FormGroup>
-        <header>
-          <h3 className="">Two-factor auth settings</h3>
-        </header>
-        <FormControlLabel
-          className="black-text"
-          control={
-            <ControlledSwitch
-              defaultChecked={isTwoFactorSetup}
-              onStateChange={handle2faCheckedStatus}
-              defaultDisabled={isTFASliderDisabled}
-            />
-          }
-          label={isTwoFactorSetup ? "ON" : "OFF"}
+        <StyledHeaderComponent
+          text="Two-factor auth settings"
+          sizeVariant="h4"
         />
+        <StyledDiv className="flex justify-center-content">
+          <StyledFormControlLabel
+            control={
+              <ControlledSwitch
+                defaultChecked={isTwoFactorSetup}
+                onStateChange={handle2faCheckedStatus}
+                defaultDisabled={isTFASliderDisabled}
+              />
+            }
+            label={getSwitchLabel()}
+          />
+        </StyledDiv>
         {!isTwoFactorSetup && isTwoFactorChecked && (
           <TwoFactorEnroll onEnrollClicked={handleTwoFactorEnrollClicked} />
         )}
@@ -116,7 +139,7 @@ function TwoFactorAuthModule(props: ITwoFactorAuthenticationModuleProps) {
       <Snackbar open={successToastOpen} autoHideDuration={6000}>
         <Alert severity="success">{successMessage}</Alert>
       </Snackbar>
-    </div>
+    </StyledBoxContainer>
   );
 }
 

@@ -17,6 +17,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { StyledTextFieldDivSection } from "../../components/StyledTextFieldDivSection";
 import { StyledHeaderComponent } from "../../components/StyledHeader";
 import { StyledReadOnlyPropertiesSection } from "../../components/StyledReadOnlyJournalPropertiesSection";
+import { StyledBoxContainer } from "../../components/StyledBoxContainer";
 /**
  * Title, description, text, created, updated, tags
  */
@@ -178,116 +179,118 @@ function JournalEntryScene() {
         sizeVariant="h4"
       />
       <StyledHeaderComponent text="Journal Entry" sizeVariant="h6" />
-      <StyledTextFieldDivSection>
-        <StyledTextFieldComponent
-          id="journalEntryTitle"
-          type="text"
-          label="Title"
-          onChange={handleTextInputChanged}
-          value={journalEntryTitle}
-          onBlur={handleElementOnBlur}
-          customStyles={textFieldSpacingStyle}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <EditIcon htmlColor="white" />
-              </InputAdornment>
-            ),
-          }}
-        />
-      </StyledTextFieldDivSection>
-      <StyledTextFieldDivSection>
-        <StyledTextFieldComponent
-          id="journalEntryDescription"
-          type="text"
-          label="Description"
-          onChange={handleTextInputChanged}
-          value={journalEntryDescription}
-          onBlur={handleElementOnBlur}
-          customStyles={textFieldSpacingStyle}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <EditIcon htmlColor="white" />
-              </InputAdornment>
-            ),
-          }}
-        />
-      </StyledTextFieldDivSection>
-      {journalEntryContext && (
-        <StyledReadOnlyPropertiesSection>
-          <StyledTextFieldDivSection>
-            <StyledTextFieldComponent
-              label="Created"
-              customInputStyles={{
-                padding: "20px",
-              }}
-              value={getFormattedDate({
-                dateString: journalEntryContext?.createdAt?.toString()!,
-              })}
-            />
-          </StyledTextFieldDivSection>
-          <StyledTextFieldDivSection>
-            <StyledTextFieldComponent
-              label="Last updated"
-              customInputStyles={{
-                padding: "20px",
-              }}
-              value={getFormattedDate({
-                dateString: journalEntryContext?.updatedAt?.toString()!,
-              })}
-            />
-          </StyledTextFieldDivSection>
-          <StyledTextFieldDivSection>
-            <StyledTextFieldComponent
-              label="id"
-              customInputStyles={{
-                padding: "20px",
-              }}
-              value={journalEntryContext?._id}
-            />
-          </StyledTextFieldDivSection>
-        </StyledReadOnlyPropertiesSection>
-      )}
-      <StyledTextFieldDivSection>
-        <StyledTextFieldComponent
-          id="journalEntryTags"
-          type="text"
-          label="Tags"
-          onChange={handleTextInputChanged}
-          value={journalEntryTags}
-          onBlur={handleElementOnBlur}
-          customStyles={textFieldSpacingStyle}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <EditIcon htmlColor="white" />
-              </InputAdornment>
-            ),
-          }}
-        />
-      </StyledTextFieldDivSection>
-      <StyledTextFieldDivSection>
-        <StyledTextFieldComponent
-          id="journalEntryText"
-          multiline
-          type="text"
-          label="Text"
-          fullWidth
-          focused
-          onBlur={handleElementOnBlur}
-          onChange={handleTextInputChanged}
-          value={journalEntryText}
-          rows={6}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <EditIcon htmlColor="white" />
-              </InputAdornment>
-            ),
-          }}
-        />
-      </StyledTextFieldDivSection>
+      <StyledBoxContainer>
+        <StyledTextFieldDivSection>
+          <StyledTextFieldComponent
+            id="journalEntryTitle"
+            type="text"
+            label="Title"
+            onChange={handleTextInputChanged}
+            value={journalEntryTitle}
+            onBlur={handleElementOnBlur}
+            customStyles={textFieldSpacingStyle}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <EditIcon htmlColor="white" />
+                </InputAdornment>
+              ),
+            }}
+          />
+        </StyledTextFieldDivSection>
+        <StyledTextFieldDivSection>
+          <StyledTextFieldComponent
+            id="journalEntryDescription"
+            type="text"
+            label="Description"
+            onChange={handleTextInputChanged}
+            value={journalEntryDescription}
+            onBlur={handleElementOnBlur}
+            customStyles={textFieldSpacingStyle}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <EditIcon htmlColor="white" />
+                </InputAdornment>
+              ),
+            }}
+          />
+        </StyledTextFieldDivSection>
+        {journalEntryContext && (
+          <StyledReadOnlyPropertiesSection>
+            <StyledTextFieldDivSection>
+              <StyledTextFieldComponent
+                label="Created"
+                customInputStyles={{
+                  padding: "20px",
+                }}
+                value={getFormattedDate({
+                  dateString: journalEntryContext?.createdAt?.toString()!,
+                })}
+              />
+            </StyledTextFieldDivSection>
+            <StyledTextFieldDivSection>
+              <StyledTextFieldComponent
+                label="Last updated"
+                customInputStyles={{
+                  padding: "20px",
+                }}
+                value={getFormattedDate({
+                  dateString: journalEntryContext?.updatedAt?.toString()!,
+                })}
+              />
+            </StyledTextFieldDivSection>
+            <StyledTextFieldDivSection>
+              <StyledTextFieldComponent
+                label="id"
+                customInputStyles={{
+                  padding: "20px",
+                }}
+                value={journalEntryContext?._id}
+              />
+            </StyledTextFieldDivSection>
+          </StyledReadOnlyPropertiesSection>
+        )}
+        <StyledTextFieldDivSection>
+          <StyledTextFieldComponent
+            id="journalEntryTags"
+            type="text"
+            label="Tags"
+            onChange={handleTextInputChanged}
+            value={journalEntryTags}
+            onBlur={handleElementOnBlur}
+            customStyles={textFieldSpacingStyle}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <EditIcon htmlColor="white" />
+                </InputAdornment>
+              ),
+            }}
+          />
+        </StyledTextFieldDivSection>
+        <StyledTextFieldDivSection>
+          <StyledTextFieldComponent
+            id="journalEntryText"
+            multiline
+            type="text"
+            label="Text"
+            fullWidth
+            focused
+            onBlur={handleElementOnBlur}
+            onChange={handleTextInputChanged}
+            value={journalEntryText}
+            rows={6}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <EditIcon htmlColor="white" />
+                </InputAdornment>
+              ),
+            }}
+          />
+        </StyledTextFieldDivSection>
+      </StyledBoxContainer>
     </div>
   ) : (
     <NotFound404 />

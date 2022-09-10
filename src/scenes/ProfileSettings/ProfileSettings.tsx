@@ -69,7 +69,7 @@ function ProfileSettings() {
       >
         <Tab label="Personal Details" {...a11yProps(0)} />
         <Tab label="Password and security" {...a11yProps(1)} />
-        <Tab label="2FA" {...a11yProps(2)} disabled={true} />
+        <Tab label="2FA" {...a11yProps(2)} disabled={false} />
       </StyledTab>
       <TabPanel value={value} index={0}>
         <PersonalPanel

@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, styled } from "@mui/material";
 import { shallowEqual, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { JournalEntriesList } from "../../components/JournalEntriesList";
@@ -18,6 +18,13 @@ function JournalEntryListScene() {
     selectJournalById(journalId!),
     shallowEqual
   );
+
+  const StyledJournalEntriesListBoxContainer = styled(Box)((props) => ({
+    [props.theme.breakpoints.up("md")]: {
+      marginLeft: "20%",
+      marginRight: "20%",
+    },
+  }));
   return (
     <Box pt={2}>
       <div className="JournalContext__main__backToJournals">
@@ -38,13 +45,15 @@ function JournalEntryListScene() {
         sizeVariant="h4"
       />
       <StyledHeaderComponent text={"Entries list"} sizeVariant="h6" />
-      <JournalEntriesList
-        entries={
-          journalContext && journalContext.journalEntries
-            ? journalContext.journalEntries
-            : []
-        }
-      />
+      <StyledJournalEntriesListBoxContainer>
+        <JournalEntriesList
+          entries={
+            journalContext && journalContext.journalEntries
+              ? journalContext.journalEntries
+              : []
+          }
+        />
+      </StyledJournalEntriesListBoxContainer>
     </Box>
   );
 }

@@ -10,15 +10,8 @@ import { StyledButtonComponent } from "../../components/StyledButton";
 import { pallet } from "../../styling/pallets";
 import { GridRow } from "./components/grid-row";
 import { DATE_CONSTANTS } from "../../definitions";
+import { StyledBoxContainer } from "../../components/StyledBoxContainer";
 
-const StyledBox = styled(Box)((props) => ({
-  [props.theme.breakpoints.up("md")]: {
-    "&.MuiBox-root": {
-      marginLeft: "10%",
-      marginRight: "10%",
-    },
-  },
-}));
 export function PersonalPanel({
   email,
   firstName,
@@ -121,7 +114,7 @@ export function PersonalPanel({
     );
   };
   return (
-    <StyledBox>
+    <StyledBoxContainer>
       <StyledHeaderComponent text="Basic personal info" sizeVariant="h5" />
       <Grid container spacing={2}>
         <GridRow canEdit={false} label="E-mail" contentData={email} />
@@ -183,6 +176,6 @@ export function PersonalPanel({
           />
         )}
       </footer>
-    </StyledBox>
+    </StyledBoxContainer>
   );
 }
