@@ -1,11 +1,22 @@
 import InternationalNumberInput, {
   isPossiblePhoneNumber,
 } from "react-phone-number-input";
-import { Button } from "@mui/material";
 import { useState } from "react";
 import "./style.css";
 import "react-phone-number-input/style.css";
+import { StyledHeaderComponent } from "../StyledHeader";
+import { StyledButtonComponent } from "../StyledButton";
+import { styled } from "@mui/material";
+import { pallet } from "../../styling/pallets";
 
+const CustomStyledButtonComponent = styled(StyledButtonComponent)(
+  ({ theme, ...props }) => ({
+    "&.Mui-disabled": {
+      color: pallet.greyDark1,
+      border: `2px solid ${pallet.greyDark1}`,
+    },
+  })
+);
 interface ITwoFactorEnrollProps {
   onEnrollClicked?: ({ ctnData }: { ctnData?: string }) => void;
 }
@@ -30,33 +41,32 @@ function TwoFactorEnroll(props: ITwoFactorEnrollProps) {
       console.log(`${phoneNumber2fa} is not a valid number`);
     }
   };
+
   return (
-    <>
-      <section>
-        <header>
-          <p className="font-color-black">Enter your phone number</p>
-        </header>
-        <>
-          <InternationalNumberInput
-            onChange={handle2faNumberChange}
-            placeholder="Enter phone number"
-            value={phoneNumber2fa || undefined}
-            className="numberInput__Section"
-          />
-        </>
-        <div className="TwoFactorSubmission__enrollButtonSection__main">
-          <Button
-            variant="outlined"
-            size="small"
-            disabled={!isPhoneNumberValid}
-            onClick={handleEnrollClicked}
-          >
-            Enroll
-          </Button>
-        </div>
-        <footer className="errorMessagesText"></footer>
-      </section>
-    </>
+    <div>
+      <StyledHeaderComponent
+        text="Enter your phone number"
+        sizeVariant="h6"
+        headerEnclosureStylings={{ marginBottom: "10px" }}
+      />
+      <div>
+        <InternationalNumberInput
+          onChange={handle2faNumberChange}
+          placeholder="Enter phone number"
+          value={phoneNumber2fa || undefined}
+          className="numberInput__Section"
+        />
+      </div>
+      <div className="TwoFactorSubmission__enrollButtonSection__main">
+        <CustomStyledButtonComponent
+          variant="outlined"
+          disabled={!isPhoneNumberValid}
+          onClick={handleEnrollClicked}
+          textLabel="Enroll"
+        />
+      </div>
+      <footer className="errorMessagesText"></footer>
+    </div>
   );
 }
 

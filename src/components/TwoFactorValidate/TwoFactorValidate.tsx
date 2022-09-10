@@ -37,6 +37,7 @@ function TwoFactorValidate(props: ITwoFactorValidateProps) {
           onClick={handleVerifyButtonClicked}
           loading={true}
           variant="contained"
+          aria-label="Verify"
         >
           Verify
         </LoadingButton>
