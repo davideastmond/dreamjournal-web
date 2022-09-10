@@ -1,11 +1,9 @@
 import { Grid, FormControl, Typography, styled } from "@mui/material";
-import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { StyledButtonComponent } from "../../../../components/StyledButton";
 import { StyledHeaderComponent } from "../../../../components/StyledHeader";
 import { StyledTextFieldComponent } from "../../../../components/StyledTextField";
-import { getAvailableSecurityQuestionsAsync } from "../../../../reducers/app-slice";
 import { patchUserSecurePassword } from "../../../../services/user/user.service";
 import { pallet } from "../../../../styling/pallets";
 import { StyledGridItem } from "../styled-grid-item";
@@ -27,12 +25,6 @@ function PasswordSecurityPanel(props: IProfilePanelProps) {
   const [passwordUpdateError, setPasswordUpdateError] = useState<string | null>(
     null
   );
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(getAvailableSecurityQuestionsAsync());
-  }, []);
 
   const handlePasswordInputTextChange = (
     event: React.ChangeEvent<HTMLInputElement>

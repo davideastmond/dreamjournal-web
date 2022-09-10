@@ -14,6 +14,7 @@ import { StyledHeaderComponent } from "../../components/StyledHeader";
 import { pallet } from "../../styling/pallets";
 import { StyledTextFieldComponent } from "../../components/StyledTextField";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { StyledBoxContainer } from "../../components/StyledBoxContainer";
 
 const StyledFormControl = styled(FormControl)((props) => ({
   [props.theme.breakpoints.down("sm")]: {
@@ -96,7 +97,7 @@ export function NewJournal() {
     }
   }, []);
   return (
-    <div className="Scene NewJournal__Main">
+    <div className="NewJournal__Main">
       <Box display="flex" justifyContent={"space-between"}>
         <Link to="/home">
           <ArrowBackIcon
@@ -107,7 +108,7 @@ export function NewJournal() {
         </Link>
       </Box>
       <StyledHeaderComponent text="Create new journal" />
-      <Box>
+      <StyledBoxContainer>
         <StyledFormControl>
           <StyledTextFieldComponent
             onChange={handleOnTextChange}
@@ -165,7 +166,7 @@ export function NewJournal() {
             Create
           </Button>
         </StyledFormControl>
-      </Box>
+      </StyledBoxContainer>
     </div>
   );
 }

@@ -70,6 +70,12 @@ const StyledListItem = styled(ListItem)(() => ({
   },
 }));
 
+const StyledJournalListMain = styled("div")((props) => ({
+  [props.theme.breakpoints.up("md")]: {
+    marginLeft: "25%",
+    marginRight: "25%",
+  },
+}));
 function JournalList(props: IJournalListProps) {
   const handleListItemClick = ({ journalId }: { journalId: string }) => {
     navigate(`/journals/${journalId}`, { replace: true });
@@ -91,7 +97,7 @@ function JournalList(props: IJournalListProps) {
     );
   };
   return (
-    <div className="JournaList__Main">
+    <StyledJournalListMain className="JournaList__Main">
       <StyledHeaderComponent text="Your journals">
         {generateAddJournalButtons()}
       </StyledHeaderComponent>
@@ -117,7 +123,7 @@ function JournalList(props: IJournalListProps) {
           </ListItem>
         )}
       </StyledList>
-    </div>
+    </StyledJournalListMain>
   );
 }
 
