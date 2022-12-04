@@ -1,11 +1,11 @@
-import { TextField } from "@mui/material";
 import React, { useState } from "react";
+import { CustomDatePicker } from "../../components/CustomDatePicker";
 import { StyledTextFieldComponent } from "../../components/StyledTextField";
 import { textAreaStyling } from "../../styling/text-styling";
 
 interface NewJournalEntryHeaderProps {
   onHeaderDataChanged: (
-    type: "title" | "description" | "tags",
+    type: "title" | "description" | "tags" | "journalEntryDate",
     text: string
   ) => void;
 }
@@ -13,6 +13,7 @@ interface NewJournalEntryHeaderProps {
 function NewJournalEntryHeader(props: NewJournalEntryHeaderProps) {
   const [journalEntryTitle, setJournalEntryTitle] = useState<string>("");
   const [journalEntryTags, setJournalEntryTags] = useState<string>("");
+  const [journalEntryDateValue, setJournalEntryDateValue] = useState<any>(null);
   const [journalEntryDescription, setJournalEntryDescription] =
     useState<string>("");
 
@@ -35,6 +36,12 @@ function NewJournalEntryHeader(props: NewJournalEntryHeaderProps) {
         props.onHeaderDataChanged("tags", targetValue);
         break;
     }
+  };
+
+  const handleJournalEntryDateChange = (value: any) => {
+    // POIJ this needs validation
+    setJournalEntryDateValue(value);
+    props.onHeaderDataChanged("journalEntryDate", value);
   };
   return (
     <div className="NewJournalEntry__header__main">
@@ -74,6 +81,15 @@ function NewJournalEntryHeader(props: NewJournalEntryHeaderProps) {
             focused
             onChange={handleTextInputChanged}
             value={journalEntryTags}
+          />
+        </div>
+        <div style={{ marginTop: "5px" }}>
+          <CustomDatePicker
+            label="Date"
+            disableFuture
+            lightText
+            onDateChange={handleJournalEntryDateChange}
+            readOnly
           />
         </div>
       </header>

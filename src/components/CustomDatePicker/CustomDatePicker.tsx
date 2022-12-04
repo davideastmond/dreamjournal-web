@@ -6,19 +6,22 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { pallet } from "../../styling/pallets";
 
 interface IDatePickerProps {
-  onDateChange?: (value: any) => void;
-  label: string;
-  disableHighlightToday?: boolean;
-  openTo?: "month" | "day" | "year";
-  isError?: boolean;
-  errorText?: string;
-  disableFuture?: boolean;
-  classes?: any;
-  slim?: boolean;
-  inputProps?: any;
   calendarIconColor?: string;
+  classes?: any;
+  defaultDate?: string;
+  disableFuture?: boolean;
+  disableHighlightToday?: boolean;
+  errorText?: string;
+  inputProps?: any;
+  isError?: boolean;
+  label: string;
   lightText?: boolean;
   maxDate?: Date;
+  onDateChange?: (value: any) => void;
+  openTo?: "month" | "day" | "year";
+  readOnly?: boolean;
+  showEditIcon?: boolean;
+  slim?: boolean;
 }
 
 type TCalendarStyledTextInputProps = {
@@ -53,7 +56,12 @@ const CalendarStyledTextInput = styled(
 }));
 
 function CustomDatePicker(props: IDatePickerProps) {
-  const [dateOfBirthValue, setDateOfBirthValue] = useState<any>(null);
+  const [dateValue, setDateValue] = useState<any>(props.defaultDate || null);
+  const handleKeyboardInput = (e: any) => {
+    if (props.readOnly) {
+      e.preventDefault();
+    }
+  };
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DatePicker
@@ -63,10 +71,10 @@ function CustomDatePicker(props: IDatePickerProps) {
         maxDate={props.maxDate}
         autoFocus
         openTo={props.openTo || "month"}
-        value={dateOfBirthValue}
+        value={dateValue}
         onChange={(newValue: any) => {
           props.onDateChange && props.onDateChange(newValue);
-          setDateOfBirthValue(newValue);
+          setDateValue(newValue);
         }}
         renderInput={(textFieldProps: any) => (
           <CalendarStyledTextInput
@@ -76,10 +84,10 @@ function CustomDatePicker(props: IDatePickerProps) {
             helperText={props.errorText}
             calendarIconColor={props.calendarIconColor}
             lightText={props.lightText}
+            onKeyDown={handleKeyboardInput}
             required
           />
         )}
-        InputProps={props.inputProps}
       />
     </LocalizationProvider>
   );

@@ -8,7 +8,6 @@ import "./style.css";
 
 import { Spinner } from "../../components/Spinner";
 import { PersonalPanel } from "./PersonalPanel";
-import TwoFactorAuthModule from "./TwoFactorAuthModule";
 import { pallet } from "../../styling/pallets";
 
 import { PasswordSecurityPanel } from "./components/password-security-panel";
@@ -69,7 +68,6 @@ function ProfileSettings() {
       >
         <Tab label="Personal Details" {...a11yProps(0)} />
         <Tab label="Password and security" {...a11yProps(1)} />
-        <Tab label="2FA" {...a11yProps(2)} disabled={false} />
       </StyledTab>
       <TabPanel value={value} index={0}>
         <PersonalPanel
@@ -88,9 +86,6 @@ function ProfileSettings() {
           }`}
         />
       </StyledTabPanel>
-      <TabPanel value={value} index={2}>
-        {sessionUser && <TwoFactorAuthModule sessionUserId={sessionUser._id} />}
-      </TabPanel>
     </div>
   );
 }
