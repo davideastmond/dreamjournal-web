@@ -21,6 +21,7 @@ export type TJournalEntry = {
   text: string;
   photoUrl?: string;
   tags: string[];
+  entryDate?: string;
   createdAt?: Date;
   updatedAt?: Date;
 };
@@ -46,6 +47,8 @@ export type TPhotoURLPatchRequest = {
 export type TTextBodyPatchRequest = {
   text: { action: "update" | "delete"; data: string };
 };
+
+export type TJournalEntryDatePatchRequest = {};
 export type TUpdateAction = "update" | "delete";
 
 export type TJournalFieldUpdateAction = {
