@@ -17,7 +17,6 @@ interface IDatePickerProps {
   label: string;
   lightText?: boolean;
   maxDate?: Date;
-  onBlur?: (e: any) => void;
   onDateChange?: (value: any) => void;
   openTo?: "month" | "day" | "year";
   readOnly?: boolean;
@@ -87,7 +86,6 @@ function CustomDatePicker(props: IDatePickerProps) {
             lightText={props.lightText}
             onKeyDown={handleKeyboardInput}
             required
-            onBlur={() => props.onBlur && props.onBlur(dateValue)}
           />
         )}
       />
