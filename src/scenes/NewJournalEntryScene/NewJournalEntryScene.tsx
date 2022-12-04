@@ -20,6 +20,7 @@ function NewJournalEntryScene() {
   const [tags, setTags] = useState<string | null>(null);
   const [description, setDescription] = useState<string | null>(null);
   const [title, setTitle] = useState<string | null>(null);
+  const [journalEntryDate, setJournalEntryDate] = useState<any>(null);
 
   const [hasSubmissionError, setHasSubmissionError] = useState<boolean>(false);
   const [submissionErrors, setSubmissionErrors] = useState<string[]>([]);
@@ -34,7 +35,7 @@ function NewJournalEntryScene() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleHeaderDataChanged = (
-    changeType: "title" | "description" | "tags",
+    changeType: "title" | "description" | "tags" | "journalEntryDate",
     data: string
   ) => {
     switch (changeType) {
@@ -46,6 +47,10 @@ function NewJournalEntryScene() {
         break;
       case "tags":
         setTags(data);
+        break;
+      case "journalEntryDate":
+        const isoDate = (data as any).$d.toISOString();
+        setJournalEntryDate(isoDate);
         break;
     }
   };
@@ -95,6 +100,7 @@ function NewJournalEntryScene() {
             description: sanitizedDescription,
             tags: tagsArray,
             text: bodyText ?? "",
+            entryDate: journalEntryDate,
           });
           dispatch(getAllJournalsForUserAsync({ userId: userContext?._id! }));
           navigate(`/journals/${journalId}`);

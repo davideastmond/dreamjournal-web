@@ -2,6 +2,7 @@ import {
   TDescriptionPatchRequest,
   TJournal,
   TJournalDeleteResult,
+  TJournalEntryDatePatchRequest,
   TNewJournalReturnData,
   TPhotoURLPatchRequest,
   TTagsPatchRequest,
@@ -126,6 +127,7 @@ export const addEntryToJournal = async ({
   text,
   photoUrl,
   tags,
+  entryDate,
 }: {
   journalId: string;
   title: string;
@@ -133,6 +135,7 @@ export const addEntryToJournal = async ({
   text: string;
   photoUrl?: string;
   tags?: string[];
+  entryDate?: string;
 }): Promise<TJournal> => {
   const token = sessionStorage.getItem("token");
 
@@ -151,6 +154,7 @@ export const addEntryToJournal = async ({
         text,
         photoUrl,
         tags,
+        entryDate,
       },
     });
     return req.data;
@@ -171,7 +175,8 @@ export const patchJournalEntry = async ({
     | TDescriptionPatchRequest
     | TTagsPatchRequest
     | TPhotoURLPatchRequest
-    | TTextBodyPatchRequest;
+    | TTextBodyPatchRequest
+    | TJournalEntryDatePatchRequest;
 }) => {
   const token = sessionStorage.getItem("token");
   try {
