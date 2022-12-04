@@ -48,7 +48,9 @@ export type TTextBodyPatchRequest = {
   text: { action: "update" | "delete"; data: string };
 };
 
-export type TJournalEntryDatePatchRequest = {};
+export type TJournalEntryDatePatchRequest = {
+  entryDate: { action: "update"; data: string };
+};
 export type TUpdateAction = "update" | "delete";
 
 export type TJournalFieldUpdateAction = {

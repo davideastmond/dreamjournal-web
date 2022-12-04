@@ -18,6 +18,8 @@ import { StyledTextFieldDivSection } from "../../components/StyledTextFieldDivSe
 import { StyledHeaderComponent } from "../../components/StyledHeader";
 import { StyledReadOnlyPropertiesSection } from "../../components/StyledReadOnlyJournalPropertiesSection";
 import { StyledBoxContainer } from "../../components/StyledBoxContainer";
+import { CustomDatePicker } from "../../components/CustomDatePicker";
+import { pallet } from "../../styling/pallets";
 /**
  * Title, description, text, created, updated, tags
  */
@@ -47,6 +49,10 @@ function JournalEntryScene() {
     journalEntryContext?.text || ""
   );
 
+  const [journalEntryDate, setJournalEntryDate] = useState<any>(
+    journalEntryContext?.entryDate?.toString() || ""
+  );
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleTextInputChanged = (
@@ -66,6 +72,25 @@ function JournalEntryScene() {
       case "journalEntryText":
         setJournalEntryText(event.target.value);
         break;
+    }
+  };
+
+  // Handle journal entry date changing
+  const handleJournalEntryDateCalendarChanged = async (value: any) => {
+    setJournalEntryDate(value);
+
+    // User uses date picker to set a date. Extract the ISO date string
+    if (!journalId || !journalEntryId || !sessionUser) return;
+    const entryDateData = value?.$d?.toISOString();
+    if (entryDateData) {
+      await patchJournalEntry({
+        journalId,
+        journalEntryId,
+        patchObject: {
+          entryDate: { action: "update", data: entryDateData },
+        },
+      });
+      dispatch(getAllJournalsForUserAsync({ userId: sessionUser._id }));
     }
   };
 
@@ -213,6 +238,7 @@ function JournalEntryScene() {
                   <EditIcon htmlColor="white" />
                 </InputAdornment>
               ),
+              readOnly: true,
             }}
           />
         </StyledTextFieldDivSection>
@@ -252,6 +278,15 @@ function JournalEntryScene() {
           </StyledReadOnlyPropertiesSection>
         )}
         <StyledTextFieldDivSection>
+          <CustomDatePicker
+            label="Entry Date"
+            lightText
+            defaultDate={journalEntryContext.entryDate}
+            calendarIconColor={pallet.white}
+            onDateChange={handleJournalEntryDateCalendarChanged}
+            readOnly
+            disableFuture
+          />
           <StyledTextFieldComponent
             id="journalEntryTags"
             type="text"
