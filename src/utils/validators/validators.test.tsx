@@ -82,8 +82,9 @@ describe("validator tests", () => {
       const mockFail = jest.fn();
       const response = isPasswordValid({ ...mockData, onFail: mockFail });
       expect(mockFail).toHaveBeenCalledWith({
-        field: "password1",
-        message: "Please enter a password that is at least 8 characters long",
+        field: "password",
+        message:
+          "Password should be at least 8 characters, contain a number and a special character",
       });
       expect(response).toBe(false);
     });
@@ -104,8 +105,8 @@ describe("validator tests", () => {
     test("function returns error free true", () => {
       const mockFail = jest.fn();
       const mockData = {
-        password1: "password1234567",
-        password2: "password1234567",
+        password1: "Password$1234567",
+        password2: "Password$1234567",
       };
       const res = isPasswordValid({ ...mockData, onFail: mockFail });
       expect(res).toBe(true);

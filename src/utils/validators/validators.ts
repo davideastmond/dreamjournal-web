@@ -61,27 +61,27 @@ export function isPasswordValid({
   onFail: ({ field, message }: { field: string; message: string }) => void;
 }): boolean {
   let foundError = true;
-  if (!password1 || password1.trim() === "") {
-    foundError = false;
-    onFail({
-      field: "password1",
-      message: "Please enter a password that is at least 8 characters long",
-    });
-  }
-
-  if (password1.length < 8) {
-    foundError = false;
-    onFail({
-      field: "password1",
-      message: "Please enter a password that is at least 8 characters long",
-    });
-  }
   if (password2.trim() !== password1.trim() || password2.trim() === "") {
     foundError = false;
     onFail({
       field: "password2",
       message:
         "Please enter or confirm your password. Please ensure the passwords match",
+    });
+  }
+  // Password complexity
+  const pw1ComplexityTest: boolean = new RegExp(
+    /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/
+  ).test(password1);
+  const pw2ComplexityTest: boolean = new RegExp(
+    /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/
+  ).test(password2);
+  if (!(pw1ComplexityTest && pw2ComplexityTest)) {
+    foundError = false;
+    onFail({
+      field: "password",
+      message:
+        "Password should be at least 8 characters, contain a number and a special character",
     });
   }
   return foundError;
