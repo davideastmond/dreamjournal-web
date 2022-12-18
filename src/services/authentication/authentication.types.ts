@@ -13,16 +13,3 @@ export type TRegistrationResponseData = {
   issued: number;
   expires: number;
 };
-
-export type TGetTwoFactorEnabledResponse = {
-  twoFactorAuthentication: {
-    enabled: boolean;
-  };
-};
-
-export type TTFAValidationResponse = {
-  status: "error" | "ok" | string;
-  isEnrollment: boolean;
-  statusMessage: string;
-  redirectPath?: string;
-};
