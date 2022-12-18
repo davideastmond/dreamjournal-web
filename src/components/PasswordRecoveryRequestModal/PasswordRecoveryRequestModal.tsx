@@ -77,7 +77,7 @@ function PasswordRecoveryRequestModal(
       setRequestErrorMessage(
         `There was a problem completing this request: ${exception.message}`
       );
-      setRequestCompleted(true);
+      setRequestCompleted(false);
       setSubmitInProgress(false);
     }
   };
@@ -86,6 +86,8 @@ function PasswordRecoveryRequestModal(
     setDobErrorState(false);
     setRequestErrorMessage("");
     setRequestErrorState(false);
+    setSubmitInProgress(false);
+    setSuccessFullSubmit(false);
   };
   return (
     <Dialog open={props.open} onClose={props.onDismiss}>
@@ -125,8 +127,7 @@ function PasswordRecoveryRequestModal(
         {successfulSubmit && (
           <div>
             <Typography>
-              Check your e-mail for a recovery message and link to reset your
-              password 😁
+              Check your e-mail for a link to reset your password 😁
             </Typography>
             <StyledButtonComponent
               textLabel="Close"
@@ -154,7 +155,7 @@ function PasswordRecoveryRequestModal(
       </DialogActions>
       {requestErrorState && (
         <Alert color="error">
-          {"We're not able to validate this request. Please try again"}
+          {"The system is unable to validate this request. Please try again"}
         </Alert>
       )}
     </Dialog>
