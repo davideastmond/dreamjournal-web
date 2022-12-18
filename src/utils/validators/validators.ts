@@ -69,13 +69,13 @@ export function isPasswordValid({
         "Please enter or confirm your password. Please ensure the passwords match",
     });
   }
+
+  const passwordRegEx = new RegExp(
+    /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/
+  );
   // Password complexity
-  const pw1ComplexityTest: boolean = new RegExp(
-    /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/
-  ).test(password1);
-  const pw2ComplexityTest: boolean = new RegExp(
-    /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z]).{8,}$/
-  ).test(password2);
+  const pw1ComplexityTest: boolean = passwordRegEx.test(password1);
+  const pw2ComplexityTest: boolean = passwordRegEx.test(password2);
   if (!(pw1ComplexityTest && pw2ComplexityTest)) {
     foundError = false;
     onFail({
