@@ -11,6 +11,7 @@ interface IDatePickerProps {
   defaultDate?: string;
   disableFuture?: boolean;
   disableHighlightToday?: boolean;
+  disabled?: boolean;
   errorText?: string;
   inputProps?: any;
   isError?: boolean;
@@ -72,6 +73,7 @@ function CustomDatePicker(props: IDatePickerProps) {
         autoFocus
         openTo={props.openTo || "month"}
         value={dateValue}
+        disabled={props.disabled}
         onChange={(newValue: any) => {
           props.onDateChange && props.onDateChange(newValue);
           setDateValue(newValue);

@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Button, ButtonBase } from "@mui/material";
 import LoginIcon from "@mui/icons-material/Login";
 import AppRegistrationIcon from "@mui/icons-material/AppRegistration";
 import AppLogo from "./app-logo.svg";
@@ -13,21 +13,16 @@ import {
   getSessionUserAsync,
   selectHasActiveSession,
 } from "../../reducers/app-slice";
+import { PasswordRecoveryRequestModal } from "../../components/PasswordRecoveryRequestModal";
 function Splash() {
   const hasSession = useSelector(selectHasActiveSession, shallowEqual);
   const [loginModalOpen, setLoginModalOpen] = useState<boolean>(false);
   const [registrationModalOpen, setRegistrationModalOpen] =
     useState<boolean>(false);
+  const [passwordRecoveryModalOpen, setPasswordRecoveryModalOpen] =
+    useState<boolean>(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const handleOpenLoginModal = () => {
-    setLoginModalOpen(true);
-  };
-
-  const handleOpenRegisterModal = () => {
-    setRegistrationModalOpen(true);
-  };
-
   const handleRegistrationSuccess = () => {
     setRegistrationModalOpen(false);
     dispatch(getHasActiveSessionAsync());
@@ -58,7 +53,7 @@ function Splash() {
             <Button
               variant="contained"
               startIcon={<LoginIcon />}
-              onClick={handleOpenLoginModal}
+              onClick={() => setLoginModalOpen(true)}
             >
               Sign in
             </Button>
@@ -67,14 +62,19 @@ function Splash() {
             <Button
               variant="contained"
               startIcon={<AppRegistrationIcon />}
-              onClick={handleOpenRegisterModal}
+              onClick={() => setRegistrationModalOpen(true)}
             >
               New account
             </Button>
           </div>
-          {/* <div>
-            <p className="red-text cursor-hover thin">Forgot my credentials</p>
-          </div> */}
+          {/* Forgot credentials */}
+          <div>
+            <ButtonBase onClick={() => setPasswordRecoveryModalOpen(true)}>
+              <p className="red-text cursor-hover thin">
+                Forgot my credentials
+              </p>
+            </ButtonBase>
+          </div>
         </div>
       </div>
       <section className="Login__Main__app-blurb">
@@ -107,6 +107,12 @@ function Splash() {
           open={registrationModalOpen}
           onDismiss={() => setRegistrationModalOpen(false)}
           onSuccessDismiss={handleRegistrationSuccess}
+        />
+      )}
+      {passwordRecoveryModalOpen && (
+        <PasswordRecoveryRequestModal
+          open={passwordRecoveryModalOpen}
+          onDismiss={() => setPasswordRecoveryModalOpen(false)}
         />
       )}
     </div>

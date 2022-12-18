@@ -90,7 +90,9 @@ function LoginModal(props: ILoginModalProps) {
   return (
     <Dialog open={props.open} onClose={props.onDismiss}>
       {loginInProgress && <Spinner />}
-      <DialogTitle>Sign In</DialogTitle>
+      <DialogTitle sx={{ textAlign: "center", marginBottom: "5px" }}>
+        Sign in
+      </DialogTitle>
       <DialogContent>
         <form>
           <DialogContentText>Enter your details</DialogContentText>
