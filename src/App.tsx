@@ -1,3 +1,4 @@
+import { Typography } from "@mui/material";
 import { useEffect } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
@@ -19,7 +20,9 @@ import { NewJournal } from "./scenes/NewJournal";
 import { NewJournalEntryScene } from "./scenes/NewJournalEntryScene";
 import { NotFound404 } from "./scenes/NotFound404";
 import { ProfileSettings } from "./scenes/ProfileSettings";
+import { PasswordResetScene } from "./scenes/ResetPasswordScene";
 import Splash from "./scenes/Splash";
+import { pallet } from "./styling/pallets";
 
 function App() {
   const hasSession = useSelector(selectHasActiveSession, shallowEqual);
@@ -105,6 +108,16 @@ function App() {
               <ProtectedRoute redirectPath="/">
                 <ProfileSettings />
               </ProtectedRoute>
+            }
+          />
+          <Route path="/recover" element={<PasswordResetScene />} />
+          <Route
+            path="/error"
+            element={
+              <div>
+                <h3 style={{ color: pallet.redText }}>Error</h3>
+                <p>Expired or invalid</p>
+              </div>
             }
           />
           <Route path="*" element={<NotFound404 />} />
