@@ -1,4 +1,4 @@
-import { InputAdornment } from "@mui/material";
+import { ButtonBase, InputAdornment, styled } from "@mui/material";
 import React, { useState } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -20,6 +20,7 @@ import { StyledReadOnlyPropertiesSection } from "../../components/StyledReadOnly
 import { StyledBoxContainer } from "../../components/StyledBoxContainer";
 import { CustomDatePicker } from "../../components/CustomDatePicker";
 import { pallet } from "../../styling/pallets";
+import CloseIcon from "@mui/icons-material/Close";
 /**
  * Title, description, text, created, updated, tags
  */
@@ -27,6 +28,24 @@ const textFieldSpacingStyle = {
   marginTop: "10px",
   marginBottom: "10px",
 };
+
+const StyledFullScreenTextComponent = styled(StyledTextFieldComponent)(
+  ({ ...props }) => ({
+    [props.theme.breakpoints.down("sm")]: {
+      "&.MuiTextField-root": {
+        position: "absolute",
+        zIndex: 3,
+        left: "0px",
+        backgroundColor: pallet.black,
+        display: "block",
+        top: "60px",
+      },
+      "&& .MuiInputBase-inputMultiline": {
+        height: "70vh !important",
+      },
+    },
+  })
+);
 
 function JournalEntryScene() {
   const [searchParams] = useSearchParams();
@@ -52,6 +71,8 @@ function JournalEntryScene() {
   const [journalEntryDate, setJournalEntryDate] = useState<any>(
     journalEntryContext?.entryDate?.toString() || ""
   );
+  const [isTextEntryFullScreenMode, setIsTextEntryFullScreenMode] =
+    useState<boolean>(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -186,6 +207,14 @@ function JournalEntryScene() {
     }
   };
 
+  const handleSmallTextBoxClick = (e: any) => {
+    // Open full-screen mode
+    if (window.innerWidth <= 600) {
+      if (!isTextEntryFullScreenMode) setIsTextEntryFullScreenMode(true);
+    }
+  };
+  console.log("ScreenWidth", window.innerWidth);
+
   return journalEntryContext ? (
     <div className="JournalEntry__Main">
       <div className="JournalContext__main__backToJournals">
@@ -203,6 +232,34 @@ function JournalEntryScene() {
         text={journalEntryContext.title}
         sizeVariant="h4"
       />
+      {isTextEntryFullScreenMode && (
+        <>
+          <StyledFullScreenTextComponent
+            id="journalEntryText"
+            multiline
+            type="text"
+            label="Text"
+            fullWidth
+            focused
+            onBlur={handleElementOnBlur}
+            onChange={handleTextInputChanged}
+            value={journalEntryText}
+            rows={6}
+            InputProps={{
+              startAdornment: (
+                <ButtonBase onClick={() => setIsTextEntryFullScreenMode(false)}>
+                  <CloseIcon htmlColor={pallet.eggShellWhite} />
+                </ButtonBase>
+              ),
+              endAdornment: (
+                <InputAdornment position="end">
+                  <EditIcon htmlColor="white" />
+                </InputAdornment>
+              ),
+            }}
+          />
+        </>
+      )}
       <StyledHeaderComponent text="Journal Entry" sizeVariant="h6" />
       <StyledBoxContainer>
         <StyledTextFieldDivSection>
@@ -304,27 +361,29 @@ function JournalEntryScene() {
             }}
           />
         </StyledTextFieldDivSection>
-        <StyledTextFieldDivSection>
-          <StyledTextFieldComponent
-            id="journalEntryText"
-            multiline
-            type="text"
-            label="Text"
-            fullWidth
-            focused
-            onBlur={handleElementOnBlur}
-            onChange={handleTextInputChanged}
-            value={journalEntryText}
-            rows={6}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <EditIcon htmlColor="white" />
-                </InputAdornment>
-              ),
-            }}
-          />
-        </StyledTextFieldDivSection>
+        {!isTextEntryFullScreenMode && (
+          <StyledTextFieldDivSection>
+            <StyledTextFieldComponent
+              id="journalEntryText"
+              multiline
+              type="text"
+              label="Text"
+              fullWidth
+              onBlur={handleElementOnBlur}
+              onChange={handleTextInputChanged}
+              value={journalEntryText}
+              rows={6}
+              onClick={handleSmallTextBoxClick}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <EditIcon htmlColor="white" />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </StyledTextFieldDivSection>
+        )}
       </StyledBoxContainer>
     </div>
   ) : (
