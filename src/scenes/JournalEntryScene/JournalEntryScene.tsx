@@ -1,4 +1,10 @@
-import { InputAdornment } from "@mui/material";
+import {
+  ButtonBase,
+  Checkbox,
+  FormControlLabel,
+  InputAdornment,
+  styled,
+} from "@mui/material";
 import React, { useState } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -20,13 +26,12 @@ import { StyledReadOnlyPropertiesSection } from "../../components/StyledReadOnly
 import { StyledBoxContainer } from "../../components/StyledBoxContainer";
 import { CustomDatePicker } from "../../components/CustomDatePicker";
 import { pallet } from "../../styling/pallets";
+import CloseIcon from "@mui/icons-material/Close";
+import { StyledCheckBox } from "../../components/StyledCheckBox";
+
 /**
- * Title, description, text, created, updated, tags
+ * Title, description, text, created, updated, tags, entryDate, lucid
  */
-const textFieldSpacingStyle = {
-  marginTop: "10px",
-  marginBottom: "10px",
-};
 
 function JournalEntryScene() {
   const [searchParams] = useSearchParams();
@@ -52,7 +57,9 @@ function JournalEntryScene() {
   const [journalEntryDate, setJournalEntryDate] = useState<any>(
     journalEntryContext?.entryDate?.toString() || ""
   );
-
+  const [isTextEntryFullScreenMode, setIsTextEntryFullScreenMode] =
+    useState<boolean>(false);
+  const [isBusy, setIsBusy] = useState<boolean>(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleTextInputChanged = (
@@ -82,15 +89,40 @@ function JournalEntryScene() {
     // User uses date picker to set a date. Extract the ISO date string
     if (!journalId || !journalEntryId || !sessionUser) return;
     const entryDateData = value?.$d?.toISOString();
-    if (entryDateData) {
+
+    try {
+      if (entryDateData) {
+        await patchJournalEntry({
+          journalId,
+          journalEntryId,
+          patchObject: {
+            entryDate: { action: "update", data: entryDateData },
+          },
+        });
+        dispatch(getAllJournalsForUserAsync({ userId: sessionUser._id }));
+      }
+    } catch (exception: any) {
+      // POIJ do something with this error
+      console.error(exception.message);
+    }
+  };
+
+  // Lucid checkbox.
+  const handleLucidCheckboxChange = async (checked: boolean) => {
+    // When this event is received, we should send a request to update this journalEntry context
+    if (!journalId || !journalEntryId || !sessionUser) return;
+    try {
       await patchJournalEntry({
         journalId,
         journalEntryId,
         patchObject: {
-          entryDate: { action: "update", data: entryDateData },
+          lucid: { action: "update", data: checked },
         },
       });
       dispatch(getAllJournalsForUserAsync({ userId: sessionUser._id }));
+    } catch (exception: any) {
+      // POIJ do something with this error
+      console.error(exception.message);
     }
   };
 
@@ -186,6 +218,13 @@ function JournalEntryScene() {
     }
   };
 
+  const handleSmallTextBoxClick = (e: any) => {
+    // Open full-screen mode
+    if (window.innerWidth <= 600) {
+      if (!isTextEntryFullScreenMode) setIsTextEntryFullScreenMode(true);
+    }
+  };
+
   return journalEntryContext ? (
     <div className="JournalEntry__Main">
       <div className="JournalContext__main__backToJournals">
@@ -203,6 +242,34 @@ function JournalEntryScene() {
         text={journalEntryContext.title}
         sizeVariant="h4"
       />
+      {isTextEntryFullScreenMode && (
+        <>
+          <StyledFullScreenTextComponent
+            id="journalEntryText"
+            multiline
+            type="text"
+            label="Text"
+            fullWidth
+            focused
+            onBlur={handleElementOnBlur}
+            onChange={handleTextInputChanged}
+            value={journalEntryText}
+            rows={6}
+            InputProps={{
+              startAdornment: (
+                <ButtonBase onClick={() => setIsTextEntryFullScreenMode(false)}>
+                  <CloseIcon htmlColor={pallet.eggShellWhite} />
+                </ButtonBase>
+              ),
+              endAdornment: (
+                <InputAdornment position="end">
+                  <EditIcon htmlColor="white" />
+                </InputAdornment>
+              ),
+            }}
+          />
+        </>
+      )}
       <StyledHeaderComponent text="Journal Entry" sizeVariant="h6" />
       <StyledBoxContainer>
         <StyledTextFieldDivSection>
@@ -304,27 +371,37 @@ function JournalEntryScene() {
             }}
           />
         </StyledTextFieldDivSection>
-        <StyledTextFieldDivSection>
-          <StyledTextFieldComponent
-            id="journalEntryText"
-            multiline
-            type="text"
-            label="Text"
-            fullWidth
-            focused
-            onBlur={handleElementOnBlur}
-            onChange={handleTextInputChanged}
-            value={journalEntryText}
-            rows={6}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <EditIcon htmlColor="white" />
-                </InputAdornment>
-              ),
-            }}
+        <div>
+          {/* This is for the lucid checkbox */}
+          <StyledCheckBox
+            label="Lucid"
+            onChange={handleLucidCheckboxChange as any}
+            defaultChecked={journalEntryContext.attributes.lucid}
           />
-        </StyledTextFieldDivSection>
+        </div>
+        {!isTextEntryFullScreenMode && (
+          <StyledTextFieldDivSection>
+            <StyledTextFieldComponent
+              id="journalEntryText"
+              multiline
+              type="text"
+              label="Text"
+              fullWidth
+              onBlur={handleElementOnBlur}
+              onChange={handleTextInputChanged}
+              value={journalEntryText}
+              rows={6}
+              onClick={handleSmallTextBoxClick}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <EditIcon htmlColor="white" />
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </StyledTextFieldDivSection>
+        )}
       </StyledBoxContainer>
     </div>
   ) : (
@@ -333,3 +410,26 @@ function JournalEntryScene() {
 }
 
 export default JournalEntryScene;
+
+const textFieldSpacingStyle = {
+  marginTop: "10px",
+  marginBottom: "10px",
+};
+
+const StyledFullScreenTextComponent = styled(StyledTextFieldComponent)(
+  ({ ...props }) => ({
+    [props.theme.breakpoints.down("sm")]: {
+      "&.MuiTextField-root": {
+        position: "absolute",
+        zIndex: 3,
+        left: "0px",
+        backgroundColor: pallet.black,
+        display: "block",
+        top: "60px",
+      },
+      "&& .MuiInputBase-inputMultiline": {
+        height: "70vh !important",
+      },
+    },
+  })
+);

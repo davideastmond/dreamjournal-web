@@ -2,7 +2,7 @@ import { TextField, TextFieldProps, styled } from "@mui/material";
 import { pallet } from "../../styling/pallets";
 
 const StyledTextField = styled(TextField)<TStyledTextFieldComponentProps>(
-  (props) => ({
+  ({ ...props }) => ({
     "&&& input": {
       height: "0",
       width: "100%",

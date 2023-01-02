@@ -1,5 +1,5 @@
 import { Stack, Alert, styled, Box, FormControl } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { StyledButtonComponent } from "../../components/StyledButton";
@@ -16,15 +16,15 @@ import NewJournalEntryBody from "./NewJournalEntryBody";
 import NewJournalEntryHeader from "./NewJournalEntryHeader";
 
 function NewJournalEntryScene() {
-  const [bodyText, setBodyText] = useState<string | null>(null);
-  const [tags, setTags] = useState<string | null>(null);
-  const [description, setDescription] = useState<string | null>(null);
-  const [title, setTitle] = useState<string | null>(null);
-  const [journalEntryDate, setJournalEntryDate] = useState<any>(null);
+  const [bodyText, setBodyText] = useState<string | null>("");
+  const [tags, setTags] = useState<string | null>("");
+  const [description, setDescription] = useState<string | null>("");
+  const [title, setTitle] = useState<string | null>("");
+  const [journalEntryDate, setJournalEntryDate] = useState<any>("");
 
   const [hasSubmissionError, setHasSubmissionError] = useState<boolean>(false);
   const [submissionErrors, setSubmissionErrors] = useState<string[]>([]);
-
+  const [lucidChecked, setLucidChecked] = useState<boolean>(false);
   const { journalId } = useParams();
   const journalContext = useSelector(selectJournalById(journalId!));
   const userContext = useSelector(selectSessionUser, shallowEqual);
@@ -101,6 +101,7 @@ function NewJournalEntryScene() {
             tags: tagsArray,
             text: bodyText ?? "",
             entryDate: journalEntryDate,
+            lucid: lucidChecked,
           });
           dispatch(getAllJournalsForUserAsync({ userId: userContext?._id! }));
           navigate(`/journals/${journalId}`);
@@ -120,6 +121,7 @@ function NewJournalEntryScene() {
     setHasSubmissionError(false);
     setSubmissionErrors([]);
   };
+
   return (
     <FormControl>
       <Box>
@@ -129,7 +131,12 @@ function NewJournalEntryScene() {
           customClassNames="small-top-margin"
         />
         <NewJournalEntryHeader onHeaderDataChanged={handleHeaderDataChanged} />
-        <NewJournalEntryBody onTextChange={handleJournalEntryBodyTextChange} />
+        <NewJournalEntryBody
+          onTextChange={handleJournalEntryBodyTextChange}
+          onLucidCheckBoxChanged={(checked: boolean) =>
+            setLucidChecked(checked)
+          }
+        />
         <footer className="JournalEntryText__footer__main">
           {hasSubmissionError && (
             <Stack sx={{ width: "100%" }} spacing={0}>

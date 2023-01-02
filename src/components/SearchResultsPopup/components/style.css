@@ -2,3 +2,7 @@
   cursor: pointer;
   background-color: var(--egg-shell-white);
 }
+
+.ResultPanel__Main {
+  padding-left: 5%;
+}
