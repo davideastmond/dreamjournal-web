@@ -1,4 +1,10 @@
-import { ButtonBase, InputAdornment, styled } from "@mui/material";
+import {
+  ButtonBase,
+  Checkbox,
+  FormControlLabel,
+  InputAdornment,
+  styled,
+} from "@mui/material";
 import React, { useState } from "react";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -21,31 +27,11 @@ import { StyledBoxContainer } from "../../components/StyledBoxContainer";
 import { CustomDatePicker } from "../../components/CustomDatePicker";
 import { pallet } from "../../styling/pallets";
 import CloseIcon from "@mui/icons-material/Close";
-/**
- * Title, description, text, created, updated, tags
- */
-const textFieldSpacingStyle = {
-  marginTop: "10px",
-  marginBottom: "10px",
-};
+import { StyledCheckBox } from "../../components/StyledCheckBox";
 
-const StyledFullScreenTextComponent = styled(StyledTextFieldComponent)(
-  ({ ...props }) => ({
-    [props.theme.breakpoints.down("sm")]: {
-      "&.MuiTextField-root": {
-        position: "absolute",
-        zIndex: 3,
-        left: "0px",
-        backgroundColor: pallet.black,
-        display: "block",
-        top: "60px",
-      },
-      "&& .MuiInputBase-inputMultiline": {
-        height: "70vh !important",
-      },
-    },
-  })
-);
+/**
+ * Title, description, text, created, updated, tags, entryDate, lucid
+ */
 
 function JournalEntryScene() {
   const [searchParams] = useSearchParams();
@@ -73,7 +59,7 @@ function JournalEntryScene() {
   );
   const [isTextEntryFullScreenMode, setIsTextEntryFullScreenMode] =
     useState<boolean>(false);
-
+  const [isBusy, setIsBusy] = useState<boolean>(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleTextInputChanged = (
@@ -103,15 +89,40 @@ function JournalEntryScene() {
     // User uses date picker to set a date. Extract the ISO date string
     if (!journalId || !journalEntryId || !sessionUser) return;
     const entryDateData = value?.$d?.toISOString();
-    if (entryDateData) {
+
+    try {
+      if (entryDateData) {
+        await patchJournalEntry({
+          journalId,
+          journalEntryId,
+          patchObject: {
+            entryDate: { action: "update", data: entryDateData },
+          },
+        });
+        dispatch(getAllJournalsForUserAsync({ userId: sessionUser._id }));
+      }
+    } catch (exception: any) {
+      // POIJ do something with this error
+      console.error(exception.message);
+    }
+  };
+
+  // Lucid checkbox.
+  const handleLucidCheckboxChange = async (checked: boolean) => {
+    // When this event is received, we should send a request to update this journalEntry context
+    if (!journalId || !journalEntryId || !sessionUser) return;
+    try {
       await patchJournalEntry({
         journalId,
         journalEntryId,
         patchObject: {
-          entryDate: { action: "update", data: entryDateData },
+          lucid: { action: "update", data: checked },
         },
       });
       dispatch(getAllJournalsForUserAsync({ userId: sessionUser._id }));
+    } catch (exception: any) {
+      // POIJ do something with this error
+      console.error(exception.message);
     }
   };
 
@@ -213,7 +224,6 @@ function JournalEntryScene() {
       if (!isTextEntryFullScreenMode) setIsTextEntryFullScreenMode(true);
     }
   };
-  console.log("ScreenWidth", window.innerWidth);
 
   return journalEntryContext ? (
     <div className="JournalEntry__Main">
@@ -361,6 +371,14 @@ function JournalEntryScene() {
             }}
           />
         </StyledTextFieldDivSection>
+        <div>
+          {/* This is for the lucid checkbox */}
+          <StyledCheckBox
+            label="Lucid"
+            onChange={handleLucidCheckboxChange as any}
+            defaultChecked={journalEntryContext.attributes.lucid}
+          />
+        </div>
         {!isTextEntryFullScreenMode && (
           <StyledTextFieldDivSection>
             <StyledTextFieldComponent
@@ -392,3 +410,26 @@ function JournalEntryScene() {
 }
 
 export default JournalEntryScene;
+
+const textFieldSpacingStyle = {
+  marginTop: "10px",
+  marginBottom: "10px",
+};
+
+const StyledFullScreenTextComponent = styled(StyledTextFieldComponent)(
+  ({ ...props }) => ({
+    [props.theme.breakpoints.down("sm")]: {
+      "&.MuiTextField-root": {
+        position: "absolute",
+        zIndex: 3,
+        left: "0px",
+        backgroundColor: pallet.black,
+        display: "block",
+        top: "60px",
+      },
+      "&& .MuiInputBase-inputMultiline": {
+        height: "70vh !important",
+      },
+    },
+  })
+);
