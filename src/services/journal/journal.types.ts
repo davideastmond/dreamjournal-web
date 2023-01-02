@@ -20,6 +20,9 @@ export type TJournalEntry = {
   description?: string;
   text: string;
   photoUrl?: string;
+  attributes: {
+    lucid?: boolean;
+  };
   tags: string[];
   entryDate?: string;
   createdAt?: Date;
@@ -48,6 +51,9 @@ export type TTextBodyPatchRequest = {
   text: { action: "update" | "delete"; data: string };
 };
 
+export type TLucidPatchRequest = {
+  lucid: { action: "update"; data: boolean };
+};
 export type TJournalEntryDatePatchRequest = {
   entryDate: { action: "update"; data: string };
 };

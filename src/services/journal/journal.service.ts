@@ -3,6 +3,7 @@ import {
   TJournal,
   TJournalDeleteResult,
   TJournalEntryDatePatchRequest,
+  TLucidPatchRequest,
   TNewJournalReturnData,
   TPhotoURLPatchRequest,
   TTagsPatchRequest,
@@ -128,6 +129,7 @@ export const addEntryToJournal = async ({
   photoUrl,
   tags,
   entryDate,
+  lucid,
 }: {
   journalId: string;
   title: string;
@@ -136,6 +138,7 @@ export const addEntryToJournal = async ({
   photoUrl?: string;
   tags?: string[];
   entryDate?: string;
+  lucid?: boolean;
 }): Promise<TJournal> => {
   const token = sessionStorage.getItem("token");
 
@@ -155,6 +158,7 @@ export const addEntryToJournal = async ({
         photoUrl,
         tags,
         entryDate,
+        lucid,
       },
     });
     return req.data;
@@ -176,7 +180,8 @@ export const patchJournalEntry = async ({
     | TTagsPatchRequest
     | TPhotoURLPatchRequest
     | TTextBodyPatchRequest
-    | TJournalEntryDatePatchRequest;
+    | TJournalEntryDatePatchRequest
+    | TLucidPatchRequest;
 }) => {
   const token = sessionStorage.getItem("token");
   try {
